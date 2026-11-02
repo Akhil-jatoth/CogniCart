@@ -971,6 +971,39 @@
     <div id="alerts" class="user-section reveal"></div>
     <div id="profile" class="user-section reveal"></div>
 
+    <!-- Action Confirmation & Popup Message Modal -->
+    <div id="actionPopupModal" class="modal" style="display:none; align-items:center; justify-content:center; z-index:9999;">
+      <div class="modal-content" style="max-width: 440px; width: 92%; padding: 28px 24px; text-align: center; border-radius: 24px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(24px); border: 1px solid var(--glass-border); box-shadow: 0 24px 60px rgba(0,0,0,0.6); position: relative;">
+        <button class="close-modal-btn" onclick="closeActionPopupModal()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 1.2rem; color: var(--text-muted); cursor: pointer;">✕</button>
+        
+        <div id="actionPopupIcon" style="font-size: 3rem; margin-bottom: 12px; line-height: 1;">🛒</div>
+        <h3 id="actionPopupTitle" style="font-size: 1.35rem; font-weight: 700; color: #f1f5f9; margin: 0 0 8px;">Add to Cart?</h3>
+        <p id="actionPopupMessage" style="font-size: 0.9rem; color: #94a3b8; margin: 0 0 16px; line-height: 1.5;">Do you want to add this item to your cart?</p>
+        
+        <!-- Optional Product Card Preview -->
+        <div id="actionPopupProductPreview" style="display:none; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 14px; padding: 12px; margin-bottom: 20px; align-items: center; gap: 14px; text-align: left;">
+          <img id="actionPopupProductImg" src="" alt="" style="width: 58px; height: 58px; object-fit: contain; border-radius: 8px; background: rgba(255,255,255,0.05); flex-shrink: 0;">
+          <div style="flex: 1; min-width: 0;">
+            <p id="actionPopupProductTitle" style="font-size: 0.88rem; font-weight: 600; color: #f1f5f9; margin: 0 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></p>
+            <div style="display: flex; align-items: baseline; gap: 8px;">
+              <span id="actionPopupProductPrice" style="font-size: 1.05rem; font-weight: 800; color: #34d399;"></span>
+              <span id="actionPopupProductStore" style="font-size: 0.72rem; color: #818cf8; background: rgba(99,102,241,0.12); padding: 2px 7px; border-radius: 6px;"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div id="actionPopupActions" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+          <button id="actionPopupCancelBtn" onclick="closeActionPopupModal()" style="flex: 1; min-width: 120px; padding: 12px 18px; border-radius: 12px; background: rgba(255,255,255,0.06); border: 1px solid var(--glass-border); color: #cbd5e1; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.2s;">
+            Cancel
+          </button>
+          <button id="actionPopupConfirmBtn" style="flex: 1.2; min-width: 140px; padding: 12px 18px; border-radius: 12px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; color: #fff; font-weight: 700; font-size: 0.9rem; cursor: pointer; box-shadow: 0 4px 16px rgba(99,102,241,0.35); transition: 0.2s;">
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Auth Modal -->
     <div id="authModal" class="modal">
       <form
@@ -1924,6 +1957,116 @@
           .forEach((el) => revealObserver.observe(el));
       }
 
+      
+      // ─── ACTION CONFIRMATION & POPUP MESSAGE SYSTEM ─────────────────────────
+      let _actionConfirmCallback = null;
+
+      function closeActionPopupModal() {
+        const modal = document.getElementById("actionPopupModal");
+        if (modal) modal.style.display = "none";
+        _actionConfirmCallback = null;
+      }
+
+      function showActionConfirm({
+        icon = "❓",
+        title = "Confirm Action",
+        message = "Are you sure you want to proceed?",
+        product = null,
+        confirmText = "Yes, Continue",
+        confirmBg = "linear-gradient(135deg, #6366f1, #8b5cf6)",
+        cancelText = "Cancel",
+        onConfirm = null
+      }) {
+        const modal = document.getElementById("actionPopupModal");
+        if (!modal) return;
+
+        document.getElementById("actionPopupIcon").textContent = icon;
+        document.getElementById("actionPopupTitle").textContent = title;
+        document.getElementById("actionPopupMessage").textContent = message;
+
+        const previewEl = document.getElementById("actionPopupProductPreview");
+        if (product && product.title) {
+          const cleanPrice = parseInt(String(product.price || 0).replace(/[^\d.]/g, "")) || 0;
+          previewEl.style.display = "flex";
+          document.getElementById("actionPopupProductImg").src = product.image || "assets/logo.png";
+          document.getElementById("actionPopupProductTitle").textContent = product.title;
+          document.getElementById("actionPopupProductPrice").textContent = cleanPrice > 0 ? `₹${cleanPrice.toLocaleString("en-IN")}` : "Deal Price";
+          document.getElementById("actionPopupProductStore").textContent = product.store || "Verified Store";
+        } else {
+          previewEl.style.display = "none";
+        }
+
+        const cancelBtn = document.getElementById("actionPopupCancelBtn");
+        cancelBtn.style.display = "block";
+        cancelBtn.textContent = cancelText;
+
+        const confirmBtn = document.getElementById("actionPopupConfirmBtn");
+        confirmBtn.textContent = confirmText;
+        confirmBtn.style.background = confirmBg;
+
+        _actionConfirmCallback = onConfirm;
+        confirmBtn.onclick = () => {
+          closeActionPopupModal();
+          if (typeof _actionConfirmCallback === "function") {
+            _actionConfirmCallback();
+          }
+        };
+
+        modal.style.display = "flex";
+      }
+
+      function showActionPopup({
+        icon = "✅",
+        title = "Success",
+        message = "Action completed successfully!",
+        product = null,
+        primaryBtnText = "Continue Shopping",
+        primaryAction = null,
+        secondaryBtnText = null,
+        secondaryAction = null
+      }) {
+        const modal = document.getElementById("actionPopupModal");
+        if (!modal) return;
+
+        document.getElementById("actionPopupIcon").textContent = icon;
+        document.getElementById("actionPopupTitle").textContent = title;
+        document.getElementById("actionPopupMessage").textContent = message;
+
+        const previewEl = document.getElementById("actionPopupProductPreview");
+        if (product && product.title) {
+          const cleanPrice = parseInt(String(product.price || 0).replace(/[^\d.]/g, "")) || 0;
+          previewEl.style.display = "flex";
+          document.getElementById("actionPopupProductImg").src = product.image || "assets/logo.png";
+          document.getElementById("actionPopupProductTitle").textContent = product.title;
+          document.getElementById("actionPopupProductPrice").textContent = cleanPrice > 0 ? `₹${cleanPrice.toLocaleString("en-IN")}` : "Deal Price";
+          document.getElementById("actionPopupProductStore").textContent = product.store || "Verified Store";
+        } else {
+          previewEl.style.display = "none";
+        }
+
+        const cancelBtn = document.getElementById("actionPopupCancelBtn");
+        if (secondaryBtnText) {
+          cancelBtn.style.display = "block";
+          cancelBtn.textContent = secondaryBtnText;
+          cancelBtn.onclick = () => {
+            closeActionPopupModal();
+            if (typeof secondaryAction === "function") secondaryAction();
+          };
+        } else {
+          cancelBtn.style.display = "none";
+        }
+
+        const confirmBtn = document.getElementById("actionPopupConfirmBtn");
+        confirmBtn.textContent = primaryBtnText;
+        confirmBtn.style.background = "linear-gradient(135deg, #10b981, #059669)";
+        confirmBtn.onclick = () => {
+          closeActionPopupModal();
+          if (typeof primaryAction === "function") primaryAction();
+        };
+
+        modal.style.display = "flex";
+      }
+
       // ─── TOAST NOTIFICATIONS ─────────────────────────────────────────────────
       // FIX: Replaces alert() which blocks the UI thread entirely.
       function toast(msg, type = "success", duration = 3000) {
@@ -2513,11 +2656,17 @@
           });
           const data = await res.json();
           closeModal("priceAlertModal");
-          toast(
-            data.message || `🔔 Alert set! We will notify you when price drops below ₹${targetNum.toLocaleString("en-IN")}`,
-            "success",
-            4000
-          );
+          showActionPopup({
+            icon: "🔔",
+            title: "Price Alert Set!",
+            message: `We will monitor "${_priceAlertProduct.title.slice(0, 40)}..." and notify you when the price drops below ₹${targetNum.toLocaleString("en-IN")}.`,
+            product: _priceAlertProduct,
+            primaryBtnText: "View Alerts 🔔",
+            primaryAction: () => showSection("alerts"),
+            secondaryBtnText: "Continue Shopping",
+            secondaryAction: () => {}
+          });
+          toast("Price alert activated ✓", "success", 3500);
         } catch (e) {
           console.error("Alert save error:", e);
           toast("Failed to set alert.", "error");
@@ -3622,36 +3771,59 @@
           openAuthModal();
           return;
         }
-        const btn = document.getElementById("productPageAddCartBtn");
+
         const qtySelect = document.getElementById("productPageQty");
         const qty = qtySelect ? parseInt(qtySelect.value) || 1 : 1;
-        if (btn) {
-          btn.disabled = true;
-          btn.textContent = "Adding…";
-        }
-        try {
-          for (let i = 0; i < qty; i++) {
-            await fetch("/api/add-to-cart", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ username, product: _currentViewingProduct }),
-            });
+        const product = _currentViewingProduct;
+
+        showActionConfirm({
+          icon: "🛒",
+          title: "Add to Cart?",
+          message: `Are you sure you want to add ${qty > 1 ? qty + ' units of ' : ''}this product to your cart?`,
+          product: product,
+          confirmText: `🛒 Yes, Add (${qty}) to Cart`,
+          confirmBg: "linear-gradient(135deg, #f59e0b, #d97706)",
+          onConfirm: async () => {
+            const btn = document.getElementById("productPageAddCartBtn");
+            if (btn) {
+              btn.disabled = true;
+              btn.textContent = "Adding…";
+            }
+            try {
+              for (let i = 0; i < qty; i++) {
+                await fetch("/api/add-to-cart", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ username, product }),
+                });
+              }
+              if (btn) {
+                btn.textContent = "✓ Added to Cart";
+                setTimeout(() => {
+                  btn.disabled = false;
+                  btn.textContent = "🛒 Add to Cart";
+                }, 2500);
+              }
+              showActionPopup({
+                icon: "🎉",
+                title: "Added to Cart!",
+                message: `${qty > 1 ? qty + ' items added' : 'Item added'} to your shopping cart successfully.`,
+                product: product,
+                primaryBtnText: "View Cart 🛒",
+                primaryAction: () => showSection("cart"),
+                secondaryBtnText: "Keep Browsing",
+                secondaryAction: () => {}
+              });
+              toast(`Added ${qty > 1 ? qty + ' items' : 'item'} to cart ✓`, "success");
+            } catch {
+              toast("Failed to add to cart", "error");
+              if (btn) {
+                btn.disabled = false;
+                btn.textContent = "🛒 Add to Cart";
+              }
+            }
           }
-          toast(`Added ${qty > 1 ? qty + ' items' : 'item'} to cart ✓`, "success");
-          if (btn) {
-            btn.textContent = "✓ Added to Cart";
-            setTimeout(() => {
-              btn.disabled = false;
-              btn.textContent = "🛒 Add to Cart";
-            }, 1800);
-          }
-        } catch {
-          toast("Failed to add to cart", "error");
-          if (btn) {
-            btn.disabled = false;
-            btn.textContent = "🛒 Add to Cart";
-          }
-        }
+        });
       }
 
       function productPageWatch() {
@@ -3777,17 +3949,34 @@
       }
 
       async function removeWatchlistItem(watchlistId) {
-        try {
-          const res = await fetch(`${API_BASE}/watchlist/${watchlistId}`, { method: "DELETE" });
-          if (res.ok) {
-            toast("Removed from watchlist ✓", "success");
-            loadWatchlistSection();
-          } else {
-            toast("Failed to remove item", "error");
+        showActionConfirm({
+          icon: "🗑️",
+          title: "Remove from Watchlist?",
+          message: "Are you sure you want to stop tracking this product in your Watchlist?",
+          confirmText: "🗑️ Yes, Remove",
+          confirmBg: "linear-gradient(135deg, #ef4444, #dc2626)",
+          cancelText: "Keep Tracking",
+          onConfirm: async () => {
+            try {
+              const res = await fetch(`${API_BASE}/watchlist/${watchlistId}`, { method: "DELETE" });
+              if (res.ok) {
+                loadWatchlistSection();
+                showActionPopup({
+                  icon: "🗑️",
+                  title: "Item Removed",
+                  message: "The product has been removed from your Watchlist.",
+                  primaryBtnText: "OK",
+                  primaryAction: () => {}
+                });
+                toast("Removed from watchlist ✓", "success");
+              } else {
+                toast("Failed to remove item", "error");
+              }
+            } catch {
+              toast("Failed to remove item", "error");
+            }
           }
-        } catch {
-          toast("Failed to remove item", "error");
-        }
+        });
       }
 
       async function watchlistAddToCart(prod) {
@@ -3797,16 +3986,37 @@
           openAuthModal();
           return;
         }
-        try {
-          await fetch(`${API_BASE}/add-to-cart`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, product: prod }),
-          });
-          toast("Added to cart ✓", "success");
-        } catch {
-          toast("Failed to add to cart", "error");
-        }
+
+        showActionConfirm({
+          icon: "🛒",
+          title: "Add to Cart?",
+          message: "Do you want to add this watchlist product to your shopping cart?",
+          product: prod,
+          confirmText: "🛒 Yes, Add to Cart",
+          confirmBg: "linear-gradient(135deg, #f59e0b, #d97706)",
+          onConfirm: async () => {
+            try {
+              await fetch(`${API_BASE}/add-to-cart`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, product: prod }),
+              });
+              showActionPopup({
+                icon: "🎉",
+                title: "Added to Cart!",
+                message: `"${(prod.title || 'Product').slice(0, 40)}..." has been added to your shopping cart.`,
+                product: prod,
+                primaryBtnText: "View Cart 🛒",
+                primaryAction: () => showSection("cart"),
+                secondaryBtnText: "Stay on Watchlist",
+                secondaryAction: () => {}
+              });
+              toast("Added to cart ✓", "success");
+            } catch {
+              toast("Failed to add to cart", "error");
+            }
+          }
+        });
       }
 
       async function loadAlertsSection() {
@@ -3912,8 +4122,15 @@
             body: JSON.stringify({ targetPrice: +newPrice }),
           });
           if (res.ok) {
-            toast(`Target price updated to ₹${parseInt(newPrice).toLocaleString("en-IN")} ✓`, "success");
             loadAlertsSection();
+            showActionPopup({
+              icon: "✏️",
+              title: "Target Price Updated",
+              message: `Target price updated to ₹${parseInt(newPrice).toLocaleString("en-IN")} successfully.`,
+              primaryBtnText: "OK",
+              primaryAction: () => {}
+            });
+            toast(`Target price updated to ₹${parseInt(newPrice).toLocaleString("en-IN")} ✓`, "success");
           } else {
             toast("Failed to update target price", "error");
           }
@@ -3923,20 +4140,36 @@
       }
 
       async function deletePriceAlertItem(alertId) {
-        try {
-          const res = await fetch(`${API_BASE}/price-alerts/${alertId}`, { method: "DELETE" });
-          if (res.ok) {
-            toast("Alert deleted ✓", "success");
-            loadAlertsSection();
-          } else {
-            toast("Failed to delete alert", "error");
+        showActionConfirm({
+          icon: "🔔",
+          title: "Delete Price Alert?",
+          message: "Are you sure you want to remove this price drop alert?",
+          confirmText: "🗑️ Yes, Delete",
+          confirmBg: "linear-gradient(135deg, #ef4444, #dc2626)",
+          cancelText: "Keep Alert",
+          onConfirm: async () => {
+            try {
+              const res = await fetch(`${API_BASE}/price-alerts/${alertId}`, { method: "DELETE" });
+              if (res.ok) {
+                loadAlertsSection();
+                showActionPopup({
+                  icon: "🗑️",
+                  title: "Alert Deleted",
+                  message: "The price alert has been successfully removed.",
+                  primaryBtnText: "OK",
+                  primaryAction: () => {}
+                });
+                toast("Alert deleted ✓", "success");
+              } else {
+                toast("Failed to delete alert", "error");
+              }
+            } catch {
+              toast("Failed to delete alert", "error");
+            }
           }
-        } catch {
-          toast("Failed to delete alert", "error");
-        }
+        });
       }
 
-      
       // ─── PROFILE DASHBOARD SECTION (THEME UNIFIED & FIXED) ─────────────────
       let _profileHistory = [];
       let _profileWatchlist = [];
@@ -4538,28 +4771,50 @@
           return;
         }
 
-        // FIX: Disable button to prevent double-tap adds
-        btn.disabled = true;
-        btn.textContent = "Adding…";
-
+        let product = null;
         try {
-          const product = JSON.parse(
-            decodeURIComponent(btn.dataset.product || "{}"),
-          );
-          const res = await fetch("/api/add-to-cart", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, product }),
-          });
-          const data = await res.json();
-          // FIX: toast instead of alert() (non-blocking)
-          toast(data.message || "Added to cart ✓", "success");
-          btn.textContent = "✓ Added";
-        } catch {
-          toast("Failed to add to cart", "error");
-          btn.disabled = false;
-          btn.textContent = "Add to Cart";
-        }
+          product = JSON.parse(decodeURIComponent(btn.dataset.product || btn.getAttribute("data-product") || "{}"));
+        } catch(e) {}
+        if (!product || !product.title) return;
+
+        showActionConfirm({
+          icon: "🛒",
+          title: "Add to Cart?",
+          message: "Would you like to add this product to your shopping cart?",
+          product: product,
+          confirmText: "🛒 Yes, Add to Cart",
+          confirmBg: "linear-gradient(135deg, #f59e0b, #d97706)",
+          onConfirm: async () => {
+            btn.disabled = true;
+            btn.textContent = "Adding…";
+            try {
+              const res = await fetch("/api/add-to-cart", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, product }),
+              });
+              const data = await res.json();
+              btn.textContent = "✓ Added";
+              setTimeout(() => { btn.disabled = false; btn.textContent = "Add to Cart"; }, 2500);
+
+              showActionPopup({
+                icon: "🎉",
+                title: "Added to Cart!",
+                message: `"${product.title.slice(0, 42)}..." has been added to your shopping cart.`,
+                product: product,
+                primaryBtnText: "View Cart 🛒",
+                primaryAction: () => showSection("cart"),
+                secondaryBtnText: "Continue Shopping",
+                secondaryAction: () => {}
+              });
+              toast("Added to cart ✓", "success");
+            } catch {
+              toast("Failed to add to cart", "error");
+              btn.disabled = false;
+              btn.textContent = "Add to Cart";
+            }
+          }
+        });
       }
 
       // ─── WATCHLIST / PRICE TRACKING ──────────────────────────────────────────
@@ -4606,32 +4861,51 @@
         const cleanPrice = parseInt(String(product.price || 0).replace(/[^\d.]/g, "")) || 0;
         product.price = cleanPrice;
 
-        if (btn) {
-          btn.disabled = true;
-          btn.textContent = "Adding…";
-        }
-
-        try {
-          const res = await fetch(`${API_BASE}/watchlist/add`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, product, folder: "My Wishlist" }),
-          });
-          const data = await res.json();
-          toast(`📊 Added "${product.title.slice(0, 32)}..." to Watchlist ✓`, "success", 3000);
-          if (btn) {
-            btn.disabled = false;
-            btn.textContent = "✓ Watching";
-            setTimeout(() => { if (btn) btn.textContent = "📊 Watch"; }, 2500);
+        showActionConfirm({
+          icon: "📊",
+          title: "Add to Watchlist?",
+          message: "Do you want to track price changes and drops for this product in your Watchlist?",
+          product: product,
+          confirmText: "📊 Yes, Add to Watchlist",
+          confirmBg: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+          onConfirm: async () => {
+            if (btn) {
+              btn.disabled = true;
+              btn.textContent = "Adding…";
+            }
+            try {
+              const res = await fetch(`${API_BASE}/watchlist/add`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, product, folder: "My Wishlist" }),
+              });
+              const data = await res.json();
+              if (btn) {
+                btn.disabled = false;
+                btn.textContent = "✓ Watching";
+                setTimeout(() => { if (btn) btn.textContent = "📊 Watch"; }, 2500);
+              }
+              showActionPopup({
+                icon: "📈",
+                title: "Added to Watchlist!",
+                message: `"${product.title.slice(0, 42)}..." is now in your Watchlist. We'll monitor its price 24/7!`,
+                product: product,
+                primaryBtnText: "View Watchlist 📊",
+                primaryAction: () => showSection("watchlist"),
+                secondaryBtnText: "Continue Shopping",
+                secondaryAction: () => {}
+              });
+              toast("Added to Watchlist ✓", "success", 3000);
+            } catch (err) {
+              console.error("Watchlist error:", err);
+              toast("Failed to add to watchlist", "error");
+              if (btn) {
+                btn.disabled = false;
+                btn.textContent = "📊 Watch";
+              }
+            }
           }
-        } catch (err) {
-          console.error("Watchlist error:", err);
-          toast("Failed to add to watchlist", "error");
-          if (btn) {
-            btn.disabled = false;
-            btn.textContent = "📊 Watch";
-          }
-        }
+        });
       }
 
       async function loadCart() {
@@ -4742,147 +5016,67 @@
 
       async function removeFromCart(index) {
         const username = sessionStorage.getItem("loggedUser");
-        try {
-          const res = await fetch(
-            `${API_BASE}/cart/${encodeURIComponent(username)}/${index}`,
-            { method: "DELETE" },
-          );
-          const data = await res.json();
-          toast("Item removed ✔️", "success");
-          renderCart(data.cart || [], username);
-        } catch {
-          toast("Failed to remove item", "error");
-        }
+        const item = (window.currentCartItems || [])[index];
+
+        showActionConfirm({
+          icon: "🗑️",
+          title: "Remove from Cart?",
+          message: "Are you sure you want to remove this item from your shopping cart?",
+          product: item,
+          confirmText: "🗑️ Yes, Remove",
+          confirmBg: "linear-gradient(135deg, #ef4444, #dc2626)",
+          cancelText: "Keep Item",
+          onConfirm: async () => {
+            try {
+              const res = await fetch(
+                `${API_BASE}/cart/${encodeURIComponent(username)}/${index}`,
+                { method: "DELETE" },
+              );
+              const data = await res.json();
+              renderCart(data.cart || [], username);
+              showActionPopup({
+                icon: "🗑️",
+                title: "Removed from Cart",
+                message: "The item has been removed from your shopping cart.",
+                primaryBtnText: "OK",
+                primaryAction: () => {}
+              });
+              toast("Item removed ✔️", "success");
+            } catch {
+              toast("Failed to remove item", "error");
+            }
+          }
+        });
       }
 
       async function clearCart() {
         const username = sessionStorage.getItem("loggedUser");
-        try {
-          await fetch(`${API_BASE}/cart/${encodeURIComponent(username)}`, {
-            method: "DELETE",
-          });
-          toast("Cart cleared!", "success");
-          renderCart([], username);
-        } catch {
-          toast("Failed to clear cart", "error");
-        }
-      }
-
-      // ─── ORDERS & HISTORY ────────────────────────────────────────────────────
-      function placeOrder() {
-        openAggregatorCheckout();
-      }
-
-      function openAggregatorCheckout() {
-        const items = window.currentCartItems || [];
-        if (!items.length) {
-          toast("Your cart is empty", "error");
-          return;
-        }
-
-        // Group items by store
-        const byStore = {};
-        items.forEach((p, i) => {
-          const s = p.store || "Other Stores";
-          if (!byStore[s]) byStore[s] = [];
-          byStore[s].push({ ...p, originalIndex: i });
-        });
-
-        const listEl = document.getElementById("checkoutItemList");
-        listEl.innerHTML = "";
-
-        for (const [store, storeItems] of Object.entries(byStore)) {
-          const storeTotal = storeItems.reduce(
-            (s, p) => s + parseInt(p.price) * p.qty,
-            0,
-          );
-
-          let html = `
-          <div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:12px; padding:16px; margin-bottom:10px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:8px;">
-              <h4 style="margin:0; font-size:1.05rem; display:flex; align-items:center; gap:8px;">
-                <span style="background:var(--primary); width:10px; height:10px; border-radius:50%; display:inline-block;"></span>
-                ${store}
-              </h4>
-              <span style="font-weight:600; color:var(--primary-light)">Total: ₹${storeTotal.toLocaleString("en-IN")}</span>
-            </div>
-            <div style="display:flex; flex-direction:column; gap:10px;">
-        `;
-
-          storeItems.forEach((p) => {
-            html += `
-            <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
-              <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:0;">
-                <img src="${p.image}" style="width:36px; height:36px; border-radius:6px; object-fit:cover;">
-                <div style="flex:1; min-width:0;">
-                  <p style="margin:0; font-size:0.85rem; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.title}</p>
-                  <p style="margin:0; font-size:0.75rem; color:var(--text-muted)">Qty: ${p.qty} • ₹${(parseInt(p.price) * p.qty).toLocaleString("en-IN")}</p>
-                </div>
-              </div>
-              <button onclick="openStoreLink('${p.link}', this)" style="background:linear-gradient(135deg, var(--accent), #f97316); border:none; border-radius:8px; padding:6px 12px; font-size:0.8rem; font-weight:600; cursor:pointer; color:white; flex-shrink:0;">
-                Buy on ${store} ↗
-              </button>
-            </div>
-          `;
-          });
-
-          html += `</div></div>`;
-          listEl.insertAdjacentHTML("beforeend", html);
-        }
-
-        document.getElementById("aggregatorCheckoutModal").style.display =
-          "flex";
-      }
-
-      function openStoreLink(link, btnElement) {
-        if (link && link !== "#" && link !== "null") {
-          window.open(link, "_blank", "noopener,noreferrer");
-        }
-        btnElement.textContent = "✅ Redirected";
-        btnElement.style.background = "var(--success)";
-        btnElement.disabled = true;
-      }
-
-      async function finishAggregatorCheckout() {
-        const items = window.currentCartItems || [];
-        const orderItems = items.map((p) => ({
-          ...p,
-          paymentMethod: "Store Checkout",
-        }));
-
-        const payBtn = document.getElementById("finishCheckoutBtn");
-        if (payBtn) {
-          payBtn.disabled = true;
-          payBtn.textContent = "Processing…";
-        }
-
-        try {
-          const username = sessionStorage.getItem("loggedUser");
-          const res = await fetch(`${API_BASE}/place-order-multi`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, orderItems }),
-          });
-          const data = await res.json();
-          closeModal("aggregatorCheckoutModal");
-
-          // Clear local cart items to reflect backend clear
-          window.currentCartItems = [];
-
-          // Show success toast and load orders section
-          toast("Purchases logged successfully! 🎉", "success");
-          setTimeout(() => {
-            showSection("orders");
-          }, 1500);
-        } catch (err) {
-          console.error(err);
-          toast("Failed to log purchase", "error");
-        } finally {
-          if (payBtn) {
-            payBtn.disabled = false;
-            payBtn.textContent = "✅ Log as Purchased & Clear Cart";
+        showActionConfirm({
+          icon: "🛒",
+          title: "Clear Entire Cart?",
+          message: "Are you sure you want to remove all items from your shopping cart?",
+          confirmText: "🗑️ Yes, Clear Cart",
+          confirmBg: "linear-gradient(135deg, #ef4444, #dc2626)",
+          cancelText: "Cancel",
+          onConfirm: async () => {
+            try {
+              await fetch(`${API_BASE}/cart/${encodeURIComponent(username)}`, {
+                method: "DELETE",
+              });
+              renderCart([], username);
+              showActionPopup({
+                icon: "🧹",
+                title: "Cart Cleared",
+                message: "All items have been removed from your shopping cart.",
+                primaryBtnText: "Continue Shopping",
+                primaryAction: () => goHome()
+              });
+              toast("Cart cleared 🛒", "info");
+            } catch {
+              toast("Failed to clear cart", "error");
+            }
           }
-        }
+        });
       }
 
       async function loadOrders() {
