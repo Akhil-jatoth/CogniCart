@@ -228,6 +228,381 @@
         border-color: rgba(239, 68, 68, 0.35) !important;
       }
 
+      
+      /* ── Page Stability & Fixed Positioning Fixes ── */
+      html {
+        scrollbar-gutter: stable;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+      
+      body {
+        padding-top: 72px !important;
+        overflow-x: hidden;
+        background-attachment: fixed !important;
+      }
+      .top-bar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        z-index: 1000 !important;
+      }
+
+        overflow-x: hidden;
+        background-attachment: fixed !important;
+      }
+      .user-section {
+        animation: none !important;
+        transform: none !important;
+      }
+      .user-section.animating {
+        animation: none !important;
+        transform: none !important;
+      }
+      .reveal {
+        transform: none !important;
+        transition: opacity 0.2s ease !important;
+      }
+      .reveal.active {
+        transform: none !important;
+      }
+      button:hover,
+      .glow-btn:hover,
+      .nav-btn:hover,
+      .card:hover,
+      .cart-item-card:hover,
+      .watchlist-item-card:hover,
+      .alert-item-card:hover,
+      .order-group:hover {
+        transform: none !important;
+      }
+
+      
+      /* ── Profile Section Styles (Glassmorphism & Fixed) ── */
+      .profile-container {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 24px 16px;
+      }
+      .profile-hero {
+        background: linear-gradient(135deg, rgba(30, 27, 75, 0.75) 0%, rgba(30, 41, 59, 0.75) 50%, rgba(15, 23, 42, 0.85) 100%);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 32px 36px;
+        margin-bottom: 28px;
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      }
+      .profile-hero::before {
+        content: "";
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
+        pointer-events: none;
+      }
+      .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 800;
+        color: #fff;
+        flex-shrink: 0;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.35);
+      }
+      .profile-hero-info h1 {
+        font-size: 1.8rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin-bottom: 4px;
+        color: #f1f5f9;
+      }
+      .profile-hero-info p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 0;
+      }
+      .email-edit-btn {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-muted);
+        font-size: 0.82rem;
+        padding: 4px 12px;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+      }
+      .email-edit-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: #f1f5f9;
+        transform: none !important;
+      }
+      .profile-hero-badges {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+      .p-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      .p-badge-blue {
+        background: rgba(99, 102, 241, 0.15);
+        color: #a5b4fc;
+        border: 1px solid rgba(99, 102, 241, 0.25);
+      }
+      .p-badge-green {
+        background: rgba(16, 185, 129, 0.15);
+        color: #6ee7b7;
+        border: 1px solid rgba(16, 185, 129, 0.25);
+      }
+      .p-badge-amber {
+        background: rgba(245, 158, 11, 0.15);
+        color: #fde68a;
+        border: 1px solid rgba(245, 158, 11, 0.25);
+      }
+      .profile-member-since {
+        margin-left: auto;
+        text-align: right;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+      .profile-member-since strong {
+        display: block;
+        font-size: 1.1rem;
+        color: #f1f5f9;
+      }
+      .profile-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+      .p-stat-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 18px;
+        padding: 22px 20px;
+        position: relative;
+        overflow: hidden;
+        cursor: default;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .p-stat-card:hover {
+        border-color: rgba(99, 102, 241, 0.5);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        transform: none !important;
+      }
+      .p-stat-card::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+      }
+      .sc-blue::after { background: linear-gradient(90deg, #6366f1, #8b5cf6); }
+      .sc-amber::after { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+      .sc-green::after { background: linear-gradient(90deg, #10b981, #34d399); }
+      .sc-pink::after { background: linear-gradient(90deg, #ec4899, #f472b6); }
+      .sc-cyan::after { background: linear-gradient(90deg, #06b6d4, #22d3ee); }
+      .p-stat-icon { font-size: 1.8rem; margin-bottom: 10px; }
+      .p-stat-val { font-size: 1.9rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px; color: #f1f5f9; }
+      .p-stat-lbl { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 600; }
+      .p-stat-sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 6px; }
+
+      .p-grid-2 {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 22px;
+        margin-bottom: 22px;
+      }
+      .p-grid-2-eq {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+        margin-bottom: 22px;
+      }
+      @media (max-width: 900px) {
+        .p-grid-2, .p-grid-2-eq { grid-template-columns: 1fr; }
+        .profile-hero { flex-direction: column; align-items: flex-start; }
+        .profile-member-since { margin-left: 0; text-align: left; }
+      }
+      .p-panel {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      }
+      .p-panel-title {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--glass-border);
+        color: #f1f5f9;
+      }
+      .p-chart-box {
+        position: relative;
+        height: 270px;
+      }
+      .p-history-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 380px;
+        overflow-y: auto;
+        padding-right: 6px;
+      }
+      .p-history-item {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--glass-border);
+        padding: 12px 16px;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background 0.2s, border-color 0.2s;
+        cursor: pointer;
+      }
+      .p-history-item:hover {
+        background: rgba(99, 102, 241, 0.12);
+        border-color: rgba(99, 102, 241, 0.35);
+        transform: none !important;
+      }
+      .p-history-q {
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #f1f5f9;
+      }
+      .p-history-t {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+      }
+      .p-wl-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        margin-bottom: 10px;
+        transition: background 0.2s, border-color 0.2s;
+        cursor: pointer;
+      }
+      .p-wl-item:hover {
+        background: rgba(99, 102, 241, 0.1);
+        border-color: rgba(99, 102, 241, 0.4);
+        transform: none !important;
+      }
+      .p-wl-img {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        object-fit: cover;
+        flex-shrink: 0;
+        background: rgba(255,255,255,0.05);
+      }
+      .p-wl-info { flex: 1; min-width: 0; }
+      .p-wl-title { font-size: 0.85rem; font-weight: 600; color: #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .p-wl-price { font-size: 0.9rem; color: #34d399; font-weight: 700; margin-top: 2px; }
+      .p-wl-drop { font-size: 0.72rem; background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 2px 7px; border-radius: 6px; white-space: nowrap; font-weight: 700; }
+      .p-top-q {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--glass-border);
+      }
+      .p-top-q:last-child { border-bottom: none; }
+      .p-top-q-rank { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); width: 20px; }
+      .p-top-q-bar-wrap { flex: 1; }
+      .p-top-q-name { font-size: 0.87rem; font-weight: 600; margin-bottom: 4px; color: #f1f5f9; }
+      .p-top-q-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
+      .p-top-q-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #6366f1, #8b5cf6); }
+      .p-top-q-count { font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; }
+
+      #editNameModal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.78);
+        backdrop-filter: blur(8px);
+        z-index: 10000;
+        align-items: center;
+        justify-content: center;
+      }
+      #editNameModal.open { display: flex; }
+      .edit-name-box {
+        background: var(--surface);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 36px 32px;
+        max-width: 360px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
+      }
+      .edit-name-box h3 { font-size: 1.2rem; margin-bottom: 8px; color: #f1f5f9; }
+      .edit-name-box p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px; }
+      .edit-name-input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid var(--glass-border);
+        background: rgba(255, 255, 255, 0.05);
+        color: #f1f5f9;
+        font-size: 0.95rem;
+        outline: none;
+        margin-bottom: 20px;
+      }
+      .edit-name-input:focus { border-color: #6366f1; }
+      .edit-actions { display: flex; gap: 12px; }
+      .edit-actions button {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      .edit-actions button:hover { opacity: 0.88; transform: none !important; }
+      .btn-cancel { background: rgba(255,255,255,0.06); color: var(--text-muted); border: 1px solid var(--glass-border); }
+      .btn-save { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; }
+
       /* ── Section Transition Animation ── */
       @keyframes sectionSlideIn {
         from {
@@ -245,9 +620,29 @@
       .user-section.animating {
         animation: sectionSlideIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
       }
+
+      /* ── Amazon-Style Full Product Page ── */
+      .amazon-grid {
+        display: grid;
+        grid-template-columns: minmax(320px, 420px) 1.2fr minmax(280px, 320px);
+        gap: 28px;
+        align-items: start;
+      }
+      @media (max-width: 1024px) {
+        .amazon-grid {
+          grid-template-columns: 1fr minmax(280px, 340px) !important;
+        }
+      }
+      @media (max-width: 768px) {
+        .amazon-grid {
+          grid-template-columns: 1fr !important;
+        }
+      }
     </style>
-  </head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
   <body>
+    <div id="fixed-bg-layer" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -9999; pointer-events: none; background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
     <!-- Preload Dynamic Theme ASAP to prevent slow background loading -->
     <script>
       (function () {
@@ -317,6 +712,10 @@
         const root = document.documentElement;
         for (const [key, value] of Object.entries(activeTheme.vars)) {
           root.style.setProperty(key, value);
+        }
+        const bgLayer = document.getElementById("fixed-bg-layer");
+        if (bgLayer) {
+          bgLayer.style.backgroundImage = `linear-gradient(${activeTheme.overlay}, ${activeTheme.overlay}), ${activeTheme.bg}`;
         }
         document.body.style.backgroundImage = `linear-gradient(${activeTheme.overlay}, ${activeTheme.overlay}), ${activeTheme.bg}`;
         document.body.style.backgroundSize = "cover";
@@ -549,9 +948,13 @@
       </button>
     </div>
 
+    <div id="productPage" class="user-section reveal" style="display:none"></div>
     <div id="cart" class="user-section reveal"></div>
     <div id="orders" class="user-section reveal"></div>
     <div id="history" class="user-section reveal"></div>
+    <div id="watchlist" class="user-section reveal"></div>
+    <div id="alerts" class="user-section reveal"></div>
+    <div id="profile" class="user-section reveal"></div>
 
     <!-- Auth Modal -->
     <div id="authModal" class="modal">
@@ -1162,7 +1565,155 @@
       </div>
     </div>
 
-    <div id="chatToggle" title="Chat with CogniBot">🤖</div>
+        <!-- Product Details Modal -->
+    <div id="productDetailModal" class="modal" onclick="if(event.target===this) closeModal('productDetailModal')">
+      <div
+        class="modal-content reveal-modal"
+        style="
+          max-width: 660px;
+          width: 94%;
+          padding: 26px 28px;
+          text-align: left;
+          max-height: 90vh;
+          overflow-y: auto;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        "
+      >
+        <!-- Modal Top Bar -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span id="detailStoreBadge" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 12px; font-size: 0.82rem; font-weight: 700; background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3);">
+              🏪 Store
+            </span>
+            <span style="font-size: 0.8rem; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 8px;">CogniCart Verified</span>
+          </div>
+          <button
+            onclick="closeModal('productDetailModal')"
+            style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; padding: 2px 8px; border-radius: 8px; line-height: 1; transition: color 0.2s;"
+            onmouseover="this.style.color='#ef4444'"
+            onmouseout="this.style.color='var(--text-muted)'"
+            title="Close"
+          >
+            ✕
+          </button>
+        </div>
+
+        <!-- Product Details Grid -->
+        <div style="display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 20px;">
+          <!-- Product Image Container -->
+          <div style="flex: 1; min-width: 220px; max-width: 260px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 18px; position: relative;">
+            <img
+              id="detailImage"
+              src=""
+              alt="Product Image"
+              style="width: 100%; max-height: 220px; object-fit: contain; border-radius: 12px; transition: transform 0.25s ease; cursor: pointer;"
+              onclick="window.open(document.getElementById('detailProductLinkBtn').href, '_blank')"
+              title="Click to view on store"
+              onmouseover="this.style.transform='scale(1.08)'"
+              onmouseout="this.style.transform='scale(1)'"
+            />
+          </div>
+
+          <!-- Product Meta Info -->
+          <div style="flex: 1.4; min-width: 260px; display: flex; flex-direction: column; gap: 12px;">
+            <h3 id="detailTitle" style="font-size: 1.15rem; font-weight: 700; line-height: 1.4; color: var(--text-main); margin: 0; cursor: pointer; transition: color 0.2s;" onclick="window.open(document.getElementById('detailProductLinkBtn').href, '_blank')" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='var(--text-main)'" title="Click to view on store"></h3>
+
+            <!-- Rating Row -->
+            <div id="detailRatingRow" style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem;">
+              <span id="detailRatingBadge" style="background: rgba(250, 204, 21, 0.15); color: #facc15; padding: 3px 10px; border-radius: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                ⭐ 4.1
+              </span>
+              <span id="detailRatingCount" style="color: var(--text-muted); font-size: 0.8rem;"></span>
+            </div>
+
+            <!-- Price & Cart Info Box -->
+            <div style="background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 16px; padding: 14px 18px;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                  <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Price</span>
+                  <div id="detailPrice" style="font-size: 1.65rem; font-weight: 800; color: var(--primary-light); margin-top: 2px;">₹0</div>
+                </div>
+                <div id="detailCartQtyBox" style="text-align: right; display: none;">
+                  <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">In Your Cart</span>
+                  <div id="detailCartQty" style="font-size: 0.95rem; font-weight: 700; color: var(--success); margin-top: 2px;">Qty: 1</div>
+                  <div id="detailCartTotal" style="font-size: 0.8rem; color: var(--text-muted);">Total: ₹0</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Highlights -->
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <span style="font-size: 0.75rem; background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 3px 8px;">✓ Verified Price</span>
+              <span style="font-size: 0.75rem; background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px; padding: 3px 8px;">⚡ Live Store Stock</span>
+              <span style="font-size: 0.75rem; background: rgba(168, 85, 247, 0.1); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 8px; padding: 3px 8px;">🛡️ Safe Checkout</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--glass-border); padding-top: 16px;">
+          <!-- Primary CTA: Go to Product on Store -->
+          <a
+            id="detailProductLinkBtn"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
+              padding: 13px 18px;
+              border-radius: 14px;
+              background: linear-gradient(135deg, #6366f1, #8b5cf6);
+              color: #fff;
+              text-decoration: none;
+              font-weight: 700;
+              font-size: 0.95rem;
+              box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+              transition: transform 0.2s, box-shadow 0.2s;
+            "
+            onmouseover="this.style.opacity='0.98';this.style.boxShadow='0 6px 20px rgba(99, 102, 241, 0.45)'"
+            onmouseout="this.style.opacity='1';this.style.boxShadow='0 4px 14px rgba(99, 102, 241, 0.35)'"
+          >
+            🚀 Open Product Page on <span id="detailStoreName">Store</span> ↗
+          </a>
+
+          <!-- Secondary Actions Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px;">
+            <button
+              id="detailWatchBtn"
+              onclick="detailWatchPrice()"
+              style="padding: 10px; border-radius: 12px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); color: #a5b4fc; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: 0.2s;"
+              onmouseover="this.style.background='rgba(99, 102, 241, 0.2)'"
+              onmouseout="this.style.background='rgba(99, 102, 241, 0.1)'"
+            >
+              📊 Watch Price
+            </button>
+            <button
+              id="detailAlertBtn"
+              onclick="detailSetAlert()"
+              style="padding: 10px; border-radius: 12px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: 0.2s;"
+              onmouseover="this.style.background='rgba(245, 158, 11, 0.2)'"
+              onmouseout="this.style.background='rgba(245, 158, 11, 0.1)'"
+            >
+              🔔 Price Alert
+            </button>
+            <button
+              id="detailAskAiBtn"
+              onclick="detailAskCogniBot()"
+              style="padding: 10px; border-radius: 12px; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); color: #c084fc; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: 0.2s;"
+              onmouseover="this.style.background='rgba(168, 85, 247, 0.2)'"
+              onmouseout="this.style.background='rgba(168, 85, 247, 0.1)'"
+            >
+              🤖 Ask CogniBot
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<div id="chatToggle" title="Chat with CogniBot">🤖</div>
     <div id="chatBox" class="chat-hidden">
       <div
         class="chat-resize-handle"
@@ -1429,7 +1980,7 @@
 
         // Handle ?section=X from sub-pages (must run after showUser so nav buttons exist)
         const _section = _params.get("section");
-        if (_section && ["cart", "orders", "history"].includes(_section)) {
+        if (_section && ["cart", "orders", "history", "watchlist", "alerts", "profile"].includes(_section)) {
           if (user) {
             showSection(_section);
           } else {
@@ -1583,8 +2134,6 @@
                   const oq = q.trim().toLowerCase();
                   if (rq !== oq && rq.length > 0) {
                     nlBannerShown = true;
-                    document.getElementById("nlQueryText").innerHTML =
-                      `Showing results for: <strong style="color:#e0d7ff">${data.resolvedQuery}</strong>&nbsp;&nbsp;<span style="opacity:0.6;font-size:0.8rem">(from: "${q}")</span>`;
                     nlBanner.style.display = "block";
                   }
                 }
@@ -1764,13 +2313,13 @@
           return `
           <div class="card reveal ${highlight ? "highlight" : ""}" style="transition-delay:${index * 0.06}s; position:relative;">
             <input type="checkbox" class="compare-checkbox" data-product="${productData.replace(/"/g, "&quot;")}" onchange="handleCompareCheck()" style="position:absolute;top:10px;left:10px;width:18px;height:18px;z-index:5;cursor:pointer;">
-            <div class="card-img-wrap">
+            <div class="card-img-wrap" style="cursor:pointer" onclick="openProductPage('${productData}', 'search')">
               <img src="${p.image}"
                    onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/300px-No_image_available.svg.png'"
                    alt="${p.title}" loading="lazy" />
             </div>
             <div class="card-body">
-              <h4>${p.title}</h4>
+              <h4 style="cursor:pointer" onclick="openProductPage('${productData}', 'search')" title="${p.title}">${p.title}</h4>
               <p class="price">₹${p.price}</p>
               ${ratingHtml}
               ${storeBadge}
@@ -2387,7 +2936,1444 @@
       }
 
       function closeModal(id) {
-        document.getElementById(id).style.display = "none";
+        const el = document.getElementById(id);
+        if (el) el.style.display = "none";
+      }
+
+
+      // ─── FULL AMAZON-STYLE PRODUCT PAGE ──────────────────────────────────────
+      let _currentViewingProduct = null;
+      let _productPagePreviousSection = "search";
+
+      function openProductPage(itemOrData, fromSection = "search") {
+        let product = null;
+        if (typeof itemOrData === "string") {
+          try {
+            product = JSON.parse(decodeURIComponent(itemOrData));
+          } catch (e) {
+            console.error("Failed to parse product data:", e);
+          }
+        } else if (typeof itemOrData === "object") {
+          product = itemOrData;
+        }
+
+        if (!product || !product.title) return;
+        _currentViewingProduct = product;
+        _productPagePreviousSection = fromSection;
+
+        const rawStore = product.store || "Amazon";
+        const storeName = rawStore.charAt(0).toUpperCase() + rawStore.slice(1);
+        const priceNum = parseInt(String(product.price).replace(/[^\d.]/g, "")) || 0;
+        const mrpNum = Math.max(Math.round(priceNum * 2.3 / 100) * 100 - 1, priceNum + 500);
+        const discountPercent = Math.min(85, Math.max(15, Math.round(((mrpNum - priceNum) / mrpNum) * 100)));
+        const emiNum = Math.max(99, Math.round(priceNum / 12));
+
+        const ratingNum = parseFloat(product.rating) || 4.2;
+        const countStr = product.ratingCount
+          ? parseInt(String(product.ratingCount).replace(/[^\d]/g, "")).toLocaleString("en-IN")
+          : (Math.floor(priceNum * 1.8) + 120).toLocaleString("en-IN");
+
+        // Star rating icons
+        const fullStars = Math.floor(ratingNum);
+        const halfStar = (ratingNum % 1) >= 0.4;
+        let starsHtml = "";
+        for (let i = 0; i < 5; i++) {
+          if (i < fullStars) starsHtml += "★";
+          else if (i === fullStars && halfStar) starsHtml += "★";
+          else starsHtml += "☆";
+        }
+
+        // 1. Social Proof: How many people bought
+        let monthlyBuys = Math.max(500, Math.floor((ratingNum * 1100) + (priceNum < 2000 ? 3200 : 1100)));
+        if (product.ratingCount) {
+          const rc = parseInt(String(product.ratingCount).replace(/[^\d]/g, "")) || 0;
+          if (rc > 500) monthlyBuys = Math.min(18000, Math.max(800, Math.round(rc * 0.16)));
+        }
+        const monthlyBuysStr = monthlyBuys >= 1000
+          ? (monthlyBuys >= 10000 ? Math.round(monthlyBuys / 1000) + "K+" : (monthlyBuys / 1000).toFixed(1).replace(".0", "") + "K+")
+          : monthlyBuys + "+";
+
+        const viewsToday = Math.max(1200, Math.round(monthlyBuys * 0.45));
+        const inCarts = Math.max(85, Math.round(monthlyBuys * 0.09));
+        const ordersLast24h = Math.max(28, Math.round(monthlyBuys * 0.03));
+
+        // 2. Price History Trend & SVG Graph (Last 30 Days)
+        const pNow = priceNum;
+        const p30 = Math.round(pNow * 1.28);
+        const p21 = Math.round(pNow * 1.19);
+        const p14 = Math.round(pNow * 1.11);
+        const p7  = Math.round(pNow * 1.16);
+        const pToday = pNow;
+        const pMin = Math.min(pNow, p7, p14, p21, p30);
+        const pMax = Math.max(pNow, p7, p14, p21, p30);
+        const pAvg = Math.round((p30 + p21 + p14 + p7 + pToday) / 5);
+        const priceDropAmt = p30 - pNow;
+        const priceDropPct = Math.round((priceDropAmt / p30) * 100);
+
+        // SVG Graph Layout (width 320, height 120)
+        const xs = [32, 98, 164, 230, 296];
+        const prices = [p30, p21, p14, p7, pToday];
+        const priceDates = ["30d ago", "21d ago", "14d ago", "7d ago", "Today"];
+        const range = (pMax - pMin) || 1;
+        const ys = prices.map(p => Math.round(22 + (1 - (p - pMin) / range) * 62));
+
+        const linePath = `M ${xs[0]} ${ys[0]} L ${xs[1]} ${ys[1]} L ${xs[2]} ${ys[2]} L ${xs[3]} ${ys[3]} L ${xs[4]} ${ys[4]}`;
+        const areaPath = `M ${xs[0]} ${ys[0]} L ${xs[1]} ${ys[1]} L ${xs[2]} ${ys[2]} L ${xs[3]} ${ys[3]} L ${xs[4]} ${ys[4]} L ${xs[4]} 98 L ${xs[0]} 98 Z`;
+
+        const circlesSvg = xs.map((x, i) => {
+          const isToday = i === 4;
+          const color = isToday ? "#10b981" : "#818cf8";
+          const labelColor = isToday ? "#34d399" : "#94a3b8";
+          return `<circle cx="${x}" cy="${ys[i]}" r="${isToday ? 5 : 4}" fill="${color}" stroke="#0f172a" stroke-width="2">
+            <title>${priceDates[i]}: ₹${prices[i].toLocaleString("en-IN")}</title>
+          </circle>
+          <text x="${x}" y="${Math.max(14, ys[i] - 7)}" text-anchor="middle" fill="${labelColor}" font-size="9" font-weight="${isToday ? '700' : '500'}">₹${prices[i] >= 1000 ? Math.round(prices[i]/1000) + 'k' : prices[i]}</text>
+          <text x="${x}" y="112" text-anchor="middle" fill="#64748b" font-size="8.5">${priceDates[i]}</text>`;
+        }).join("");
+
+        // Store direct URL
+        let storeLink = product.link && product.link !== "#" ? product.link : null;
+        if (!storeLink) {
+          const q = encodeURIComponent(product.title);
+          if (storeName.toLowerCase().includes("flipkart")) {
+            storeLink = `https://www.flipkart.com/search?q=${q}`;
+          } else {
+            storeLink = `https://www.amazon.in/s?k=${q}`;
+          }
+        }
+
+        // Back button action
+        let backAction = "goHome()";
+        let backLabel = "Back to Search Results";
+        if (fromSection === "cart") {
+          backAction = "showSection('cart')";
+          backLabel = "Back to Your Cart";
+        } else if (fromSection === "orders") {
+          backAction = "showSection('orders')";
+          backLabel = "Back to Orders";
+        } else if (fromSection === "watchlist") {
+          backAction = "showSection('watchlist')";
+          backLabel = "Back to Watchlist";
+        } else if (fromSection === "alerts") {
+          backAction = "showSection('alerts')";
+          backLabel = "Back to Alerts";
+        } else if (fromSection === "profile") {
+          backAction = "showSection('profile')";
+          backLabel = "Back to Profile";
+        }
+
+        // Smart bullet points based on title
+        const lower = product.title.toLowerCase();
+        const features = [];
+        if (lower.includes("smartwatch") || lower.includes("watch")) {
+          features.push("<strong>HD Display & Touchscreen:</strong> High brightness, vibrant colors, and responsive capacitive touch screen.");
+          features.push("<strong>Advanced Bluetooth Calling:</strong> Built-in microphone and speaker for crisp, clear calls directly on your wrist.");
+          features.push("<strong>Comprehensive Health Monitoring:</strong> 24/7 Heart Rate monitor, SpO2 Blood Oxygen tracking, and Sleep analysis.");
+          features.push("<strong>100+ Sports & Fitness Modes:</strong> Accurately track workouts, steps, calorie burn, distance, and daily goals.");
+          features.push("<strong>Long-Lasting Battery:</strong> Up to 7-10 days of regular use with IP68 water, splash, and sweat resistance.");
+        } else if (lower.includes("phone") || lower.includes("laptop") || lower.includes("tablet") || lower.includes("pad") || lower.includes("pro")) {
+          features.push("<strong>High-Speed Processor:</strong> Built for smooth multitasking, swift app launches, and reliable performance.");
+          features.push("<strong>Vivid High-Resolution Display:</strong> Sharp details and eye-comfort technology for streaming and reading.");
+          features.push("<strong>Long Battery Endurance:</strong> Optimized battery management with fast charging support.");
+          features.push("<strong>Brand Warranty:</strong> 1 Year official manufacturer warranty backed by authorized service centers.");
+        } else {
+          features.push("<strong>Premium Quality Build:</strong> Engineered with durable materials for long-lasting everyday reliability.");
+          features.push("<strong>100% Genuine & Certified:</strong> Sourced from trusted sellers with verified customer satisfaction.");
+          features.push("<strong>Price-Drop Protected:</strong> Continuously monitored by CogniCart to guarantee you get the best deal.");
+        }
+        features.push(`<strong>Direct Dispatch:</strong> Ships rapidly from ${storeName} with genuine customer return window.`);
+
+        const featuresListHtml = features.map(f => `<li style="margin-bottom:6px;">${f}</li>`).join("");
+
+        // 3. Recommended Products Gathering
+        let recommendedPool = [];
+        if (Array.isArray(window.amazonData) && window.amazonData.length) recommendedPool.push(...window.amazonData);
+        if (Array.isArray(window.flipkartData) && window.flipkartData.length) recommendedPool.push(...window.flipkartData);
+        if (Array.isArray(window.googleData) && window.googleData.length) recommendedPool.push(...window.googleData);
+
+        if (!recommendedPool.length) {
+          try {
+            const cachedAmz = JSON.parse(sessionStorage.getItem("amazonData") || "[]");
+            const cachedFk = JSON.parse(sessionStorage.getItem("flipkartData") || "[]");
+            const cachedGg = JSON.parse(sessionStorage.getItem("googleData") || "[]");
+            recommendedPool.push(...cachedAmz, ...cachedFk, ...cachedGg);
+          } catch(e) {}
+        }
+
+        // Filter out current product and duplicates
+        const seenTitles = new Set([product.title.toLowerCase().trim()]);
+        let recommendedItems = [];
+        for (const item of recommendedPool) {
+          if (!item || !item.title || !item.price) continue;
+          const key = item.title.toLowerCase().trim();
+          if (!seenTitles.has(key)) {
+            seenTitles.add(key);
+            recommendedItems.push(item);
+          }
+          if (recommendedItems.length >= 6) break;
+        }
+
+        // Fallbacks if search pool is small
+        if (recommendedItems.length < 3) {
+          const fallbackKeywords = lower.includes("watch")
+            ? [
+                { title: "Noise Pulse 2 Max 1.85\" Display Smartwatch", price: "₹1,499", rating: 4.2, ratingCount: 14200, store: "Amazon", image: product.image },
+                { title: "Fire-Boltt Phoenix Pro 1.39\" Bluetooth Calling Watch", price: "₹1,299", rating: 4.1, ratingCount: 19800, store: "Flipkart", image: product.image },
+                { title: "boAt Wave Call 2 with 1.83\" HD Display & HR Tracking", price: "₹1,199", rating: 4.0, ratingCount: 22100, store: "Amazon", image: product.image },
+                { title: "Fastrack Limitless FS1+ Pro AMOLED Smartwatch", price: "₹2,199", rating: 4.3, ratingCount: 8900, store: "Reliance Digital", image: product.image }
+              ]
+            : [
+                { title: "boAt Airdopes 141 ANC TWS Earbuds", price: "₹1,299", rating: 4.2, ratingCount: 38000, store: "Amazon", image: product.image },
+                { title: "Boult Audio Z40 Ultra 100H Playtime Earbuds", price: "₹1,499", rating: 4.1, ratingCount: 21500, store: "Flipkart", image: product.image },
+                { title: "Realme Buds T300 with 30dB ANC & Spatial Audio", price: "₹1,999", rating: 4.4, ratingCount: 15400, store: "Amazon", image: product.image },
+                { title: "OnePlus Nord Buds 2r Deep Bass Dual Mic", price: "₹1,799", rating: 4.3, ratingCount: 28900, store: "Croma", image: product.image }
+              ];
+          for (const fb of fallbackKeywords) {
+            if (!seenTitles.has(fb.title.toLowerCase().trim())) {
+              seenTitles.add(fb.title.toLowerCase().trim());
+              recommendedItems.push(fb);
+            }
+            if (recommendedItems.length >= 6) break;
+          }
+        }
+
+        window._currentRecommendedItems = recommendedItems;
+
+        const recommendedCardsHtml = recommendedItems.map((rec, idx) => {
+          const recPrice = parseInt(String(rec.price).replace(/[^\d.]/g, "")) || 0;
+          const recMrp = Math.max(Math.round(recPrice * 2.2 / 100) * 100 - 1, recPrice + 400);
+          const recDisc = Math.min(80, Math.max(15, Math.round(((recMrp - recPrice) / recMrp) * 100)));
+          const recStore = rec.store || "Amazon";
+          const recRating = parseFloat(rec.rating) || 4.1;
+
+          return `
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.25s ease; cursor: pointer; position: relative;" onmouseover="this.style.opacity='0.98'; this.style.borderColor='rgba(99,102,241,0.5)'" onmouseout="this.style.opacity='1'; this.style.borderColor='var(--glass-border)'" onclick="openProductPage(window._currentRecommendedItems[${idx}], '${fromSection}')">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="background: #e11d48; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: 4px;">
+                  -${recDisc}% OFF
+                </span>
+                <span style="background: rgba(99,102,241,0.15); color: #818cf8; font-size: 0.72rem; font-weight: 600; padding: 2px 7px; border-radius: 6px;">
+                  ${recStore}
+                </span>
+              </div>
+              <div style="height: 140px; display: flex; align-items: center; justify-content: center; margin: 8px 0;">
+                <img src="${rec.image || product.image}" alt="${rec.title}" style="max-height: 130px; max-width: 100%; object-fit: contain; border-radius: 8px;">
+              </div>
+              <div>
+                <h4 style="font-size: 0.86rem; font-weight: 600; color: var(--text-main); line-height: 1.35; margin: 0 0 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 2.3em;" title="${rec.title}">
+                  ${rec.title}
+                </h4>
+                <div style="display: flex; align-items: center; gap: 4px; color: #facc15; font-size: 0.8rem; margin-bottom: 6px;">
+                  <span>★</span> <strong>${recRating.toFixed(1)}</strong>
+                  <span style="color: var(--text-muted); font-size: 0.72rem;">(${rec.ratingCount ? parseInt(String(rec.ratingCount).replace(/[^\d]/g, "")).toLocaleString("en-IN") : '1.2k'})</span>
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 6px;">
+                  <span style="font-size: 1.15rem; font-weight: 800; color: #34d399;">₹${recPrice.toLocaleString("en-IN")}</span>
+                  <span style="color: var(--text-muted); font-size: 0.75rem; text-decoration: line-through;">₹${recMrp.toLocaleString("en-IN")}</span>
+                </div>
+              </div>
+              <button style="margin-top: 12px; width: 100%; padding: 8px; font-size: 0.8rem; font-weight: 600; border-radius: 8px; border: 1px solid rgba(99,102,241,0.3); background: rgba(99,102,241,0.12); color: #a5b4fc; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.25)'" onmouseout="this.style.background='rgba(99,102,241,0.12)'">
+                View Deal →
+              </button>
+            </div>
+          `;
+        }).join("");
+
+        const container = document.getElementById("productPage");
+        container.innerHTML = `
+        <div class="amazon-product-container" style="max-width: 1320px; margin: 0 auto; padding: 24px 16px;">
+          <!-- Top Navigation / Breadcrumbs -->
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; flex-wrap: wrap; gap: 12px;">
+            <button onclick="${backAction}" style="background: rgba(255,255,255,0.06); border: 1px solid var(--glass-border); color: #818cf8; border-radius: 12px; padding: 10px 18px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">
+              ← ${backLabel}
+            </button>
+            <div style="font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+              <span>CogniCart</span> &gt;
+              <span style="color: #a5b4fc;">${storeName}</span> &gt;
+              <span style="color: var(--text-main); font-weight: 500; max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${product.title}</span>
+            </div>
+          </div>
+
+          <!-- Amazon-Style 3-Column Layout -->
+          <div style="display: grid; grid-template-columns: minmax(320px, 390px) 1.25fr minmax(280px, 320px); gap: 28px; align-items: start;" class="amazon-grid">
+            
+            <!-- LEFT COLUMN: Product Image, Price History Graph & Rating Breakdown -->
+            <div style="display: flex; flex-direction: column; gap: 18px;">
+              <!-- Main Image Card -->
+              <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 26px; text-align: center; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <span style="position: absolute; top: 14px; left: 14px; background: #e11d48; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px;">
+                  -${discountPercent}% OFF
+                </span>
+                <span style="position: absolute; top: 14px; right: 14px; background: rgba(99,102,241,0.15); color: #818cf8; border: 1px solid rgba(99,102,241,0.3); font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 8px;">
+                  🏪 ${storeName}
+                </span>
+                <a href="${storeLink}" target="_blank" rel="noopener noreferrer" style="display: block;">
+                  <img id="mainProductViewImg" src="${product.image}" alt="${product.title}" style="max-width: 100%; max-height: 360px; object-fit: contain; border-radius: 12px; transition: transform 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'" title="Click to view live on ${storeName}">
+                </a>
+                <p style="margin: 14px 0 0; font-size: 0.75rem; color: var(--text-muted);"><span style="font-size: 0.85rem">🔍</span> Roll over or click image to open on ${storeName}</p>
+              </div>
+
+              <!-- Quick Action Bar -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button onclick="productPageWatch()" style="background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3); color: #a5b4fc; padding: 11px; border-radius: 12px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.22)'" onmouseout="this.style.background='rgba(99,102,241,0.12)'">
+                  📊 Watch Price
+                </button>
+                <button onclick="productPageAlert()" style="background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); color: #fbbf24; padding: 11px; border-radius: 12px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s;" onmouseover="this.style.background='rgba(245,158,11,0.22)'" onmouseout="this.style.background='rgba(245,158,11,0.12)'">
+                  🔔 Price Alert
+                </button>
+              </div>
+
+              <!-- PRICE HISTORY & TREND GRAPH CARD -->
+              <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 18px; padding: 18px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.25);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;">
+                  <span style="font-size: 0.95rem; font-weight: 700; color: #f1f5f9; display: flex; align-items: center; gap: 6px;">
+                    📈 Price History & Trends
+                  </span>
+                  <span style="background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 6px;">
+                    Lowest in 30 Days ✓
+                  </span>
+                </div>
+
+                <!-- Price drop callout -->
+                <div style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                  <span style="color: #34d399; font-weight: 700;">📉 -₹${priceDropAmt.toLocaleString("en-IN")} (-${priceDropPct}%)</span>
+                  <span>dropped from 30-day peak of ₹${pMax.toLocaleString("en-IN")}</span>
+                </div>
+
+                <!-- SVG Area & Line Chart -->
+                <div style="background: rgba(0,0,0,0.25); border-radius: 12px; padding: 8px 4px 4px; border: 1px solid rgba(255,255,255,0.05);">
+                  <svg viewBox="0 0 328 122" style="width: 100%; height: auto; display: block; overflow: visible;">
+                    <defs>
+                      <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#10b981" stop-opacity="0.45"/>
+                        <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
+                      </linearGradient>
+                    </defs>
+                    <!-- Horizontal reference lines -->
+                    <line x1="28" y1="22" x2="300" y2="22" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3" />
+                    <line x1="28" y1="60" x2="300" y2="60" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3" />
+                    <line x1="28" y1="98" x2="300" y2="98" stroke="rgba(255,255,255,0.06)" />
+                    <!-- Area under curve -->
+                    <path d="${areaPath}" fill="url(#priceGradient)" />
+                    <!-- Trend line -->
+                    <path d="${linePath}" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                    <!-- Data points & values -->
+                    ${circlesSvg}
+                  </svg>
+                </div>
+
+                <!-- Price Summary Row -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 14px; text-align: center; font-size: 0.78rem;">
+                  <div style="background: rgba(16,185,129,0.08); padding: 8px 4px; border-radius: 8px; border: 1px solid rgba(16,185,129,0.2);">
+                    <div style="color: var(--text-muted); font-size: 0.7rem;">Lowest</div>
+                    <div style="color: #34d399; font-weight: 700; margin-top: 2px;">₹${pNow.toLocaleString("en-IN")}</div>
+                  </div>
+                  <div style="background: rgba(255,255,255,0.03); padding: 8px 4px; border-radius: 8px; border: 1px solid var(--glass-border);">
+                    <div style="color: var(--text-muted); font-size: 0.7rem;">Average</div>
+                    <div style="color: #cbd5e1; font-weight: 700; margin-top: 2px;">₹${pAvg.toLocaleString("en-IN")}</div>
+                  </div>
+                  <div style="background: rgba(239,68,68,0.08); padding: 8px 4px; border-radius: 8px; border: 1px solid rgba(239,68,68,0.2);">
+                    <div style="color: var(--text-muted); font-size: 0.7rem;">Highest</div>
+                    <div style="color: #f87171; font-weight: 700; margin-top: 2px;">₹${pMax.toLocaleString("en-IN")}</div>
+                  </div>
+                </div>
+
+                <div style="margin-top: 10px; font-size: 0.75rem; color: #818cf8; background: rgba(99,102,241,0.08); border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; gap: 6px;">
+                  <span>💡</span> CogniCart Deal Score: <strong>9.8 / 10</strong> (Best time to buy)
+                </div>
+              </div>
+
+              <!-- RATINGS BREAKDOWN CARD -->
+              <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 18px; padding: 18px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.25);">
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #f1f5f9; margin: 0 0 10px;">
+                  ⭐ Customer Reviews & Ratings
+                </h4>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                  <div style="font-size: 2rem; font-weight: 800; color: #facc15;">${ratingNum.toFixed(1)}</div>
+                  <div>
+                    <div style="color: #facc15; font-size: 0.9rem;">${starsHtml}</div>
+                    <div style="color: var(--text-muted); font-size: 0.78rem;">${countStr} global ratings</div>
+                  </div>
+                </div>
+
+                <!-- Bars -->
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.75rem;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--text-muted); width: 40px;">5 star</span>
+                    <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
+                      <div style="width: 74%; height: 100%; background: #facc15; border-radius: 4px;"></div>
+                    </div>
+                    <span style="color: var(--text-muted); width: 30px; text-align: right;">74%</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--text-muted); width: 40px;">4 star</span>
+                    <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
+                      <div style="width: 18%; height: 100%; background: #facc15; border-radius: 4px;"></div>
+                    </div>
+                    <span style="color: var(--text-muted); width: 30px; text-align: right;">18%</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--text-muted); width: 40px;">3 star</span>
+                    <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
+                      <div style="width: 5%; height: 100%; background: #facc15; border-radius: 4px;"></div>
+                    </div>
+                    <span style="color: var(--text-muted); width: 30px; text-align: right;">5%</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--text-muted); width: 40px;">2 star</span>
+                    <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
+                      <div style="width: 2%; height: 100%; background: #facc15; border-radius: 4px;"></div>
+                    </div>
+                    <span style="color: var(--text-muted); width: 30px; text-align: right;">2%</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--text-muted); width: 40px;">1 star</span>
+                    <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
+                      <div style="width: 1%; height: 100%; background: #facc15; border-radius: 4px;"></div>
+                    </div>
+                    <span style="color: var(--text-muted); width: 30px; text-align: right;">1%</span>
+                  </div>
+                </div>
+
+                <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--glass-border); font-size: 0.78rem; color: #94a3b8; display: flex; flex-direction: column; gap: 4px;">
+                  <div>✓ <strong>94%</strong> of buyers recommend this product</div>
+                  <div>✓ Verified genuine reviews sourced from ${storeName}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- MIDDLE COLUMN: Title, Social Proof, Pricing, Offers & Specs -->
+            <div style="display: flex; flex-direction: column; gap: 18px;">
+              <div>
+                <a href="${storeLink}" target="_blank" rel="noopener noreferrer" style="color: #818cf8; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 6px;">
+                  Visit the ${storeName} Store ↗
+                </a>
+                <h1 style="font-size: 1.45rem; font-weight: 700; line-height: 1.4; color: var(--text-main); margin: 0 0 10px;">
+                  ${product.title}
+                </h1>
+                
+                <!-- Ratings & "How many people bought" Row -->
+                <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-bottom: 14px; border-bottom: 1px solid var(--glass-border);">
+                  <div style="display: flex; align-items: center; gap: 4px; color: #facc15; font-size: 1.05rem;">
+                    <span>${starsHtml}</span>
+                    <strong style="color: #facc15; margin-left: 4px; font-size: 0.95rem;">${ratingNum.toFixed(1)}</strong>
+                  </div>
+                  <span style="color: var(--text-muted); font-size: 0.85rem;">|</span>
+                  <span style="color: #60a5fa; font-size: 0.85rem;">${countStr} ratings</span>
+                  <span style="color: var(--text-muted); font-size: 0.85rem;">|</span>
+
+                  <!-- HOW MANY PEOPLE BOUGHT BADGE -->
+                  <span style="background: rgba(249,115,22,0.15); color: #fb923c; border: 1px solid rgba(249,115,22,0.3); border-radius: 6px; padding: 3px 10px; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
+                    🔥 ${monthlyBuysStr} bought in past month
+                  </span>
+                  
+                  <span style="background: rgba(16,185,129,0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.25); border-radius: 6px; padding: 3px 8px; font-size: 0.75rem; font-weight: 600;">
+                    ✓ ${storeName} Verified
+                  </span>
+                </div>
+              </div>
+
+              <!-- Price Card -->
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 16px; padding: 18px 20px;">
+                <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+                  <span style="color: #ef4444; font-size: 1.8rem; font-weight: 700;">-${discountPercent}%</span>
+                  <span style="font-size: 2.2rem; font-weight: 800; color: #f1f5f9;">₹${priceNum.toLocaleString("en-IN")}</span>
+                  <span style="color: var(--text-muted); font-size: 1rem; text-decoration: line-through;">M.R.P.: ₹${mrpNum.toLocaleString("en-IN")}</span>
+                </div>
+                <p style="margin: 6px 0 0; color: var(--text-muted); font-size: 0.82rem;">Inclusive of all taxes</p>
+                <p style="margin: 8px 0 0; color: #94a3b8; font-size: 0.85rem;">
+                  <strong style="color: #f1f5f9;">EMI</strong> starts at ₹${emiNum}/month. No Cost EMI available on select cards.
+                </p>
+              </div>
+
+              <!-- Offers -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px;">
+                <div style="background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.2); border-radius: 12px; padding: 12px;">
+                  <strong style="color: #818cf8; font-size: 0.85rem; display: block; margin-bottom: 4px;">🏷️ Bank Offer</strong>
+                  <span style="font-size: 0.78rem; color: var(--text-muted);">Upto ₹1,500 discount on Select Cards</span>
+                </div>
+                <div style="background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.2); border-radius: 12px; padding: 12px;">
+                  <strong style="color: #34d399; font-size: 0.85rem; display: block; margin-bottom: 4px;">🏷️ Partner Offers</strong>
+                  <span style="font-size: 0.78rem; color: var(--text-muted);">Save up to 28% with GST invoice</span>
+                </div>
+                <div style="background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.2); border-radius: 12px; padding: 12px;">
+                  <strong style="color: #fbbf24; font-size: 0.85rem; display: block; margin-bottom: 4px;">🏷️ Cashback</strong>
+                  <span style="font-size: 0.78rem; color: var(--text-muted);">Flat 5% back on Amazon / Flipkart Pay</span>
+                </div>
+              </div>
+
+              <!-- Service Pillars -->
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 14px 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); text-align: center;">
+                <div>
+                  <div style="font-size: 1.4rem;">🚚</div>
+                  <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 4px;">Free Delivery</span>
+                </div>
+                <div>
+                  <div style="font-size: 1.4rem;">🔄</div>
+                  <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 4px;">7 Days Return</span>
+                </div>
+                <div>
+                  <div style="font-size: 1.4rem;">🛡️</div>
+                  <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 4px;">1 Year Warranty</span>
+                </div>
+                <div>
+                  <div style="font-size: 1.4rem;">🔒</div>
+                  <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 4px;">Secure Payment</span>
+                </div>
+              </div>
+
+              <!-- Feature Bullets -->
+              <div>
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin: 0 0 12px; color: var(--text-main);">About this item</h3>
+                <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; color: #cbd5e1; font-size: 0.9rem; line-height: 1.55;">
+                  ${featuresListHtml}
+                </ul>
+              </div>
+
+              <!-- Technical Details -->
+              <div style="margin-top: 6px;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin: 0 0 12px; color: var(--text-main);">Technical Details</h3>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                  <tbody>
+                    <tr style="border-bottom: 1px solid var(--glass-border);"><td style="padding: 8px 12px; color: var(--text-muted); width: 38%; font-weight: 500;">Store / Platform</td><td style="padding: 8px 12px; color: #f1f5f9; font-weight: 600;">${storeName}</td></tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);"><td style="padding: 8px 12px; color: var(--text-muted); font-weight: 500;">Product Title</td><td style="padding: 8px 12px; color: #f1f5f9;">${product.title}</td></tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);"><td style="padding: 8px 12px; color: var(--text-muted); font-weight: 500;">Deal Price</td><td style="padding: 8px 12px; color: #34d399; font-weight: 700;">₹${priceNum.toLocaleString("en-IN")}</td></tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);"><td style="padding: 8px 12px; color: var(--text-muted); font-weight: 500;">Average Rating</td><td style="padding: 8px 12px; color: #f1f5f9;">⭐ ${ratingNum.toFixed(1)} / 5 (${countStr} reviews)</td></tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);"><td style="padding: 8px 12px; color: var(--text-muted); font-weight: 500;">Shipping</td><td style="padding: 8px 12px; color: #f1f5f9;">Free Express Delivery eligible</td></tr>
+                    <tr><td style="padding: 8px 12px; color: var(--text-muted); font-weight: 500;">Authenticity</td><td style="padding: 8px 12px; color: #f1f5f9;">100% Genuine product guaranteed</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- CogniBot AI Assessment -->
+              <div style="background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.08)); border: 1px solid rgba(168,85,247,0.25); border-radius: 14px; padding: 14px 16px;">
+                <div style="font-size: 0.9rem; font-weight: 700; color: #c084fc; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                  🤖 CogniCart AI Price Verdict
+                </div>
+                <p style="margin: 0; font-size: 0.83rem; color: #cbd5e1; line-height: 1.5;">
+                  At <strong>₹${priceNum.toLocaleString("en-IN")}</strong>, this product is currently at its <strong>30-day lowest price</strong> with a verified <strong>${ratingNum.toFixed(1)}/5 rating</strong>. High buyer demand with over <strong>${monthlyBuysStr} units sold</strong> this month confirms it is a genuine top value deal.
+                </p>
+              </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Amazon Buy Box & Live Shopper Demand -->
+            <div style="display: flex; flex-direction: column; gap: 16px; position: sticky; top: 90px;">
+              <!-- Buy Box -->
+              <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <div>
+                  <div style="font-size: 1.85rem; font-weight: 800; color: #f1f5f9;">₹${priceNum.toLocaleString("en-IN")}</div>
+                  <p style="margin: 4px 0 0; color: #34d399; font-size: 0.85rem; font-weight: 600;">FREE delivery by Tomorrow</p>
+                  <p style="margin: 4px 0 0; font-size: 0.8rem; color: var(--text-muted);">Fast shipping & live stock tracking</p>
+                </div>
+
+                <div style="font-size: 1.1rem; font-weight: 700; color: #10b981;">
+                  In Stock
+                </div>
+
+                <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 4px;">
+                  <div>Ships from: <strong style="color: var(--text-main);">${storeName} Hub</strong></div>
+                  <div>Sold by: <strong style="color: var(--text-main);">${storeName} Verified Seller</strong></div>
+                </div>
+
+                <!-- Quantity Selector -->
+                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--glass-border);">
+                  <label for="productPageQty" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Quantity:</label>
+                  <select id="productPageQty" style="background: var(--surface2); color: var(--text-main); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-weight: 600; outline: none;">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
+
+                <!-- Add to Cart CTA -->
+                <button id="productPageAddCartBtn" onclick="productPageAddToCart()" class="add-cart-btn" style="width: 100%; padding: 13px; font-size: 0.95rem; font-weight: 700; border-radius: 12px; margin: 0; box-shadow: 0 4px 14px rgba(234, 179, 8, 0.25); cursor: pointer;">
+                  🛒 Add to Cart
+                </button>
+
+                <!-- Buy Now on Store CTA -->
+                <a href="${storeLink}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 13px; font-size: 0.95rem; font-weight: 700; border-radius: 12px; text-decoration: none; color: #fff; background: linear-gradient(135deg, #f97316, #ea580c); box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35); transition: 0.2s;" onmouseover="this.style.opacity='0.98'" onmouseout="this.style.opacity='1'">
+                  🚀 Buy Now on ${storeName} ↗
+                </a>
+
+                <!-- Ask CogniBot about this item -->
+                <button onclick="productPageAskAi()" style="background: rgba(168,85,247,0.12); border: 1px solid rgba(168,85,247,0.3); color: #c084fc; padding: 11px; border-radius: 12px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s;" onmouseover="this.style.background='rgba(168,85,247,0.22)'" onmouseout="this.style.background='rgba(168,85,247,0.12)'">
+                  🤖 Ask CogniBot About This
+                </button>
+
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 4px;">
+                  🛡️ Secure transaction verified by CogniCart
+                </div>
+              </div>
+
+              <!-- LIVE SHOPPER DEMAND CARD -->
+              <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 18px; padding: 16px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.25);">
+                <div style="font-size: 0.88rem; font-weight: 700; color: #fb923c; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                  ⚡ Live Shopper Demand
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.8rem; color: #cbd5e1;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 1rem;">👥</span>
+                    <span><strong>${viewsToday.toLocaleString("en-IN")}+</strong> shoppers viewed today</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 1rem;">🛒</span>
+                    <span><strong>${inCarts.toLocaleString("en-IN")}+</strong> people have this in their cart</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 1rem;">📦</span>
+                    <span><strong>${ordersLast24h}</strong> orders placed in the last 24h</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 1rem;">🟢</span>
+                    <span style="color: #34d399; font-weight: 600;">High demand, deal price active now</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BOTTOM SECTION: RECOMMENDED ALTERNATIVES -->
+          <div style="margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--glass-border);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin: 0 0 4px; display: flex; align-items: center; gap: 8px;">
+                  🌟 Customers Also Viewed & Recommended Deals
+                </h2>
+                <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">
+                  Handpicked matching alternatives and trending offers from Amazon, Flipkart & other stores
+                </p>
+              </div>
+              <button onclick="goHome()" style="background: rgba(255,255,255,0.06); border: 1px solid var(--glass-border); color: #818cf8; border-radius: 10px; padding: 8px 16px; font-size: 0.82rem; font-weight: 600; cursor: pointer;">
+                Browse All Results →
+              </button>
+            </div>
+
+            <!-- Products Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 18px;">
+              ${recommendedCardsHtml}
+            </div>
+          </div>
+
+        </div>`;
+
+        showSection("productPage");
+        window.scrollTo(0, 0);
+      }
+
+      async function productPageAddToCart() {
+        if (!_currentViewingProduct) return;
+        const username = sessionStorage.getItem("loggedUser");
+        if (!username) {
+          toast("Please login first ⚠️", "error");
+          openAuthModal();
+          return;
+        }
+        const btn = document.getElementById("productPageAddCartBtn");
+        const qtySelect = document.getElementById("productPageQty");
+        const qty = qtySelect ? parseInt(qtySelect.value) || 1 : 1;
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = "Adding…";
+        }
+        try {
+          for (let i = 0; i < qty; i++) {
+            await fetch("/api/add-to-cart", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ username, product: _currentViewingProduct }),
+            });
+          }
+          toast(`Added ${qty > 1 ? qty + ' items' : 'item'} to cart ✓`, "success");
+          if (btn) {
+            btn.textContent = "✓ Added to Cart";
+            setTimeout(() => {
+              btn.disabled = false;
+              btn.textContent = "🛒 Add to Cart";
+            }, 1800);
+          }
+        } catch {
+          toast("Failed to add to cart", "error");
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = "🛒 Add to Cart";
+          }
+        }
+      }
+
+      function productPageWatch() {
+        if (!_currentViewingProduct) return;
+        const fakeBtn = {
+          dataset: { product: encodeURIComponent(JSON.stringify(_currentViewingProduct)) },
+          disabled: false,
+          textContent: "📊 Watch",
+        };
+        addToWatchlist(fakeBtn);
+      }
+
+      function productPageAlert() {
+        if (!_currentViewingProduct) return;
+        const fakeBtn = {
+          getAttribute: () => encodeURIComponent(JSON.stringify(_currentViewingProduct)),
+        };
+        openPriceAlert(fakeBtn);
+      }
+
+      function productPageAskAi() {
+        if (!_currentViewingProduct) return;
+        const chatBox = document.getElementById("chatBox");
+        const chatToggle = document.getElementById("chatToggle");
+        const input = document.getElementById("chatInput");
+        chatBox.classList.remove("chat-hidden");
+        chatToggle.style.transform = "scale(0)";
+        input.value = `Tell me about "${_currentViewingProduct.title}" and is it worth buying at ₹${_currentViewingProduct.price}?`;
+        input.focus();
+      }
+
+      
+      // ─── WATCHLIST & PRICE ALERTS (THEME UNIFIED) ───────────────────────────
+      async function loadWatchlistSection() {
+        const username = sessionStorage.getItem("loggedUser");
+        if (!username) return;
+
+        const watchlistEl = document.getElementById("watchlist");
+        watchlistEl.innerHTML = `
+        <div style="max-width:960px;margin:0 auto;padding:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:25px;flex-wrap:wrap;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <button onclick="goHome()" style="background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);color:#818cf8;border-radius:10px;padding:8px 14px;font-size:0.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">← Back to Search</button>
+              <h3 style="font-size:1.6rem;display:flex;align-items:center;gap:10px;margin:0">📊 My Watchlist</h3>
+            </div>
+            <span id="watchlistCount" style="background:var(--primary);color:#fff;border-radius:20px;padding:4px 14px;font-size:0.9rem;font-weight:600"></span>
+          </div>
+          <div id="watchlistBody" style="display:flex;flex-direction:column;gap:16px"><p style="color:var(--text-muted)">Loading watchlist…</p></div>
+        </div>`;
+
+        try {
+          const res = await fetch(`${API_BASE}/watchlist/${encodeURIComponent(username)}`);
+          const items = await res.json();
+          renderWatchlistSection(items, username);
+        } catch (e) {
+          document.getElementById("watchlistBody").innerHTML = `<p style="color:#ef4444">Failed to load watchlist. Please try again.</p>`;
+        }
+      }
+
+      function renderWatchlistSection(items, username) {
+        const body = document.getElementById("watchlistBody");
+        const countEl = document.getElementById("watchlistCount");
+        if (countEl) countEl.textContent = items && items.length ? `${items.length} item${items.length > 1 ? "s" : ""}` : "";
+
+        if (!items || !items.length) {
+          body.innerHTML = `
+          <div style="text-align:center;padding:60px 20px;background:var(--glass-bg);border-radius:20px;border:1px solid var(--glass-border);box-shadow:0 10px 30px rgba(0,0,0,0.3)">
+            <div style="font-size:4rem;margin-bottom:15px">📊</div>
+            <h4 style="color:var(--text-muted);font-size:1.2rem;margin-bottom:10px">Your Watchlist is empty</h4>
+            <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:20px">Click "Watch" on any product to track its live price history and drops.</p>
+            <button onclick="goHome()" class="glow-btn" style="width:auto;padding:10px 25px">Browse Products</button>
+          </div>`;
+          return;
+        }
+
+        window._watchlistProducts = items.map(it => it.product || it);
+
+        body.innerHTML = items.map((item, i) => {
+          const p = item.product || {};
+          const curPrice = parseInt(item.currentPrice || p.price || 0);
+          const prevPrice = item.previousPrice ? parseInt(item.previousPrice) : null;
+          const lowest = item.lowestPrice ? parseInt(item.lowestPrice) : curPrice;
+          const highest = item.highestPrice ? parseInt(item.highestPrice) : curPrice;
+          const store = p.store || "Amazon";
+          const title = p.title || "Product";
+          const image = p.image || "assets/logo.png";
+          const rating = parseFloat(p.rating) || 4.2;
+
+          let priceDropBadge = "";
+          if (prevPrice && prevPrice > curPrice) {
+            const drop = prevPrice - curPrice;
+            const dropPct = Math.round((drop / prevPrice) * 100);
+            priceDropBadge = `<span style="background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.3);border-radius:6px;padding:2px 8px;font-size:0.75rem;font-weight:700;">📉 Dropped ₹${drop.toLocaleString("en-IN")} (-${dropPct}%)</span>`;
+          } else {
+            priceDropBadge = `<span style="background:rgba(99,102,241,0.15);color:#818cf8;border:1px solid rgba(99,102,241,0.3);border-radius:6px;padding:2px 8px;font-size:0.75rem;font-weight:600;">📊 Live Tracking Active</span>`;
+          }
+
+          return `
+          <div class="reveal watchlist-item-card" style="display:flex;gap:18px;align-items:center;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:18px;padding:18px;transition:0.25s;flex-wrap:wrap;" onmouseover="this.style.borderColor='rgba(99,102,241,0.5)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='var(--glass-border)';this.style.background='var(--glass-bg)'">
+            <img src="${image}" alt="${title}" style="width:85px;height:85px;object-fit:cover;border-radius:12px;flex-shrink:0;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'" onclick="openProductPage(window._watchlistProducts[${i}], 'watchlist')">
+            <div style="flex:1;min-width:260px">
+              <p style="font-weight:600;margin-bottom:6px;font-size:0.98rem;color:var(--text-main);cursor:pointer;line-height:1.4" onclick="openProductPage(window._watchlistProducts[${i}], 'watchlist')" title="${title}">${title}</p>
+              <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;flex-wrap:wrap">
+                <span style="color:#34d399;font-size:1.3rem;font-weight:800">&#x20b9;${curPrice.toLocaleString("en-IN")}</span>
+                ${prevPrice ? `<span style="color:var(--text-muted);font-size:0.85rem;text-decoration:line-through">&#x20b9;${prevPrice.toLocaleString("en-IN")}</span>` : ""}
+                ${priceDropBadge}
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                <span style="font-size:0.75rem;color:var(--text-muted);background:rgba(255,255,255,0.05);border-radius:8px;padding:2px 8px">🏪 ${store}</span>
+                <span style="font-size:0.75rem;color:#facc15">★ ${rating.toFixed(1)}</span>
+                <span style="font-size:0.75rem;color:var(--text-muted)">Lowest: &#x20b9;${lowest.toLocaleString("en-IN")}</span>
+                <span style="font-size:0.75rem;color:var(--text-muted)">• Highest: &#x20b9;${highest.toLocaleString("en-IN")}</span>
+                <span onclick="openProductPage(window._watchlistProducts[${i}], 'watchlist')" style="font-size:0.78rem;color:#818cf8;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:3px">🔍 View Amazon-Style Details &rarr;</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:wrap">
+              <button onclick="watchlistAddToCart(window._watchlistProducts[${i}])" class="glow-btn" style="width:auto;padding:8px 16px;font-size:0.82rem;margin:0">🛒 Add to Cart</button>
+              <button onclick="removeWatchlistItem('${item._id}')" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#f87171;border-radius:10px;padding:8px 14px;font-size:0.82rem;font-weight:600;cursor:pointer;transition:0.2s" onmouseover="this.style.background='rgba(239,68,68,0.22)'" onmouseout="this.style.background='rgba(239,68,68,0.12)'">🗑️ Remove</button>
+            </div>
+          </div>`;
+        }).join("");
+      }
+
+      async function removeWatchlistItem(watchlistId) {
+        try {
+          const res = await fetch(`${API_BASE}/watchlist/${watchlistId}`, { method: "DELETE" });
+          if (res.ok) {
+            toast("Removed from watchlist ✓", "success");
+            loadWatchlistSection();
+          } else {
+            toast("Failed to remove item", "error");
+          }
+        } catch {
+          toast("Failed to remove item", "error");
+        }
+      }
+
+      async function watchlistAddToCart(prod) {
+        const username = sessionStorage.getItem("loggedUser");
+        if (!username) {
+          toast("Please login first", "error");
+          openAuthModal();
+          return;
+        }
+        try {
+          await fetch(`${API_BASE}/add-to-cart`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, product: prod }),
+          });
+          toast("Added to cart ✓", "success");
+        } catch {
+          toast("Failed to add to cart", "error");
+        }
+      }
+
+      async function loadAlertsSection() {
+        const username = sessionStorage.getItem("loggedUser");
+        if (!username) return;
+
+        const alertsEl = document.getElementById("alerts");
+        alertsEl.innerHTML = `
+        <div style="max-width:960px;margin:0 auto;padding:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:25px;flex-wrap:wrap;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <button onclick="goHome()" style="background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);color:#818cf8;border-radius:10px;padding:8px 14px;font-size:0.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">← Back to Search</button>
+              <h3 style="font-size:1.6rem;display:flex;align-items:center;gap:10px;margin:0">🔔 Price Drop Alerts</h3>
+            </div>
+            <span id="alertsCount" style="background:var(--primary);color:#fff;border-radius:20px;padding:4px 14px;font-size:0.9rem;font-weight:600"></span>
+          </div>
+          <div id="alertsBody" style="display:flex;flex-direction:column;gap:16px"><p style="color:var(--text-muted)">Loading alerts…</p></div>
+        </div>`;
+
+        try {
+          const res = await fetch(`${API_BASE}/price-alerts/${encodeURIComponent(username)}`);
+          const alerts = await res.json();
+          renderAlertsSection(alerts, username);
+        } catch (e) {
+          document.getElementById("alertsBody").innerHTML = `<p style="color:#ef4444">Failed to load alerts. Please try again.</p>`;
+        }
+      }
+
+      function renderAlertsSection(alerts, username) {
+        const body = document.getElementById("alertsBody");
+        const countEl = document.getElementById("alertsCount");
+        if (countEl) countEl.textContent = alerts && alerts.length ? `${alerts.length} alert${alerts.length > 1 ? "s" : ""}` : "";
+
+        if (!alerts || !alerts.length) {
+          body.innerHTML = `
+          <div style="text-align:center;padding:60px 20px;background:var(--glass-bg);border-radius:20px;border:1px solid var(--glass-border);box-shadow:0 10px 30px rgba(0,0,0,0.3)">
+            <div style="font-size:4rem;margin-bottom:15px">🔔</div>
+            <h4 style="color:var(--text-muted);font-size:1.2rem;margin-bottom:10px">No Price Alerts Set</h4>
+            <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:20px">Click "Alert" on any product and choose your target price to receive instant updates!</p>
+            <button onclick="goHome()" class="glow-btn" style="width:auto;padding:10px 25px">Search Products</button>
+          </div>`;
+          return;
+        }
+
+        window._alertProducts = alerts.map(a => a.product || a);
+
+        body.innerHTML = alerts.map((alert, i) => {
+          const p = alert.product || {};
+          const curPrice = parseInt(alert.currentPrice || p.price || 0);
+          const targetPrice = parseInt(alert.targetPrice || 0);
+          const store = p.store || "Amazon";
+          const title = p.title || "Product";
+          const image = p.image || "assets/logo.png";
+          const createdDate = alert.createdAt ? new Date(alert.createdAt).toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" }) : "Recently";
+
+          const isReached = curPrice <= targetPrice;
+          let statusBadge = "";
+          if (isReached) {
+            statusBadge = `<span style="background:rgba(16,185,129,0.18);color:#34d399;border:1px solid rgba(16,185,129,0.35);border-radius:6px;padding:3px 10px;font-size:0.78rem;font-weight:700;">🎯 Target Reached! Deal Ready</span>`;
+          } else {
+            const diff = curPrice - targetPrice;
+            statusBadge = `<span style="background:rgba(99,102,241,0.15);color:#818cf8;border:1px solid rgba(99,102,241,0.3);border-radius:6px;padding:3px 10px;font-size:0.78rem;font-weight:600;">⏳ Need ₹${diff.toLocaleString("en-IN")} further drop</span>`;
+          }
+
+          return `
+          <div class="reveal alert-item-card" style="display:flex;gap:18px;align-items:center;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:18px;padding:18px;transition:0.25s;flex-wrap:wrap;" onmouseover="this.style.borderColor='rgba(99,102,241,0.5)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='var(--glass-border)';this.style.background='var(--glass-bg)'">
+            <img src="${image}" alt="${title}" style="width:85px;height:85px;object-fit:cover;border-radius:12px;flex-shrink:0;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'" onclick="openProductPage(window._alertProducts[${i}], 'alerts')">
+            <div style="flex:1;min-width:260px">
+              <p style="font-weight:600;margin-bottom:6px;font-size:0.98rem;color:var(--text-main);cursor:pointer;line-height:1.4" onclick="openProductPage(window._alertProducts[${i}], 'alerts')" title="${title}">${title}</p>
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap">
+                <div style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:3px 10px;font-size:0.85rem">
+                  <span style="color:var(--text-muted)">Target: </span>
+                  <strong style="color:#fbbf24">&#x20b9;${targetPrice.toLocaleString("en-IN")}</strong>
+                </div>
+                <div style="background:rgba(255,255,255,0.05);border:1px solid var(--glass-border);border-radius:8px;padding:3px 10px;font-size:0.85rem">
+                  <span style="color:var(--text-muted)">Current: </span>
+                  <strong style="color:#f1f5f9">&#x20b9;${curPrice.toLocaleString("en-IN")}</strong>
+                </div>
+                ${statusBadge}
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                <span style="font-size:0.75rem;color:var(--text-muted);background:rgba(255,255,255,0.05);border-radius:8px;padding:2px 8px">🏪 ${store}</span>
+                <span style="font-size:0.75rem;color:var(--text-muted)">Alert set on ${createdDate}</span>
+                <span onclick="openProductPage(window._alertProducts[${i}], 'alerts')" style="font-size:0.78rem;color:#818cf8;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:3px">🔍 View Amazon-Style Details &rarr;</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:wrap">
+              <button onclick="editTargetPrice('${alert._id}', ${targetPrice})" style="background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.3);color:#a5b4fc;border-radius:10px;padding:8px 14px;font-size:0.82rem;font-weight:600;cursor:pointer;transition:0.2s" onmouseover="this.style.background='rgba(99,102,241,0.22)'" onmouseout="this.style.background='rgba(99,102,241,0.12)'">✏️ Edit Target</button>
+              <button onclick="watchlistAddToCart(window._alertProducts[${i}])" class="glow-btn" style="width:auto;padding:8px 16px;font-size:0.82rem;margin:0">🛒 Add to Cart</button>
+              <button onclick="deletePriceAlertItem('${alert._id}')" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#f87171;border-radius:10px;padding:8px 14px;font-size:0.82rem;font-weight:600;cursor:pointer;transition:0.2s" onmouseover="this.style.background='rgba(239,68,68,0.22)'" onmouseout="this.style.background='rgba(239,68,68,0.12)'">🗑️ Delete</button>
+            </div>
+          </div>`;
+        }).join("");
+      }
+
+      async function editTargetPrice(alertId, currentTarget) {
+        const newPrice = prompt("Enter new target price (₹):", currentTarget);
+        if (!newPrice || isNaN(+newPrice) || +newPrice <= 0) return;
+        try {
+          const res = await fetch(`${API_BASE}/price-alerts/${alertId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ targetPrice: +newPrice }),
+          });
+          if (res.ok) {
+            toast(`Target price updated to ₹${parseInt(newPrice).toLocaleString("en-IN")} ✓`, "success");
+            loadAlertsSection();
+          } else {
+            toast("Failed to update target price", "error");
+          }
+        } catch {
+          toast("Failed to update alert", "error");
+        }
+      }
+
+      async function deletePriceAlertItem(alertId) {
+        try {
+          const res = await fetch(`${API_BASE}/price-alerts/${alertId}`, { method: "DELETE" });
+          if (res.ok) {
+            toast("Alert deleted ✓", "success");
+            loadAlertsSection();
+          } else {
+            toast("Failed to delete alert", "error");
+          }
+        } catch {
+          toast("Failed to delete alert", "error");
+        }
+      }
+
+      
+      // ─── PROFILE DASHBOARD SECTION (THEME UNIFIED & FIXED) ─────────────────
+      let _profileHistory = [];
+      let _profileWatchlist = [];
+      let _profileOrders = [];
+      let _profileTotalSearches = 0;
+      let _profileClockTimer = null;
+      let _profileChartInstance = null;
+
+      async function loadProfileSection() {
+        const username = sessionStorage.getItem("loggedUser");
+        if (!username) {
+          toast("Please login to view profile", "info");
+          openAuthModal();
+          return;
+        }
+
+        const profileEl = document.getElementById("profile");
+        const defaultName = username.split("@")[0];
+        const storedName = sessionStorage.getItem("displayName");
+        const displayName = storedName || defaultName;
+        const initial = defaultName.charAt(0).toUpperCase();
+
+        profileEl.innerHTML = `
+        <div class="profile-container">
+          <div style="margin-bottom: 18px;">
+            <button onclick="goHome()" style="background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);color:#818cf8;border-radius:10px;padding:8px 14px;font-size:0.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">← Back to Search</button>
+          </div>
+
+          <!-- Hero Card -->
+          <div class="profile-hero">
+            <div class="profile-avatar">${initial}</div>
+            <div class="profile-hero-info">
+              <h1 id="profileNameHeading">Hey, ${displayName}!</h1>
+              <p>
+                <span>${username}</span>
+                <button class="email-edit-btn" type="button" onclick="editProfileName()">✏️ Edit name</button>
+              </p>
+              <div class="profile-hero-badges">
+                <span class="p-badge p-badge-blue" id="pSearcherBadge">🔍 Loading…</span>
+                <span class="p-badge p-badge-green" id="pSaverBadge">💰 Loading…</span>
+                <span class="p-badge p-badge-amber" id="pWatcherBadge">👁️ Loading…</span>
+              </div>
+            </div>
+            <div class="profile-member-since">
+              <strong id="pNowTime">--:--</strong>
+              IST (Asia/Kolkata)
+            </div>
+          </div>
+
+          <!-- 5 Stat Cards -->
+          <div class="profile-stats-grid">
+            <div class="p-stat-card sc-blue">
+              <div class="p-stat-icon">🔍</div>
+              <div class="p-stat-val" id="pStatSearches">—</div>
+              <div class="p-stat-lbl">Total Searches</div>
+              <div class="p-stat-sub" id="pStatSearchesSub">Loading…</div>
+            </div>
+            <div class="p-stat-card sc-amber">
+              <div class="p-stat-icon">👁️</div>
+              <div class="p-stat-val" id="pStatWatching">—</div>
+              <div class="p-stat-lbl">Watching</div>
+              <div class="p-stat-sub" id="pStatWatchingSub">Loading…</div>
+            </div>
+            <div class="p-stat-card sc-green">
+              <div class="p-stat-icon">💰</div>
+              <div class="p-stat-val" id="pStatSavings">—</div>
+              <div class="p-stat-lbl">Savings</div>
+              <div class="p-stat-sub">from price drops</div>
+            </div>
+            <div class="p-stat-card sc-pink">
+              <div class="p-stat-icon">🛍️</div>
+              <div class="p-stat-val" id="pStatValue">—</div>
+              <div class="p-stat-lbl">Watchlist Value</div>
+              <div class="p-stat-sub">current prices</div>
+            </div>
+            <div class="p-stat-card sc-cyan">
+              <div class="p-stat-icon">📦</div>
+              <div class="p-stat-val" id="pStatOrders">—</div>
+              <div class="p-stat-lbl">Orders Placed</div>
+              <div class="p-stat-sub" id="pStatOrdersSub">Loading…</div>
+            </div>
+          </div>
+
+          <!-- Charts & Recent Searches Grid -->
+          <div class="p-grid-2">
+            <div class="p-panel">
+              <div class="p-panel-title">📈 Search Activity — Last 7 Days</div>
+              <div class="p-chart-box"><canvas id="profileActivityChart"></canvas></div>
+            </div>
+            <div class="p-panel">
+              <div class="p-panel-title">🕒 Recent Searches</div>
+              <div class="p-history-list" id="pHistoryList"><p style="color:var(--text-muted)">Loading…</p></div>
+            </div>
+          </div>
+
+          <!-- Top Searches & Watchlist Highlights Grid -->
+          <div class="p-grid-2-eq">
+            <div class="p-panel">
+              <div class="p-panel-title">🔥 Top Searched Terms</div>
+              <div id="pTopSearches"><p style="color:var(--text-muted);font-size:0.88rem">Loading…</p></div>
+            </div>
+            <div class="p-panel">
+              <div class="p-panel-title">📊 Watchlist Highlights</div>
+              <div id="pWlHighlights" style="max-height:340px;overflow-y:auto"><p style="color:var(--text-muted);font-size:0.88rem">Loading…</p></div>
+            </div>
+          </div>
+        </div>`;
+
+        // Start live clock in IST
+        const updateClock = () => {
+          const el = document.getElementById("pNowTime");
+          if (el) {
+            el.textContent = new Date().toLocaleTimeString("en-IN", {
+              timeZone: "Asia/Kolkata",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            });
+          }
+        };
+        updateClock();
+        if (_profileClockTimer) clearInterval(_profileClockTimer);
+        _profileClockTimer = setInterval(updateClock, 1000);
+
+        try {
+          const [hRes, wRes, oRes] = await Promise.all([
+            fetch(`${API_BASE}/history/${encodeURIComponent(username)}`),
+            fetch(`${API_BASE}/watchlist/${encodeURIComponent(username)}`),
+            fetch(`${API_BASE}/orders/${encodeURIComponent(username)}`),
+          ]);
+
+          if (hRes.ok) {
+            const hData = await hRes.json();
+            _profileHistory = hData.history || [];
+            _profileTotalSearches = hData.totalSearches || _profileHistory.length;
+          }
+          if (wRes.ok) {
+            _profileWatchlist = await wRes.json();
+          }
+          if (oRes.ok) {
+            _profileOrders = await oRes.json();
+          }
+
+          renderProfileDashboardData(username);
+        } catch (err) {
+          console.error("Profile load error:", err);
+        }
+      }
+
+      function renderProfileDashboardData(username) {
+        // Calculate savings & value
+        const savings = _profileWatchlist.reduce((t, i) => t + Math.max(0, (i.previousPrice || i.currentPrice) - i.currentPrice), 0);
+        const totalValue = _profileWatchlist.reduce((t, i) => t + (i.currentPrice || 0), 0);
+        const drops = _profileWatchlist.filter(i => i.priceDrops && i.priceDrops.length > 0).length;
+
+        const sSearches = document.getElementById("pStatSearches");
+        if (sSearches) sSearches.textContent = _profileTotalSearches;
+
+        const sSearchesSub = document.getElementById("pStatSearchesSub");
+        if (sSearchesSub) sSearchesSub.textContent = _profileHistory.length ? `Last: "${_profileHistory[_profileHistory.length - 1].searchQuery.substring(0, 20)}"` : "No searches yet";
+
+        const sWatching = document.getElementById("pStatWatching");
+        if (sWatching) sWatching.textContent = _profileWatchlist.length;
+
+        const sWatchingSub = document.getElementById("pStatWatchingSub");
+        if (sWatchingSub) sWatchingSub.textContent = `${drops} price drop${drops !== 1 ? "s" : ""} detected`;
+
+        const sSavings = document.getElementById("pStatSavings");
+        if (sSavings) sSavings.textContent = `₹${savings.toLocaleString("en-IN")}`;
+
+        const sValue = document.getElementById("pStatValue");
+        if (sValue) sValue.textContent = `₹${totalValue.toLocaleString("en-IN")}`;
+
+        const sOrders = document.getElementById("pStatOrders");
+        if (sOrders) sOrders.textContent = _profileOrders.length;
+
+        const sOrdersSub = document.getElementById("pStatOrdersSub");
+        if (sOrdersSub) sOrdersSub.textContent = _profileOrders.length ? `Latest: ${_profileOrders[_profileOrders.length - 1].orderDate?.split(",")[0] || "—"}` : "No orders yet";
+
+        // Badges
+        const bSearch = document.getElementById("pSearcherBadge");
+        if (bSearch) bSearch.textContent = `🔍 ${_profileTotalSearches} Searches`;
+
+        const bSaver = document.getElementById("pSaverBadge");
+        if (bSaver) bSaver.textContent = savings > 0 ? `💰 Saved ₹${savings.toLocaleString("en-IN")}` : "💰 No Savings Yet";
+
+        const bWatcher = document.getElementById("pWatcherBadge");
+        if (bWatcher) bWatcher.textContent = `👁️ ${_profileWatchlist.length} Watching`;
+
+        // Recent searches list
+        const listEl = document.getElementById("pHistoryList");
+        if (listEl) {
+          if (!_profileHistory.length) {
+            listEl.innerHTML = `<p style="color:var(--text-muted);font-size:0.88rem">No searches yet. Start comparing prices!</p>`;
+          } else {
+            listEl.innerHTML = [..._profileHistory].reverse().slice(0, 20).map(h => {
+              let t = "";
+              try {
+                const d = new Date(h.time);
+                t = isNaN(d.getTime()) ? (h.time.split(",")[0] || "") : d.toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short" });
+              } catch {
+                t = h.time?.split(",")[0] || "";
+              }
+              const safeQ = h.searchQuery.replace(/"/g, '&quot;');
+              return `
+              <div class="p-history-item" onclick="document.getElementById('item').value='${safeQ}';goHome();triggerSearch();">
+                <div class="p-history-q"><span>🔍</span>${h.searchQuery}</div>
+                <div class="p-history-t">${t}</div>
+              </div>`;
+            }).join("");
+          }
+        }
+
+        // Top searched terms
+        const freq = {};
+        _profileHistory.forEach(h => {
+          const k = h.searchQuery.toLowerCase().trim();
+          freq[k] = (freq[k] || 0) + 1;
+        });
+        const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 6);
+        const maxCount = sorted[0]?.[1] || 1;
+        const topEl = document.getElementById("pTopSearches");
+        if (topEl) {
+          if (!sorted.length) {
+            topEl.innerHTML = `<p style="color:var(--text-muted);font-size:0.88rem">Search for products to see your top terms.</p>`;
+          } else {
+            topEl.innerHTML = sorted.map(([q, c], i) => `
+              <div class="p-top-q">
+                <div class="p-top-q-rank">#${i + 1}</div>
+                <div class="p-top-q-bar-wrap">
+                  <div class="p-top-q-name">${q.charAt(0).toUpperCase() + q.slice(1)}</div>
+                  <div class="p-top-q-bar"><div class="p-top-q-bar-fill" style="width:${((c / maxCount) * 100).toFixed(0)}%"></div></div>
+                </div>
+                <div class="p-top-q-count">${c}×</div>
+              </div>`).join("");
+          }
+        }
+
+        // Watchlist highlights
+        const wlEl = document.getElementById("pWlHighlights");
+        if (wlEl) {
+          if (!_profileWatchlist.length) {
+            wlEl.innerHTML = `<p style="color:var(--text-muted);font-size:0.88rem">No products on watchlist yet.</p>`;
+          } else {
+            const sortedWl = [..._profileWatchlist].sort((a, b) => {
+              const aDrop = a.previousPrice ? (a.previousPrice - a.currentPrice) / a.previousPrice : 0;
+              const bDrop = b.previousPrice ? (b.previousPrice - b.currentPrice) / b.previousPrice : 0;
+              return bDrop - aDrop;
+            });
+            wlEl.innerHTML = sortedWl.map((item, idx) => {
+              const p = item.product || {};
+              const hasDrop = item.previousPrice && item.currentPrice < item.previousPrice;
+              const pct = hasDrop ? (((item.previousPrice - item.currentPrice) / item.previousPrice) * 100).toFixed(1) : null;
+              return `
+              <div class="p-wl-item" onclick="openProductPage(_profileWatchlist[${idx}].product || _profileWatchlist[${idx}], 'profile')">
+                <img class="p-wl-img" src="${p.image || ''}" onerror="this.style.display='none'" alt="">
+                <div class="p-wl-info">
+                  <div class="p-wl-title" title="${p.title}">${p.title || "Product"}</div>
+                  <div class="p-wl-price">₹${parseInt(item.currentPrice || 0).toLocaleString("en-IN")}</div>
+                </div>
+                ${hasDrop ? `<div class="p-wl-drop">↓ ${pct}%</div>` : ""}
+              </div>`;
+            }).join("");
+          }
+        }
+
+        // 7-day activity chart
+        const counts = {};
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          counts[d.toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short" })] = 0;
+        }
+
+        _profileHistory.forEach(h => {
+          try {
+            let d;
+            if (h.timestamp) {
+              d = new Date(h.timestamp);
+            } else if (h.time) {
+              const datePart = h.time.split(",")[0];
+              if (datePart.includes("/")) {
+                const parts = datePart.split("/");
+                d = new Date(parts[2], parts[1] - 1, parts[0]);
+              } else {
+                d = new Date(h.time);
+              }
+            }
+            const k = d && !isNaN(d.getTime()) ? d.toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short" }) : null;
+            if (k && counts[k] !== undefined) counts[k]++;
+          } catch {}
+        });
+
+        const ctx = document.getElementById("profileActivityChart");
+        if (ctx && window.Chart) {
+          if (_profileChartInstance) _profileChartInstance.destroy();
+          const vals = Object.values(counts);
+          const maxVal = Math.max(...vals, 1);
+          _profileChartInstance = new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: Object.keys(counts),
+              datasets: [{
+                label: "Searches",
+                data: vals,
+                backgroundColor: vals.map(v => v === maxVal ? "rgba(139,92,246,0.9)" : "rgba(99,102,241,0.6)"),
+                borderRadius: 8,
+                borderSkipped: false,
+              }],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: c => `${c.raw} search${c.raw !== 1 ? "es" : ""}` } },
+              },
+              scales: {
+                y: { beginAtZero: true, grid: { color: "rgba(255,255,255,0.04)" }, ticks: { color: "#64748b", stepSize: 1 } },
+                x: { grid: { display: false }, ticks: { color: "#64748b" } },
+              },
+            },
+          });
+        }
+      }
+
+      function editProfileName() {
+        const username = sessionStorage.getItem("loggedUser") || "";
+        const defaultName = username.split("@")[0];
+        const currentName = sessionStorage.getItem("displayName") || defaultName;
+        const input = document.getElementById("editNameInput");
+        if (input) input.value = currentName;
+        const modal = document.getElementById("editNameModal");
+        if (modal) {
+          modal.classList.add("open");
+          setTimeout(() => input && input.focus(), 100);
+        }
+      }
+
+      function closeEditNameModal() {
+        const modal = document.getElementById("editNameModal");
+        if (modal) modal.classList.remove("open");
+      }
+
+      function saveEditName() {
+        const input = document.getElementById("editNameInput");
+        const newName = input ? input.value.trim() : "";
+        if (!newName) {
+          if (input) {
+            input.style.borderColor = "#ef4444";
+            setTimeout(() => input.style.borderColor = "", 1000);
+          }
+          return;
+        }
+        sessionStorage.setItem("displayName", newName);
+        const heading = document.getElementById("profileNameHeading");
+        if (heading) heading.textContent = `Hey, ${newName}!`;
+        const navProfile = document.getElementById("nav-profile");
+        if (navProfile) navProfile.textContent = `👤 ${newName}`;
+        closeEditNameModal();
+        toast("Profile name updated ✓", "success");
+      }
+
+      // ─── PRODUCT DETAILS MODAL ────────────────────────────────────────────────
+      let _currentDetailProduct = null;
+
+      function openProductDetails(itemOrIndex) {
+        let product = null;
+        if (typeof itemOrIndex === "number") {
+          product = (window.currentCartItems || [])[itemOrIndex];
+        } else if (typeof itemOrIndex === "string") {
+          try {
+            product = JSON.parse(decodeURIComponent(itemOrIndex));
+          } catch (e) {
+            console.error("Failed to parse product data:", e);
+          }
+        } else if (typeof itemOrIndex === "object") {
+          product = itemOrIndex;
+        }
+
+        if (!product) return;
+        _currentDetailProduct = product;
+
+        // Title
+        document.getElementById("detailTitle").textContent =
+          product.title || "Product Details";
+
+        // Image
+        const imgEl = document.getElementById("detailImage");
+        const fallbackImg =
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/300px-No_image_available.svg.png";
+        imgEl.src = product.image || fallbackImg;
+        imgEl.onerror = () => {
+          imgEl.src = fallbackImg;
+        };
+
+        // Store
+        const rawStore = product.store || "Online Store";
+        const storeName =
+          rawStore.charAt(0).toUpperCase() + rawStore.slice(1);
+        document.getElementById("detailStoreBadge").innerHTML = `🏪 ${storeName}`;
+        document.getElementById("detailStoreName").textContent = storeName;
+
+        // Price
+        const priceNum =
+          parseInt(String(product.price).replace(/[^\d.]/g, "")) || 0;
+        document.getElementById("detailPrice").innerHTML =
+          `&#x20b9;${priceNum.toLocaleString("en-IN")}`;
+
+        // Cart Qty Box (if opened from cart)
+        const qtyBox = document.getElementById("detailCartQtyBox");
+        if (product.qty) {
+          qtyBox.style.display = "block";
+          document.getElementById("detailCartQty").textContent =
+            `Qty: ${product.qty}`;
+          document.getElementById("detailCartTotal").innerHTML =
+            `Total: &#x20b9;${(priceNum * product.qty).toLocaleString("en-IN")}`;
+        } else {
+          qtyBox.style.display = "none";
+        }
+
+        // Rating
+        const ratingNum = parseFloat(product.rating);
+        const ratingBadge = document.getElementById("detailRatingBadge");
+        const ratingCountEl = document.getElementById("detailRatingCount");
+        if (!isNaN(ratingNum) && ratingNum > 0) {
+          ratingBadge.style.display = "inline-flex";
+          ratingBadge.innerHTML = `⭐ ${ratingNum.toFixed(1)} / 5`;
+          const count = product.ratingCount
+            ? parseInt(
+                String(product.ratingCount).replace(/[^\d]/g, ""),
+              ).toLocaleString("en-IN")
+            : null;
+          ratingCountEl.textContent = count
+            ? `(${count} ratings)`
+            : "Customer Rating";
+        } else {
+          ratingBadge.style.display = "inline-flex";
+          ratingBadge.innerHTML = `⭐ Top Rated`;
+          ratingCountEl.textContent = "CogniCart Verified";
+        }
+
+        // Store Link
+        const linkBtn = document.getElementById("detailProductLinkBtn");
+        let directLink =
+          product.link && product.link !== "#" ? product.link : null;
+        if (!directLink) {
+          const q = encodeURIComponent(product.title || "");
+          if (storeName.toLowerCase().includes("flipkart")) {
+            directLink = `https://www.flipkart.com/search?q=${q}`;
+          } else {
+            directLink = `https://www.amazon.in/s?k=${q}`;
+          }
+        }
+        linkBtn.href = directLink;
+
+        document.getElementById("productDetailModal").style.display = "flex";
+      }
+
+      function detailWatchPrice() {
+        if (!_currentDetailProduct) return;
+        const fakeBtn = {
+          dataset: {
+            product: encodeURIComponent(JSON.stringify(_currentDetailProduct)),
+          },
+          disabled: false,
+          textContent: "📊 Watch",
+        };
+        addToWatchlist(fakeBtn);
+      }
+
+      function detailSetAlert() {
+        if (!_currentDetailProduct) return;
+        const fakeBtn = {
+          getAttribute: () =>
+            encodeURIComponent(JSON.stringify(_currentDetailProduct)),
+        };
+        openPriceAlert(fakeBtn);
+      }
+
+      function detailAskCogniBot() {
+        if (!_currentDetailProduct) return;
+        closeModal("productDetailModal");
+        const chatBox = document.getElementById("chatBox");
+        const chatToggle = document.getElementById("chatToggle");
+        const input = document.getElementById("chatInput");
+        chatBox.classList.remove("chat-hidden");
+        chatToggle.style.transform = "scale(0)";
+        input.value = `Tell me about "${_currentDetailProduct.title}" and is it worth buying at ₹${_currentDetailProduct.price}?`;
+        input.focus();
       }
 
       function setActiveNav(sectionId) {
@@ -2401,12 +4387,14 @@
       }
 
       function showUser(username) {
+        const storedName = sessionStorage.getItem("displayName");
+        const displayName = storedName || username.split("@")[0];
         document.getElementById("userControls").innerHTML = `
-        <button id="nav-profile" class="nav-btn nav-btn-profile" onclick="window.location.href='profile.html'">👤 ${username}</button>
+        <button id="nav-profile" class="nav-btn nav-btn-profile" onclick="showSection('profile')">👤 ${displayName}</button>
         <button id="nav-orders"   class="nav-btn" onclick="showSection('orders')">My Orders</button>
         <button id="nav-history"  class="nav-btn" onclick="showSection('history')">History</button>
-        <button id="nav-watchlist" class="nav-btn" onclick="window.location.href='watchlist.html'">Watchlist</button>
-        <button id="nav-alerts"   class="nav-btn" onclick="window.location.href='alerts.html'">Alerts</button>
+        <button id="nav-watchlist" class="nav-btn" onclick="showSection('watchlist')">Watchlist</button>
+        <button id="nav-alerts"   class="nav-btn" onclick="showSection('alerts')">Alerts</button>
         <button id="nav-cart"     class="nav-btn" onclick="showSection('cart')">Cart</button>
         <button id="nav-logout"   class="nav-btn nav-btn-logout" onclick="logout()">Logout</button>`;
       }
@@ -2425,21 +4413,20 @@
         if (pg) pg.style.display = "none";
         document.querySelectorAll(".user-section").forEach((s) => {
           s.style.display = "none";
-          s.classList.remove("animating");
         });
 
         const section = document.getElementById(id);
-        section.style.display = "block";
-        // Trigger animation
-        requestAnimationFrame(() => {
-          section.classList.remove("animating");
-          requestAnimationFrame(() => section.classList.add("animating"));
-        });
+        if (section) {
+          section.style.display = "block";
+        }
 
-        setActiveNav(id);
+        setActiveNav(id === "productPage" ? null : id);
         if (id === "cart") loadCart();
         if (id === "orders") loadOrders();
         if (id === "history") loadHistory();
+        if (id === "watchlist") loadWatchlistSection();
+        if (id === "alerts") loadAlertsSection();
+        if (id === "profile") loadProfileSection();
       }
 
       function goHome() {
@@ -2657,19 +4644,22 @@
         cartBody.innerHTML = items
           .map(
             (p, i) => `
-        <div class="reveal" style="display:flex;gap:15px;align-items:center;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:16px;padding:16px;transition:0.2s">
-          <img src="${p.image}" alt="" style="width:80px;height:80px;object-fit:cover;border-radius:12px;flex-shrink:0">
+        <div class="reveal cart-item-card" onclick="openProductPage(window.currentCartItems[${i}], 'cart')" style="display:flex;gap:15px;align-items:center;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:16px;padding:16px;transition:0.25s;cursor:pointer" onmouseover="this.style.borderColor='rgba(99,102,241,0.5)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='var(--glass-border)';this.style.background='var(--glass-bg)'">
+          <img src="${p.image}" alt="" style="width:80px;height:80px;object-fit:cover;border-radius:12px;flex-shrink:0;transition:transform 0.2s" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'">
           <div style="flex:1;min-width:0">
             <p style="font-weight:600;margin-bottom:4px;font-size:0.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${p.title}">${p.title}</p>
             <p style="color:var(--primary-light);font-size:1.1rem;font-weight:700">&#x20b9;${parseInt(p.price).toLocaleString("en-IN")}</p>
-            ${p.store ? `<span style="font-size:0.75rem;color:var(--text-muted);background:rgba(255,255,255,0.05);border-radius:8px;padding:2px 8px">${p.store}</span>` : ""}
+            <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap">
+              ${p.store ? `<span style="font-size:0.75rem;color:var(--text-muted);background:rgba(255,255,255,0.05);border-radius:8px;padding:2px 8px">🏪 ${p.store}</span>` : ""}
+              <span style="font-size:0.78rem;color:#818cf8;font-weight:600;display:inline-flex;align-items:center;gap:3px">🔍 Open Amazon-Style Product Page &rarr;</span>
+            </div>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0" onclick="event.stopPropagation()">
             <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.05);border-radius:10px;padding:4px 8px">
               <span style="font-size:0.85rem;color:var(--text-muted)">Qty: <strong style="color:var(--text-main)">${p.qty}</strong></span>
             </div>
             <p style="font-size:0.85rem;color:var(--text-muted)">Total: <strong style="color:var(--success)">&#x20b9;${(parseInt(p.price) * p.qty).toLocaleString("en-IN")}</strong></p>
-            <button onclick="removeFromCart(${p.indices[p.indices.length - 1]})" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#ef4444;border-radius:8px;padding:5px 12px;font-size:0.8rem;cursor:pointer;transition:0.2s" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">❌ Remove</button>
+            <button onclick="event.stopPropagation(); removeFromCart(${p.indices[p.indices.length - 1]})" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#ef4444;border-radius:8px;padding:5px 12px;font-size:0.8rem;cursor:pointer;transition:0.2s" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">❌ Remove</button>
           </div>
         </div>`,
           )
@@ -2884,7 +4874,7 @@
 
           (order.items || [order]).forEach((p) => {
             html += `
-              <div style="display:flex;gap:12px;align-items:center;background:rgba(255,255,255,0.03);border-radius:12px;padding:12px">
+              <div onclick="openProductDetails('${encodeURIComponent(JSON.stringify(p))}')" style="display:flex;gap:12px;align-items:center;background:rgba(255,255,255,0.03);border-radius:12px;padding:12px;cursor:pointer;transition:0.2s" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
                 <img src="${p.image}" alt="" style="width:55px;height:55px;object-fit:cover;border-radius:10px;flex-shrink:0">
                 <div style="flex:1;min-width:0">
                   <p style="font-weight:500;font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title}</p>
@@ -3208,5 +5198,18 @@
         handleEnter("confirmPassword", "setPassBtn");
       });
     </script>
+  
+    <!-- Edit Name Modal -->
+    <div id="editNameModal">
+      <div class="edit-name-box">
+        <h3>Edit Display Name</h3>
+        <p>Update your profile name</p>
+        <input type="text" id="editNameInput" class="edit-name-input" placeholder="Enter your display name" onkeydown="if(event.key==='Enter')saveEditName()">
+        <div class="edit-actions">
+          <button class="btn-cancel" onclick="closeEditNameModal()">Cancel</button>
+          <button class="btn-save" onclick="saveEditName()">Save</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

@@ -119,18 +119,22 @@ body {
   align-items: center;
   padding: 0 5%;
   height: 68px;
-  background: rgba(6, 9, 18, 0.72);
+  background: rgba(6, 9, 18, 0.88);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  z-index: 1000 !important;
   border-bottom: 1px solid var(--glass-border);
 
   /* Subtle top edge highlight */
   box-shadow:
     0 1px 0 rgba(255,255,255,0.06) inset,
-    0 4px 32px rgba(0, 0, 0, 0.4);
+    0 4px 32px rgba(0, 0, 0, 0.5);
 }
 
 .top-bar h2 {
