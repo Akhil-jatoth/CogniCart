@@ -229,6 +229,21 @@
       }
 
       
+      
+      .watchlist-item-card,
+      .alert-item-card,
+      #watchlist,
+      #alerts,
+      #watchlist *,
+      #alerts * {
+        opacity: 1;
+        visibility: visible;
+      }
+      .watchlist-item-card,
+      .alert-item-card {
+        display: flex !important;
+      }
+
       /* ── Page Stability & Fixed Positioning Fixes ── */
       html {
         scrollbar-gutter: stable;
@@ -3714,6 +3729,7 @@
 
         window._watchlistProducts = items.map(it => it.product || it);
 
+        // Ensure items are immediately visible
         body.innerHTML = items.map((item, i) => {
           const p = item.product || {};
           const curPrice = parseInt(item.currentPrice || p.price || 0);
@@ -3735,7 +3751,7 @@
           }
 
           return `
-          <div class="reveal watchlist-item-card" style="display:flex;gap:18px;align-items:center;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:18px;padding:18px;transition:0.25s;flex-wrap:wrap;" onmouseover="this.style.borderColor='rgba(99,102,241,0.5)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='var(--glass-border)';this.style.background='var(--glass-bg)'">
+          <div class="watchlist-item-card active" style="display:flex;gap:18px;align-items:center;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:18px;padding:18px;transition:0.25s;flex-wrap:wrap;" onmouseover="this.style.borderColor='rgba(99,102,241,0.5)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='var(--glass-border)';this.style.background='var(--glass-bg)'">
             <img src="${image}" alt="${title}" style="width:85px;height:85px;object-fit:cover;border-radius:12px;flex-shrink:0;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'" onclick="openProductPage(window._watchlistProducts[${i}], 'watchlist')">
             <div style="flex:1;min-width:260px">
               <p style="font-weight:600;margin-bottom:6px;font-size:0.98rem;color:var(--text-main);cursor:pointer;line-height:1.4" onclick="openProductPage(window._watchlistProducts[${i}], 'watchlist')" title="${title}">${title}</p>
@@ -3856,7 +3872,7 @@
           }
 
           return `
-          <div class="reveal alert-item-card" style="display:flex;gap:18px;align-items:center;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:18px;padding:18px;transition:0.25s;flex-wrap:wrap;" onmouseover="this.style.borderColor='rgba(99,102,241,0.5)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='var(--glass-border)';this.style.background='var(--glass-bg)'">
+          <div class="alert-item-card active" style="display:flex;gap:18px;align-items:center;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:18px;padding:18px;transition:0.25s;flex-wrap:wrap;" onmouseover="this.style.borderColor='rgba(99,102,241,0.5)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='var(--glass-border)';this.style.background='var(--glass-bg)'">
             <img src="${image}" alt="${title}" style="width:85px;height:85px;object-fit:cover;border-radius:12px;flex-shrink:0;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'" onclick="openProductPage(window._alertProducts[${i}], 'alerts')">
             <div style="flex:1;min-width:260px">
               <p style="font-weight:600;margin-bottom:6px;font-size:0.98rem;color:var(--text-main);cursor:pointer;line-height:1.4" onclick="openProductPage(window._alertProducts[${i}], 'alerts')" title="${title}">${title}</p>
@@ -4444,7 +4460,7 @@
       // ─── SECTIONS ────────────────────────────────────────────────────────────
       function showSection(id) {
         document.getElementById("storesSection").style.display = "none";
-        document.querySelector(".hero-search").style.display = "none";
+        document.querySelector(".hero-search").style.setProperty("display", "none", "important");
         document.getElementById("aiBox").style.display = "none";
         const pg = document.getElementById("paginationControls");
         if (pg) pg.style.display = "none";
@@ -4467,7 +4483,7 @@
       }
 
       function goHome() {
-        document.querySelector(".hero-search").style.display = "flex";
+        document.querySelector(".hero-search").style.setProperty("display", "flex", "important");
         document.getElementById("storesSection").style.display = "flex";
         document.getElementById("aiBox").style.display = "block";
         document.querySelectorAll(".user-section").forEach((s) => {

@@ -1022,3 +1022,10 @@ html, body {
   background: rgba(124,109,247,0.35);
   color: white;
 }
+.watchlist-item-card,
+.alert-item-card,
+.cart-item-card,
+.order-group {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
