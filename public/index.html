@@ -2417,39 +2417,75 @@
 
       // ─── PRICE DROP ALERT ─────────────────────────────────────────────────────
       let _priceAlertProduct = null;
-      function openPriceAlert(btn) {
+
+      function openPriceAlert(btnOrProduct) {
         const username = sessionStorage.getItem("loggedUser");
         if (!username) {
           toast("Please login to set alerts.", "error");
           openAuthModal();
           return;
         }
-        _priceAlertProduct = JSON.parse(
-          decodeURIComponent(btn.getAttribute("data-product")),
-        );
-        document.getElementById("priceAlertTitle").textContent =
-          _priceAlertProduct.title;
+
+        let product = null;
+        if (btnOrProduct && btnOrProduct.nodeType) {
+          const raw = btnOrProduct.getAttribute("data-product") || btnOrProduct.dataset.product;
+          if (raw) {
+            try { product = JSON.parse(decodeURIComponent(raw)); } catch(e) {}
+          }
+        } else if (btnOrProduct && typeof btnOrProduct === "object") {
+          if (btnOrProduct.getAttribute && typeof btnOrProduct.getAttribute === "function") {
+            try { product = JSON.parse(decodeURIComponent(btnOrProduct.getAttribute("data-product"))); } catch(e) {}
+          } else {
+            product = btnOrProduct;
+          }
+        }
+
+        if (!product && typeof _currentViewingProduct !== "undefined" && _currentViewingProduct) {
+          product = _currentViewingProduct;
+        }
+
+        if (!product || !product.title) {
+          toast("Could not identify product", "error");
+          return;
+        }
+
+        _priceAlertProduct = product;
+        const cleanPrice = parseInt(String(product.price || 0).replace(/[^\d.]/g, "")) || 0;
+        _priceAlertProduct.price = cleanPrice;
+
+        document.getElementById("priceAlertTitle").textContent = product.title;
         document.getElementById("priceAlertCurrentPrice").textContent =
-          `Current Price: ₹${parseInt(_priceAlertProduct.price).toLocaleString("en-IN")}`;
-        document.getElementById("priceAlertTarget").value = "";
+          cleanPrice > 0 ? `Current Price: ₹${cleanPrice.toLocaleString("en-IN")}` : "Current Price: Tracking Deal";
+
+        const suggested = cleanPrice > 0 ? Math.max(1, Math.round(cleanPrice * 0.9)) : "";
+        document.getElementById("priceAlertTarget").value = suggested;
         document.getElementById("priceAlertModal").style.display = "flex";
-        setTimeout(
-          () => document.getElementById("priceAlertTarget").focus(),
-          100,
-        );
+        setTimeout(() => document.getElementById("priceAlertTarget").focus(), 100);
       }
 
       async function savePriceAlert() {
         const username = sessionStorage.getItem("loggedUser");
-        const target = document.getElementById("priceAlertTarget").value;
-        if (!target || +target <= 0) {
+        if (!username) {
+          toast("Please login first", "error");
+          openAuthModal();
+          return;
+        }
+
+        const targetInput = document.getElementById("priceAlertTarget");
+        const targetVal = targetInput ? targetInput.value : "";
+        const targetNum = parseInt(String(targetVal).replace(/[^\d.]/g, "")) || 0;
+
+        if (!targetNum || targetNum <= 0) {
           toast("Enter a valid target price.", "error");
           return;
         }
-        if (+target >= +_priceAlertProduct.price) {
+
+        const cleanCurrentPrice = parseInt(String(_priceAlertProduct.price || 0).replace(/[^\d.]/g, "")) || 0;
+        if (cleanCurrentPrice > 0 && targetNum >= cleanCurrentPrice) {
           toast("Target must be lower than current price!", "warning");
           return;
         }
+
         try {
           const res = await fetch(`${API_BASE}/price-alert`, {
             method: "POST",
@@ -2457,17 +2493,18 @@
             body: JSON.stringify({
               username,
               product: _priceAlertProduct,
-              targetPrice: +target,
+              targetPrice: targetNum,
             }),
           });
           const data = await res.json();
           closeModal("priceAlertModal");
           toast(
-            data.message ||
-              `🔔 Alert set! We'll email when price drops below ₹${(+target).toLocaleString("en-IN")}`,
+            data.message || `🔔 Alert set! We will notify you when price drops below ₹${targetNum.toLocaleString("en-IN")}`,
             "success",
+            4000
           );
         } catch (e) {
+          console.error("Alert save error:", e);
           toast("Failed to set alert.", "error");
         }
       }
@@ -4513,7 +4550,7 @@
       let _watchProductPending = null;
       let _watchBtnPending = null;
 
-      async function addToWatchlist(btn) {
+      async function addToWatchlist(btnOrProduct) {
         const username = sessionStorage.getItem("loggedUser");
         if (!username) {
           toast("Please login first ⚠️", "error");
@@ -4521,38 +4558,38 @@
           return;
         }
 
-        _watchProductPending = JSON.parse(
-          decodeURIComponent(btn.dataset.product || "{}"),
-        );
-        _watchBtnPending = btn;
+        let product = null;
+        let btn = null;
 
-        const dropdown = document.getElementById("folderSelectDropdown");
-        dropdown.innerHTML = `<option value="My Wishlist">My Wishlist</option>`;
-
-        // Fetch user folders to populate dropdown
-        try {
-          const res = await fetch(
-            `${API_BASE}/folders/${encodeURIComponent(username)}`,
-          );
-          const folders = await res.json();
-          const allFolders = new Set(["My Wishlist", ...folders]);
-          dropdown.innerHTML = Array.from(allFolders)
-            .map((f) => `<option value="${f}">${f}</option>`)
-            .join("");
-        } catch (err) {
-          console.error("Failed to load folders:", err);
+        if (btnOrProduct && btnOrProduct.nodeType) {
+          btn = btnOrProduct;
+          const raw = btn.getAttribute("data-product") || btn.dataset.product;
+          if (raw) {
+            try { product = JSON.parse(decodeURIComponent(raw)); } catch(e) {}
+          }
+        } else if (btnOrProduct && typeof btnOrProduct === "object") {
+          if (btnOrProduct.dataset && btnOrProduct.dataset.product) {
+            try { product = JSON.parse(decodeURIComponent(btnOrProduct.dataset.product)); } catch(e) {}
+          } else if (btnOrProduct.getAttribute && typeof btnOrProduct.getAttribute === "function") {
+            try { product = JSON.parse(decodeURIComponent(btnOrProduct.getAttribute("data-product"))); } catch(e) {}
+          } else {
+            product = btnOrProduct;
+          }
+          if (btnOrProduct.textContent) btn = btnOrProduct;
         }
 
-        document.getElementById("folderSelectModal").style.display = "flex";
-      }
+        if (!product && typeof _currentViewingProduct !== "undefined" && _currentViewingProduct) {
+          product = _currentViewingProduct;
+        }
 
-      async function confirmAddToWatchlist() {
-        const username = sessionStorage.getItem("loggedUser");
-        const folder = document.getElementById("folderSelectDropdown").value;
-        const product = _watchProductPending;
-        const btn = _watchBtnPending;
+        if (!product || !product.title) {
+          toast("Failed to identify product", "error");
+          return;
+        }
 
-        closeModal("folderSelectModal");
+        const cleanPrice = parseInt(String(product.price || 0).replace(/[^\d.]/g, "")) || 0;
+        product.price = cleanPrice;
+
         if (btn) {
           btn.disabled = true;
           btn.textContent = "Adding…";
@@ -4562,21 +4599,21 @@
           const res = await fetch(`${API_BASE}/watchlist/add`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, product, folder }),
+            body: JSON.stringify({ username, product, folder: "My Wishlist" }),
           });
           const data = await res.json();
-          toast(
-            `📊 Added to "${folder}"! You'll get email alerts on price drops.`,
-            "success",
-            4000,
-          );
-          if (btn) btn.textContent = "✓ Watching";
+          toast(`📊 Added "${product.title.slice(0, 32)}..." to Watchlist ✓`, "success", 3000);
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = "✓ Watching";
+            setTimeout(() => { if (btn) btn.textContent = "📊 Watch"; }, 2500);
+          }
         } catch (err) {
           console.error("Watchlist error:", err);
           toast("Failed to add to watchlist", "error");
           if (btn) {
             btn.disabled = false;
-            btn.textContent = "📊 Watch Price";
+            btn.textContent = "📊 Watch";
           }
         }
       }

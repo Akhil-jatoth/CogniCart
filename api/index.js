@@ -649,34 +649,97 @@ router.post("/ai-compare", async (req, res) => {
 router.post("/price-alert", (req, res) => {
   const { username, product, targetPrice } = req.body;
   if (!username || !product || !targetPrice) return res.status(400).json({ message: "Missing fields" });
+
+  const cleanPrice = parseInt(String(product.price || 0).replace(/[^\d.]/g, "")) || 0;
+  const cleanTarget = parseInt(String(targetPrice).replace(/[^\d.]/g, "")) || 0;
   const id = newId();
-  alertsStore.set(id, {
-    _id: id, username,
-    product: { title: product.title, image: product.image, store: product.store, link: product.link },
-    currentPrice: parseInt(product.price), targetPrice: parseInt(targetPrice),
-    createdAt: new Date(), notified: false,
-    priceHistory: [{ price: parseInt(product.price), timestamp: new Date() }],
+
+  const alertEntry = {
+    _id: id,
+    username,
+    product: {
+      title: product.title || "Product",
+      image: product.image || "assets/logo.png",
+      store: product.store || "Amazon",
+      link: product.link || "#",
+      price: cleanPrice,
+      rating: product.rating || "4.2"
+    },
+    currentPrice: cleanPrice,
+    targetPrice: cleanTarget,
+    createdAt: new Date(),
+    notified: false,
+    priceHistory: [{ price: cleanPrice, timestamp: new Date() }],
     isDeleted: false,
+  };
+
+  alertsStore.set(id, alertEntry);
+
+  // Persist in users.json
+  upsertUser(username, u => {
+    if (!u.alerts) u.alerts = [];
+    const idx = u.alerts.findIndex(a => a.product?.title === product.title);
+    if (idx !== -1) {
+      u.alerts[idx] = alertEntry;
+    } else {
+      u.alerts.push(alertEntry);
+    }
   });
-  res.json({ message: `Alert set! We'll mail you at ${username} when the price drops below ₹${parseInt(targetPrice).toLocaleString("en-IN")}.` });
+
+  res.json({ message: `Alert set! We'll mail you at ${username} when the price drops below ₹${cleanTarget.toLocaleString("en-IN")}.` });
 });
 
 router.get("/price-alerts/:username", (req, res) => {
-  const alerts = [...alertsStore.values()].filter(a => a.username === req.params.username && !a.isDeleted);
-  res.json(alerts);
+  const user = getUser(req.params.username);
+  let userAlerts = user?.alerts ? [...user.alerts] : [];
+
+  const memAlerts = [...alertsStore.values()].filter(a => a.username === req.params.username && !a.isDeleted);
+  for (const item of memAlerts) {
+    if (!userAlerts.some(a => a._id === item._id || a.product?.title === item.product?.title)) {
+      userAlerts.push(item);
+    }
+  }
+
+  res.json(userAlerts.filter(a => !a.isDeleted));
 });
 
 router.delete("/price-alerts/:alertId", (req, res) => {
-  const alert = alertsStore.get(req.params.alertId);
-  if (alert) alertsStore.set(req.params.alertId, { ...alert, isDeleted: true });
+  const id = req.params.alertId;
+  const alert = alertsStore.get(id);
+  if (alert) alertsStore.set(id, { ...alert, isDeleted: true });
+
+  const users = readUsers();
+  users.forEach(u => {
+    if (u.alerts) {
+      u.alerts = u.alerts.filter(a => a._id !== id && String(a._id) !== String(id));
+    }
+  });
+  writeUsers(users);
+
   res.json({ message: "Alert removed" });
 });
 
 router.put("/price-alerts/:alertId", (req, res) => {
+  const id = req.params.alertId;
   const { targetPrice } = req.body;
-  if (!targetPrice || isNaN(+targetPrice)) return res.status(400).json({ message: "Invalid target price" });
-  const alert = alertsStore.get(req.params.alertId);
-  if (alert) alertsStore.set(req.params.alertId, { ...alert, targetPrice: parseInt(targetPrice), notified: false });
+  const cleanTarget = parseInt(String(targetPrice).replace(/[^\d.]/g, "")) || 0;
+  if (!cleanTarget) return res.status(400).json({ message: "Invalid target price" });
+
+  const alert = alertsStore.get(id);
+  if (alert) alertsStore.set(id, { ...alert, targetPrice: cleanTarget, notified: false });
+
+  const users = readUsers();
+  users.forEach(u => {
+    if (u.alerts) {
+      const a = u.alerts.find(item => item._id === id || String(item._id) === String(id));
+      if (a) {
+        a.targetPrice = cleanTarget;
+        a.notified = false;
+      }
+    }
+  });
+  writeUsers(users);
+
   res.json({ message: "Target price updated" });
 });
 
@@ -699,41 +762,98 @@ router.post("/trigger-alert/:alertId", async (req, res) => {
 router.post("/watchlist/add", (req, res) => {
   const { username, product, folder } = req.body;
   if (!username || !product) return res.status(400).json({ message: "Missing username or product" });
+
+  const cleanPrice = parseInt(String(product.price || 0).replace(/[^\d.]/g, "")) || 0;
   const id = newId();
-  watchlistStore.set(id, {
-    _id: id, username,
-    productId: `${product.title.substring(0, 50)}_${Date.now()}`,
-    product: { title: product.title, image: product.image, rating: product.rating },
-    priceHistory: [{ price: parseInt(product.price) || 0, timestamp: new Date(), source: product.store || "Unknown" }],
-    isActive: true, addedAt: new Date(), lastChecked: new Date(),
-    priceDropNotifications: [], folder: folder || "My Wishlist",
+  const entry = {
+    _id: id,
+    username,
+    productId: `${(product.title || "prod").substring(0, 50)}_${Date.now()}`,
+    product: {
+      title: product.title || "Product",
+      image: product.image || "assets/logo.png",
+      rating: product.rating || "4.2",
+      ratingCount: product.ratingCount || "100",
+      store: product.store || "Amazon",
+      link: product.link || "#",
+      price: cleanPrice
+    },
+    currentPrice: cleanPrice,
+    previousPrice: cleanPrice,
+    lowestPrice: cleanPrice,
+    highestPrice: cleanPrice,
+    priceHistory: [{ price: cleanPrice, timestamp: new Date(), source: product.store || "Amazon" }],
+    isActive: true,
+    addedAt: new Date(),
+    lastChecked: new Date(),
+    priceDrops: [],
+    folder: folder || "My Wishlist",
+  };
+
+  watchlistStore.set(id, entry);
+
+  // Persist to users.json
+  upsertUser(username, u => {
+    if (!u.watchlist) u.watchlist = [];
+    const idx = u.watchlist.findIndex(w => w.product?.title === product.title);
+    if (idx !== -1) {
+      u.watchlist[idx] = entry;
+    } else {
+      u.watchlist.push(entry);
+    }
   });
+
   res.json({ message: "Product added to watchlist", watchlistId: id });
 });
 
 router.get("/watchlist/:username", (req, res) => {
-  const watchlist = [...watchlistStore.values()].filter(w => w.username === req.params.username && w.isActive);
-  const enriched = watchlist.map(item => ({
-    _id: item._id, product: item.product,
-    currentPrice: item.priceHistory[item.priceHistory.length - 1]?.price || 0,
-    previousPrice: item.priceHistory.length > 1 ? item.priceHistory[item.priceHistory.length - 2]?.price : null,
-    priceHistory: item.priceHistory, addedAt: item.addedAt, lastChecked: item.lastChecked,
-    priceDrops: item.priceDropNotifications || [], folder: item.folder || "My Wishlist",
-  }));
-  res.json(enriched);
+  const user = getUser(req.params.username);
+  let userWatchlist = user?.watchlist ? [...user.watchlist] : [];
+
+  // Also include in-memory entries
+  const memItems = [...watchlistStore.values()].filter(w => w.username === req.params.username && w.isActive);
+  for (const item of memItems) {
+    if (!userWatchlist.some(w => w._id === item._id || w.product?.title === item.product?.title)) {
+      userWatchlist.push(item);
+    }
+  }
+
+  res.json(userWatchlist.filter(w => w.isActive !== false));
 });
 
 router.delete("/watchlist/:watchlistId", (req, res) => {
-  const entry = watchlistStore.get(req.params.watchlistId);
-  if (entry) watchlistStore.set(req.params.watchlistId, { ...entry, isActive: false });
+  const id = req.params.watchlistId;
+  const entry = watchlistStore.get(id);
+  if (entry) watchlistStore.set(id, { ...entry, isActive: false });
+
+  // Update in users.json
+  const users = readUsers();
+  users.forEach(u => {
+    if (u.watchlist) {
+      u.watchlist = u.watchlist.filter(w => w._id !== id && String(w._id) !== String(id));
+    }
+  });
+  writeUsers(users);
+
   res.json({ message: "Product removed from watchlist" });
 });
 
 router.put("/watchlist/:watchlistId/move", (req, res) => {
   const { folder } = req.body;
   if (!folder) return res.status(400).json({ message: "Folder name is required" });
-  const entry = watchlistStore.get(req.params.watchlistId);
-  if (entry) watchlistStore.set(req.params.watchlistId, { ...entry, folder });
+  const id = req.params.watchlistId;
+  const entry = watchlistStore.get(id);
+  if (entry) watchlistStore.set(id, { ...entry, folder });
+
+  const users = readUsers();
+  users.forEach(u => {
+    if (u.watchlist) {
+      const w = u.watchlist.find(item => item._id === id || String(item._id) === String(id));
+      if (w) w.folder = folder;
+    }
+  });
+  writeUsers(users);
+
   res.json({ message: `Moved to ${folder}` });
 });
 

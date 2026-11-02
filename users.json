@@ -202,9 +202,71 @@
         "searchQuery": "smart watch",
         "time": "2/11/2026, 10:41:26 pm",
         "timestamp": "2026-11-02T17:11:26.340Z"
+      },
+      {
+        "searchQuery": "smart watch",
+        "time": "2/11/2026, 11:41:27 pm",
+        "timestamp": "2026-11-02T18:11:29.179Z"
       }
     ],
-    "totalSearches": 20,
-    "password": "$2b$10$TUeBbDfj7oi1nCrxFqsx6eQQ7PHNwyY2802rZaXh8T7jRqDyraD.."
+    "totalSearches": 21,
+    "password": "$2b$10$TUeBbDfj7oi1nCrxFqsx6eQQ7PHNwyY2802rZaXh8T7jRqDyraD..",
+    "watchlist": [
+      {
+        "_id": "1793643560657",
+        "username": "akhiljt1166@gmail.com",
+        "productId": "boAt Wave Call 3 Smartwatch_1793643570509",
+        "product": {
+          "title": "boAt Wave Call 3 Smartwatch",
+          "image": "https://m.media-amazon.com/images/I/61H5PEN6XtL._AC_UY218_.jpg",
+          "rating": "4.1",
+          "ratingCount": "100",
+          "store": "Amazon",
+          "link": "https://amazon.in",
+          "price": 1399
+        },
+        "currentPrice": 1399,
+        "previousPrice": 1399,
+        "lowestPrice": 1399,
+        "highestPrice": 1399,
+        "priceHistory": [
+          {
+            "price": 1399,
+            "timestamp": "2026-11-02T18:19:30.509Z",
+            "source": "Amazon"
+          }
+        ],
+        "isActive": true,
+        "addedAt": "2026-11-02T18:19:30.509Z",
+        "lastChecked": "2026-11-02T18:19:30.509Z",
+        "priceDrops": [],
+        "folder": "My Wishlist"
+      }
+    ],
+    "alerts": [
+      {
+        "_id": "1793643560658",
+        "username": "akhiljt1166@gmail.com",
+        "product": {
+          "title": "boAt Wave Call 3 Smartwatch",
+          "image": "https://m.media-amazon.com/images/I/61H5PEN6XtL._AC_UY218_.jpg",
+          "store": "Amazon",
+          "link": "https://amazon.in",
+          "price": 1399,
+          "rating": "4.1"
+        },
+        "currentPrice": 1399,
+        "targetPrice": 1200,
+        "createdAt": "2026-11-02T18:19:30.590Z",
+        "notified": false,
+        "priceHistory": [
+          {
+            "price": 1399,
+            "timestamp": "2026-11-02T18:19:30.590Z"
+          }
+        ],
+        "isDeleted": false
+      }
+    ]
   }
 ]
