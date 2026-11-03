@@ -909,18 +909,75 @@ router.get("/price-alerts/:username", (req, res) => {
 
 router.delete("/price-alerts/:alertId", (req, res) => {
   const id = req.params.alertId;
-  const alert = alertsStore.get(id);
-  if (alert) alertsStore.set(id, { ...alert, isDeleted: true });
+  const qUsername = req.query.username || req.body?.username || "";
+  const qTitle = req.query.title || req.body?.title || "";
+
+  let alert = alertsStore.get(id);
+  let targetUsername = alert?.username || qUsername;
+  let targetProductTitle = alert?.product?.title || qTitle;
 
   const users = readUsers();
+
+  // Find user and title from users.json if not in memory
+  if (!targetProductTitle || !targetUsername) {
+    for (const u of users) {
+      if (u.alerts) {
+        const found = u.alerts.find(a => a._id === id || String(a._id) === String(id) || (qTitle && a.product?.title === qTitle));
+        if (found) {
+          targetUsername = u.username;
+          targetProductTitle = found.product?.title;
+          break;
+        }
+      }
+    }
+  }
+
+  // 1. Delete from in-memory alertsStore
+  if (alert) alertsStore.set(id, { ...alert, isDeleted: true });
+  if (targetProductTitle) {
+    for (const [key, a] of alertsStore.entries()) {
+      if ((!targetUsername || a.username === targetUsername) && a.product?.title === targetProductTitle) {
+        alertsStore.set(key, { ...a, isDeleted: true });
+      }
+    }
+  }
+
+  // 2. ALSO delete from in-memory watchlistStore
+  if (targetProductTitle) {
+    for (const [wId, w] of watchlistStore.entries()) {
+      if ((!targetUsername || w.username === targetUsername) && (w.product?.title === targetProductTitle || (qTitle && w.product?.title?.includes(qTitle)))) {
+        watchlistStore.set(wId, { ...w, isActive: false });
+      }
+    }
+  }
+
+  // 3. Delete from users.json (both alerts AND watchlist)
   users.forEach(u => {
-    if (u.alerts) {
-      u.alerts = u.alerts.filter(a => a._id !== id && String(a._id) !== String(id));
+    if (!targetUsername || u.username === targetUsername) {
+      if (u.alerts) {
+        u.alerts = u.alerts.filter(a => {
+          if (a._id === id || String(a._id) === String(id)) return false;
+          if (targetProductTitle && a.product?.title === targetProductTitle) return false;
+          if (qTitle && a.product?.title === qTitle) return false;
+          return true;
+        });
+      }
+      if (u.watchlist && (targetProductTitle || qTitle)) {
+        const cmpTitle = (targetProductTitle || qTitle).toLowerCase().trim();
+        u.watchlist = u.watchlist.filter(w => {
+          const wTitle = (w.product?.title || "").toLowerCase().trim();
+          if (wTitle === cmpTitle || (cmpTitle.length > 10 && wTitle.includes(cmpTitle)) || (wTitle.length > 10 && cmpTitle.includes(wTitle))) {
+            return false;
+          }
+          if (w._id === id || String(w._id) === String(id)) return false;
+          return true;
+        });
+      }
     }
   });
   writeUsers(users);
 
-  res.json({ message: "Alert removed" });
+  res.json({ message: "Alert and corresponding watchlist item removed successfully" });
 });
 
 router.put("/price-alerts/:alertId", (req, res) => {
@@ -1027,19 +1084,74 @@ router.get("/watchlist/:username", (req, res) => {
 
 router.delete("/watchlist/:watchlistId", (req, res) => {
   const id = req.params.watchlistId;
-  const entry = watchlistStore.get(id);
-  if (entry) watchlistStore.set(id, { ...entry, isActive: false });
+  const qUsername = req.query.username || req.body?.username || "";
+  const qTitle = req.query.title || req.body?.title || "";
 
-  // Update in users.json
+  let entry = watchlistStore.get(id);
+  let targetUsername = entry?.username || qUsername;
+  let targetProductTitle = entry?.product?.title || qTitle;
+
   const users = readUsers();
+
+  if (!targetProductTitle || !targetUsername) {
+    for (const u of users) {
+      if (u.watchlist) {
+        const found = u.watchlist.find(w => w._id === id || String(w._id) === String(id) || (qTitle && w.product?.title === qTitle));
+        if (found) {
+          targetUsername = u.username;
+          targetProductTitle = found.product?.title;
+          break;
+        }
+      }
+    }
+  }
+
+  // 1. Mark in-memory watchlist entry as inactive
+  if (entry) watchlistStore.set(id, { ...entry, isActive: false });
+  if (targetProductTitle) {
+    for (const [wId, w] of watchlistStore.entries()) {
+      if ((!targetUsername || w.username === targetUsername) && w.product?.title === targetProductTitle) {
+        watchlistStore.set(wId, { ...w, isActive: false });
+      }
+    }
+  }
+
+  // 2. ALSO remove matching alerts in alertsStore
+  if (targetProductTitle) {
+    for (const [aId, a] of alertsStore.entries()) {
+      if ((!targetUsername || a.username === targetUsername) && a.product?.title === targetProductTitle) {
+        alertsStore.set(aId, { ...a, isDeleted: true });
+      }
+    }
+  }
+
+  // 3. Update in users.json (both watchlist AND alerts)
   users.forEach(u => {
-    if (u.watchlist) {
-      u.watchlist = u.watchlist.filter(w => w._id !== id && String(w._id) !== String(id));
+    if (!targetUsername || u.username === targetUsername) {
+      if (u.watchlist) {
+        u.watchlist = u.watchlist.filter(w => {
+          if (w._id === id || String(w._id) === String(id)) return false;
+          if (targetProductTitle && w.product?.title === targetProductTitle) return false;
+          if (qTitle && w.product?.title === qTitle) return false;
+          return true;
+        });
+      }
+      if (u.alerts && (targetProductTitle || qTitle)) {
+        const cmpTitle = (targetProductTitle || qTitle).toLowerCase().trim();
+        u.alerts = u.alerts.filter(a => {
+          const aTitle = (a.product?.title || "").toLowerCase().trim();
+          if (aTitle === cmpTitle || (cmpTitle.length > 10 && aTitle.includes(cmpTitle)) || (aTitle.length > 10 && cmpTitle.includes(aTitle))) {
+            return false;
+          }
+          if (a._id === id || String(a._id) === String(id)) return false;
+          return true;
+        });
+      }
     }
   });
   writeUsers(users);
 
-  res.json({ message: "Product removed from watchlist" });
+  res.json({ message: "Product removed from watchlist and alerts" });
 });
 
 router.put("/watchlist/:watchlistId/move", (req, res) => {

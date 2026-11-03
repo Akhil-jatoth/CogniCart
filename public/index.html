@@ -1999,9 +1999,10 @@
 
         _actionConfirmCallback = onConfirm;
         confirmBtn.onclick = () => {
+          const cb = _actionConfirmCallback;
           closeActionPopupModal();
-          if (typeof _actionConfirmCallback === "function") {
-            _actionConfirmCallback();
+          if (typeof cb === "function") {
+            cb();
           }
         };
 
@@ -3892,6 +3893,7 @@
           return;
         }
 
+        window._watchlistItems = items;
         window._watchlistProducts = items.map(it => it.product || it);
 
         // Ensure items are immediately visible
@@ -3935,33 +3937,40 @@
             </div>
             <div style="display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:wrap">
               <button onclick="watchlistAddToCart(window._watchlistProducts[${i}])" class="glow-btn" style="width:auto;padding:8px 16px;font-size:0.82rem;margin:0">🛒 Add to Cart</button>
-              <button onclick="removeWatchlistItem('${item._id}')" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#f87171;border-radius:10px;padding:8px 14px;font-size:0.82rem;font-weight:600;cursor:pointer;transition:0.2s" onmouseover="this.style.background='rgba(239,68,68,0.22)'" onmouseout="this.style.background='rgba(239,68,68,0.12)'">🗑️ Remove</button>
+              <button onclick="removeWatchlistItem(${i})" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#f87171;border-radius:10px;padding:8px 14px;font-size:0.82rem;font-weight:600;cursor:pointer;transition:0.2s" onmouseover="this.style.background='rgba(239,68,68,0.22)'" onmouseout="this.style.background='rgba(239,68,68,0.12)'">🗑️ Remove</button>
             </div>
           </div>`;
         }).join("");
       }
 
-      async function removeWatchlistItem(watchlistId) {
+      async function removeWatchlistItem(target) {
+        const item = typeof target === "number" && window._watchlistItems ? window._watchlistItems[target] : (window._watchlistItems?.find(it => it._id === target) || { _id: target });
+        const watchlistId = item?._id || target;
+        const prod = item?.product || {};
+        const username = sessionStorage.getItem("loggedUser") || "";
+
         showActionConfirm({
           icon: "🗑️",
-          title: "Remove from Watchlist?",
-          message: "Are you sure you want to stop tracking this product in your Watchlist?",
+          title: "Remove from Watchlist & Alerts?",
+          message: `Stop tracking "${prod.title || 'this product'}"? This will also remove any active price alerts for it.`,
+          product: prod,
           confirmText: "🗑️ Yes, Remove",
           confirmBg: "linear-gradient(135deg, #ef4444, #dc2626)",
           cancelText: "Keep Tracking",
           onConfirm: async () => {
             try {
-              const res = await fetch(`${API_BASE}/watchlist/${watchlistId}`, { method: "DELETE" });
+              const url = `${API_BASE}/watchlist/${encodeURIComponent(watchlistId)}?username=${encodeURIComponent(username)}&title=${encodeURIComponent(prod.title || '')}`;
+              const res = await fetch(url, { method: "DELETE" });
               if (res.ok) {
                 loadWatchlistSection();
                 showActionPopup({
                   icon: "🗑️",
-                  title: "Item Removed",
-                  message: "The product has been removed from your Watchlist.",
+                  title: "Product Removed",
+                  message: `"${prod.title || 'The product'}" has been successfully removed from your Watchlist and Price Alerts.`,
                   primaryBtnText: "OK",
                   primaryAction: () => {}
                 });
-                toast("Removed from watchlist ✓", "success");
+                toast("Removed from watchlist & alerts ✓", "success");
               } else {
                 toast("Failed to remove item", "error");
               }
@@ -4054,6 +4063,7 @@
           return;
         }
 
+        window._alertsList = alerts;
         window._alertProducts = alerts.map(a => a.product || a);
 
         body.innerHTML = alerts.map((alert, i) => {
@@ -4099,7 +4109,7 @@
             <div style="display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:wrap">
               <button onclick="editTargetPrice('${alert._id}', ${targetPrice})" style="background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.3);color:#a5b4fc;border-radius:10px;padding:8px 14px;font-size:0.82rem;font-weight:600;cursor:pointer;transition:0.2s" onmouseover="this.style.background='rgba(99,102,241,0.22)'" onmouseout="this.style.background='rgba(99,102,241,0.12)'">✏️ Edit Target</button>
               <button onclick="watchlistAddToCart(window._alertProducts[${i}])" class="glow-btn" style="width:auto;padding:8px 16px;font-size:0.82rem;margin:0">🛒 Add to Cart</button>
-              <button onclick="deletePriceAlertItem('${alert._id}')" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#f87171;border-radius:10px;padding:8px 14px;font-size:0.82rem;font-weight:600;cursor:pointer;transition:0.2s" onmouseover="this.style.background='rgba(239,68,68,0.22)'" onmouseout="this.style.background='rgba(239,68,68,0.12)'">🗑️ Delete</button>
+              <button onclick="deletePriceAlertItem(${i})" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#f87171;border-radius:10px;padding:8px 14px;font-size:0.82rem;font-weight:600;cursor:pointer;transition:0.2s" onmouseover="this.style.background='rgba(239,68,68,0.22)'" onmouseout="this.style.background='rgba(239,68,68,0.12)'">🗑️ Delete</button>
             </div>
           </div>`;
         }).join("");
@@ -4132,27 +4142,34 @@
         }
       }
 
-      async function deletePriceAlertItem(alertId) {
+      async function deletePriceAlertItem(target) {
+        const alert = typeof target === "number" && window._alertsList ? window._alertsList[target] : (window._alertsList?.find(a => a._id === target) || { _id: target });
+        const alertId = alert?._id || target;
+        const prod = alert?.product || {};
+        const username = sessionStorage.getItem("loggedUser") || "";
+
         showActionConfirm({
-          icon: "🔔",
-          title: "Delete Price Alert?",
-          message: "Are you sure you want to remove this price drop alert?",
-          confirmText: "🗑️ Yes, Delete",
+          icon: "🗑️",
+          title: "Delete Price Alert & Watchlist?",
+          message: `Remove price alert for "${prod.title || 'this product'}"? This will also remove it from your Watchlist.`,
+          product: prod,
+          confirmText: "🗑️ Yes, Delete Both",
           confirmBg: "linear-gradient(135deg, #ef4444, #dc2626)",
           cancelText: "Keep Alert",
           onConfirm: async () => {
             try {
-              const res = await fetch(`${API_BASE}/price-alerts/${alertId}`, { method: "DELETE" });
+              const url = `${API_BASE}/price-alerts/${encodeURIComponent(alertId)}?username=${encodeURIComponent(username)}&title=${encodeURIComponent(prod.title || '')}`;
+              const res = await fetch(url, { method: "DELETE" });
               if (res.ok) {
                 loadAlertsSection();
                 showActionPopup({
                   icon: "🗑️",
-                  title: "Alert Deleted",
-                  message: "The price alert has been successfully removed.",
+                  title: "Alert & Watchlist Removed",
+                  message: `The price alert and watchlist entry for "${prod.title || 'this item'}" have been successfully removed.`,
                   primaryBtnText: "OK",
                   primaryAction: () => {}
                 });
-                toast("Alert deleted ✓", "success");
+                toast("Removed from alerts & watchlist ✓", "success");
               } else {
                 toast("Failed to delete alert", "error");
               }
