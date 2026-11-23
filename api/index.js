@@ -3,8 +3,12 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-const dns = require("dns");
-dns.setServers(["8.8.8.8", "1.1.1.1"]);
+if (process.platform === "win32") {
+  try {
+    const dns = require("dns");
+    dns.setServers(["8.8.8.8", "1.1.1.1"]);
+  } catch (e) {}
+}
 const { MongoClient } = require("mongodb");
 const fs = require("fs");
 const path = require("path");
@@ -86,10 +90,14 @@ const mongoUri = env("MONGODB_URI");
 let mongoClient = null;
 let db = null;
 let connectPromise = null;
+let lastMongoError = null;
 
 async function getDB() {
   if (db) return db;
-  if (!mongoUri) return null;
+  if (!mongoUri) {
+    lastMongoError = "MONGODB_URI not set";
+    return null;
+  }
   if (!connectPromise) {
     connectPromise = (async () => {
       try {
@@ -103,6 +111,7 @@ async function getDB() {
         console.log("🔥 Successfully connected to MongoDB Atlas (Database: cognicart)");
         return db;
       } catch (err) {
+        lastMongoError = err.message;
         console.error("⚠️ MongoDB connection error:", err.message);
         return null;
       }
@@ -156,6 +165,7 @@ router.get("/db-status", async (req, res) => {
     database: database ? database.databaseName : null,
     mode: database ? "mongodb" : "file-store",
     userCount: readUsers().length,
+    error: lastMongoError,
   });
 });
 
