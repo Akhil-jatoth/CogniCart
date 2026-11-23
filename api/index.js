@@ -203,56 +203,104 @@ router.post("/send-otp", async (req, res) => {
   const expiry = Date.now() + 5 * 60 * 1000;
   otpStore.set(username, { otp, expiry });
 
-  let origin = "http://localhost:3000";
-  if (req.headers.origin) origin = req.headers.origin;
-  else if (req.headers.referer) {
+  let origin = "https://cognicart-three.vercel.app";
+  if (req.headers.origin && !req.headers.origin.includes("localhost")) {
+    origin = req.headers.origin;
+  } else if (req.headers.referer && !req.headers.referer.includes("localhost")) {
     try { origin = new URL(req.headers.referer).origin; } catch (e) {}
   }
   const loginLink = `${origin}/index.html?otp=${otp}&email=${encodeURIComponent(username)}`;
+  const senderEmail = env("SENDER_EMAIL") || "aakasltf06@gmail.com";
+  const senderName = env("SENDER_NAME") || "CogniCart Security";
+  const recipientName = username.split("@")[0];
+
+  const textContent = `Hi ${recipientName},
+
+Your CogniCart verification code is: ${otp}
+
+This one-time code is valid for 5 minutes. Do not share it with anyone.
+
+Direct login link:
+${loginLink}
+
+If you did not request this code, you can safely ignore this email.
+
+Best regards,
+The CogniCart Team
+https://cognicart-three.vercel.app`;
 
   try {
     await emailApi.sendTransacEmail({
-      sender: { email: "aakasltf06@gmail.com", name: "CogniCart" },
-      to: [{ email: username, name: username.split("@")[0] }],
-      subject: "🔐 Your CogniCart Verification Code",
+      sender: { email: senderEmail, name: senderName },
+      to: [{ email: username, name: recipientName }],
+      replyTo: { email: senderEmail, name: "CogniCart Support" },
+      subject: `${otp} is your CogniCart verification code`,
+      textContent,
+      headers: {
+        "X-Auto-Response-Suppress": "OOF, AutoReply",
+        "X-Mailin-tag": "otp-verification"
+      },
+      tags: ["otp-verification"],
       htmlContent: `
 <!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#0f172a;font-family:'Segoe UI',Arial,sans-serif">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0f172a;padding:40px 20px">
-    <tr><td align="center">
-      <table width="480" cellpadding="0" cellspacing="0" style="background:linear-gradient(135deg,#1e1b4b,#1e293b);border-radius:24px;overflow:hidden;border:1px solid rgba(99,102,241,0.2);box-shadow:0 32px 80px rgba(0,0,0,0.5)">
-        <tr><td style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:32px 40px;text-align:center">
-          <div style="font-size:2.5rem;margin-bottom:8px">🛒</div>
-          <h1 style="margin:0;color:#fff;font-size:1.5rem;font-weight:800;letter-spacing:-0.5px">CogniCart</h1>
-          <p style="margin:6px 0 0;color:rgba(255,255,255,0.8);font-size:0.88rem">Smart Price Comparison</p>
-        </td></tr>
-        <tr><td style="padding:40px">
-          <h2 style="margin:0 0 12px;color:#f1f5f9;font-size:1.25rem;font-weight:700">Verify Your Email 🔐</h2>
-          <p style="margin:0 0 28px;color:#94a3b8;font-size:0.9rem;line-height:1.6">Hi <strong style="color:#c7d2fe">${username.split('@')[0]}</strong>! Enter this one-time code to log in:</p>
-          <div style="background:rgba(99,102,241,0.1);border:2px solid rgba(99,102,241,0.4);border-radius:16px;padding:24px;margin-bottom:28px;text-align:center">
-            <p style="margin:0 0 16px;color:#94a3b8;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px">Your Verification Code</p>
-            <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;background:rgba(15,23,42,0.6);border-radius:12px;border:1px solid rgba(99,102,241,0.3);overflow:hidden">
-              <tr>
-                <td style="padding:14px 20px;font-size:2.2rem;font-weight:850;letter-spacing:6px;color:#a5b4fc;vertical-align:middle">${otp}</td>
-                <td style="width:1px;background:rgba(99,102,241,0.3)"></td>
-                <td style="padding:10px 16px;vertical-align:middle">
-                  <a href="${loginLink}" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:8px;font-size:0.8rem;font-weight:700;white-space:nowrap">Verify</a>
-                </td>
-              </tr>
-            </table>
-          </div>
-          <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:10px;padding:12px 16px;margin-bottom:28px">
-            <p style="margin:0;color:#fde68a;font-size:0.85rem">⏱️ This code expires in <strong>5 minutes</strong>. Do not share it with anyone.</p>
-          </div>
-          <p style="margin:0;color:#64748b;font-size:0.8rem;line-height:1.6">If you didn't request this code, you can safely ignore this email.</p>
-        </td></tr>
-        <tr><td style="padding:20px 40px 32px;border-top:1px solid rgba(255,255,255,0.06)">
-          <p style="margin:0;color:#475569;font-size:0.75rem;text-align:center">© CogniCart · Sent at ${new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'})}</p>
-        </td></tr>
-      </table>
-    </td></tr>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CogniCart Verification Code</title>
+</head>
+<body style="margin:0;padding:0;background-color:#0f172a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#f1f5f9;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0f172a;padding:36px 16px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:500px;background:#1e293b;border-radius:18px;border:1px solid #334155;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,0.4);">
+          <!-- Header -->
+          <tr>
+            <td style="background:#4f46e5;padding:26px 32px;text-align:center;">
+              <span style="font-size:2rem;line-height:1;display:inline-block;margin-bottom:6px;">🛒</span>
+              <h1 style="margin:0;color:#ffffff;font-size:1.45rem;font-weight:700;letter-spacing:-0.4px;">CogniCart</h1>
+              <p style="margin:4px 0 0;color:#c7d2fe;font-size:0.86rem;">Smart Price Comparison & Deal Tracker</p>
+            </td>
+          </tr>
+          <!-- Body Content -->
+          <tr>
+            <td style="padding:32px 32px 28px;">
+              <h2 style="margin:0 0 12px;color:#f8fafc;font-size:1.15rem;font-weight:600;">Verification Code</h2>
+              <p style="margin:0 0 24px;color:#94a3b8;font-size:0.92rem;line-height:1.6;">
+                Hi <strong style="color:#e2e8f0;">${recipientName}</strong>, use the one-time code below to log in to your CogniCart account:
+              </p>
+              
+              <!-- OTP Box -->
+              <div style="background:#0f172a;border:1px solid #4338ca;border-radius:12px;padding:22px;text-align:center;margin:0 0 24px;">
+                <div style="color:#818cf8;font-size:0.75rem;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;font-weight:600;">One-Time Passcode</div>
+                <div style="font-size:2.4rem;font-weight:800;letter-spacing:8px;color:#ffffff;font-family:Consolas,monaco,monospace;">${otp}</div>
+                <div style="margin-top:16px;">
+                  <a href="${loginLink}" target="_blank" style="display:inline-block;background:#6366f1;color:#ffffff;text-decoration:none;font-size:0.85rem;font-weight:600;padding:8px 18px;border-radius:8px;">Instant 1-Click Login</a>
+                </div>
+              </div>
+
+              <div style="background:#1e1b4b;border-left:4px solid #818cf8;border-radius:6px;padding:12px 14px;margin-bottom:24px;">
+                <p style="margin:0;color:#cbd5e1;font-size:0.84rem;line-height:1.5;">
+                  ⏱️ This code is valid for <strong>5 minutes</strong>. Never share this code with anyone.
+                </p>
+              </div>
+
+              <p style="margin:0;color:#64748b;font-size:0.82rem;line-height:1.5;">
+                If you did not request this login code, you can safely disregard this email.
+              </p>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td style="background:#0f172a;padding:18px 32px;border-top:1px solid #334155;text-align:center;">
+              <p style="margin:0;color:#64748b;font-size:0.75rem;">
+                © CogniCart · <a href="https://cognicart-three.vercel.app" target="_blank" style="color:#818cf8;text-decoration:none;">cognicart-three.vercel.app</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
   </table>
 </body>
 </html>
@@ -1305,11 +1353,31 @@ router.get("/check-prices", async (req, res) => {
 
 async function sendTargetPriceEmail(username, product, currentPrice, targetPrice) {
   try {
+    const senderEmail = env("SENDER_EMAIL") || "aakasltf06@gmail.com";
+    const senderName = env("SENDER_NAME") || "CogniCart Price Alerts";
+    const recipientName = username.split("@")[0];
+
     await emailApi.sendTransacEmail({
-      sender: { email: "aakasltf06@gmail.com", name: "CogniCart" },
-      to: [{ email: username, name: username.split("@")[0] }],
-      subject: `🎯 Price Alert: "${product.title.substring(0, 40)}" is now ₹${currentPrice.toLocaleString("en-IN")}!`,
-      htmlContent: `<p>Hi ${username.split("@")[0]}! Your target price of ₹${targetPrice.toLocaleString("en-IN")} for <strong>${product.title}</strong> has been reached. Current price: <strong>₹${currentPrice.toLocaleString("en-IN")}</strong>. Grab it now!</p>`,
+      sender: { email: senderEmail, name: senderName },
+      to: [{ email: username, name: recipientName }],
+      replyTo: { email: senderEmail, name: "CogniCart Support" },
+      subject: `Price Alert: ${product.title.substring(0, 45)} is now ₹${currentPrice.toLocaleString("en-IN")}`,
+      textContent: `Hi ${recipientName},\n\nGreat news! The product "${product.title}" has reached your target price.\n\nTarget Price: ₹${targetPrice.toLocaleString("en-IN")}\nCurrent Price: ₹${currentPrice.toLocaleString("en-IN")}\nStore: ${product.store || "Online Store"}\nLink: ${product.link || "https://cognicart-three.vercel.app"}\n\nHappy Shopping,\nThe CogniCart Team`,
+      headers: {
+        "X-Auto-Response-Suppress": "OOF, AutoReply",
+        "X-Mailin-tag": "price-alert"
+      },
+      tags: ["price-alert"],
+      htmlContent: `<div style="font-family:sans-serif;color:#333;max-width:520px;margin:0 auto;padding:24px;border:1px solid #e2e8f0;border-radius:12px;">
+        <h2 style="color:#4f46e5;margin:0 0 12px;">Price Drop Alert!</h2>
+        <p>Hi <strong>${recipientName}</strong>, your target price of <strong>₹${targetPrice.toLocaleString("en-IN")}</strong> for <strong>${product.title}</strong> has been reached.</p>
+        <p style="font-size:1.2rem;color:#16a34a;font-weight:bold;">Current Price: ₹${currentPrice.toLocaleString("en-IN")}</p>
+        <div style="margin:20px 0;">
+          <a href="${product.link || 'https://cognicart-three.vercel.app'}" style="background:#4f46e5;color:#fff;padding:10px 20px;text-decoration:none;border-radius:8px;font-weight:600;display:inline-block;">View Product</a>
+        </div>
+        <hr style="border:none;border-top:1px solid #e2e8f0;margin:20px 0;">
+        <p style="font-size:0.75rem;color:#64748b;margin:0;">© CogniCart · <a href="https://cognicart-three.vercel.app" style="color:#4f46e5;text-decoration:none;">cognicart-three.vercel.app</a></p>
+      </div>`,
     });
     return true;
   } catch (err) {
