@@ -3,6 +3,9 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const dns = require("dns");
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
+const { MongoClient } = require("mongodb");
 const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
@@ -26,10 +29,7 @@ const emailClient = SibApiV3Sdk.ApiClient.instance;
 emailClient.authentications["api-key"].apiKey = env("BREVO_API_KEY");
 const emailApi = new SibApiV3Sdk.TransactionalEmailsApi();
 
-// ─── 1. JSON FILE DATABASE (replaces MongoDB) ─────────────────────────────────
-// All user data is persisted to users.json. Watchlist / alerts / OTPs are
-// kept in memory (they reset on server restart which is fine locally).
-
+// ─── 1. DATABASE SETUP (MongoDB with users.json auto-sync & fallback) ────────
 const USERS_FILE = path.join(__dirname, "..", "users.json");
 
 function readUsers() {
@@ -47,6 +47,14 @@ function writeUsers(users) {
     fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf8");
   } catch (e) {
     console.error("Error writing users.json:", e.message);
+  }
+  if (db) {
+    const usersCol = db.collection("users");
+    for (const u of users) {
+      usersCol.updateOne({ username: u.username }, { $set: u }, { upsert: true }).catch(err => {
+        console.error("MongoDB async sync error for", u.username, err.message);
+      });
+    }
   }
 }
 
@@ -74,7 +82,66 @@ const foldersStore = new Map();       // username → Set<folderName>
 let _idCounter = Date.now();
 function newId() { return String(++_idCounter); }
 
-console.log("ℹ️  Running in file-store mode (no MongoDB needed). Data saved to users.json");
+const mongoUri = env("MONGODB_URI");
+let mongoClient = null;
+let db = null;
+
+async function initMongoDB() {
+  if (!mongoUri) {
+    console.log("ℹ️  Running in file-store mode (no MONGODB_URI set). Data saved to users.json");
+    return;
+  }
+  try {
+    mongoClient = new MongoClient(mongoUri, {
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 10000,
+      connectTimeoutMS: 10000,
+    });
+    await mongoClient.connect();
+    db = mongoClient.db("cognicart");
+    console.log("🔥 Successfully connected to MongoDB Atlas (Database: cognicart)");
+
+    // Initial sync: seed MongoDB from users.json if collection is empty
+    const usersCol = db.collection("users");
+    const count = await usersCol.countDocuments();
+    const localUsers = readUsers();
+    if (count === 0 && localUsers.length > 0) {
+      console.log(`ℹ️  Syncing ${localUsers.length} existing users from users.json to MongoDB...`);
+      for (const u of localUsers) {
+        await usersCol.updateOne(
+          { username: u.username },
+          { $set: u },
+          { upsert: true }
+        );
+      }
+      console.log("✅ Seeded MongoDB with users.json data.");
+    } else if (count > 0) {
+      const remoteUsers = await usersCol.find({}).toArray();
+      const cleanUsers = remoteUsers.map(({ _id, ...rest }) => rest);
+      if (cleanUsers.length > 0) {
+        try {
+          fs.writeFileSync(USERS_FILE, JSON.stringify(cleanUsers, null, 2), "utf8");
+          console.log(`✅ Loaded ${cleanUsers.length} users from MongoDB into local cache.`);
+        } catch (e) {
+          console.error("Local sync write error:", e.message);
+        }
+      }
+    }
+  } catch (err) {
+    console.error("⚠️ MongoDB connection error:", err.message);
+    console.log("ℹ️  Running in file-store mode (users.json).");
+  }
+}
+initMongoDB();
+
+router.get("/db-status", (req, res) => {
+  res.json({
+    connected: !!db,
+    database: db ? db.databaseName : null,
+    mode: db ? "mongodb" : "file-store",
+    userCount: readUsers().length,
+  });
+});
 
 // ─── 2. IN-MEMORY CACHE ───────────────────────────────────────────────────────
 const SEARCH_TTL = 5 * 60 * 1000;
