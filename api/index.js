@@ -85,24 +85,40 @@ function newId() { return String(++_idCounter); }
 const mongoUri = env("MONGODB_URI");
 let mongoClient = null;
 let db = null;
+let connectPromise = null;
+
+async function getDB() {
+  if (db) return db;
+  if (!mongoUri) return null;
+  if (!connectPromise) {
+    connectPromise = (async () => {
+      try {
+        mongoClient = new MongoClient(mongoUri, {
+          maxPoolSize: 10,
+          serverSelectionTimeoutMS: 8000,
+          connectTimeoutMS: 8000,
+        });
+        await mongoClient.connect();
+        db = mongoClient.db("cognicart");
+        console.log("🔥 Successfully connected to MongoDB Atlas (Database: cognicart)");
+        return db;
+      } catch (err) {
+        console.error("⚠️ MongoDB connection error:", err.message);
+        return null;
+      }
+    })();
+  }
+  return connectPromise;
+}
 
 async function initMongoDB() {
-  if (!mongoUri) {
-    console.log("ℹ️  Running in file-store mode (no MONGODB_URI set). Data saved to users.json");
+  const database = await getDB();
+  if (!database) {
+    console.log("ℹ️  Running in file-store mode (users.json).");
     return;
   }
   try {
-    mongoClient = new MongoClient(mongoUri, {
-      maxPoolSize: 10,
-      serverSelectionTimeoutMS: 10000,
-      connectTimeoutMS: 10000,
-    });
-    await mongoClient.connect();
-    db = mongoClient.db("cognicart");
-    console.log("🔥 Successfully connected to MongoDB Atlas (Database: cognicart)");
-
-    // Initial sync: seed MongoDB from users.json if collection is empty
-    const usersCol = db.collection("users");
+    const usersCol = database.collection("users");
     const count = await usersCol.countDocuments();
     const localUsers = readUsers();
     if (count === 0 && localUsers.length > 0) {
@@ -128,17 +144,17 @@ async function initMongoDB() {
       }
     }
   } catch (err) {
-    console.error("⚠️ MongoDB connection error:", err.message);
-    console.log("ℹ️  Running in file-store mode (users.json).");
+    console.error("⚠️ MongoDB sync error:", err.message);
   }
 }
 initMongoDB();
 
-router.get("/db-status", (req, res) => {
+router.get("/db-status", async (req, res) => {
+  const database = await getDB();
   res.json({
-    connected: !!db,
-    database: db ? db.databaseName : null,
-    mode: db ? "mongodb" : "file-store",
+    connected: !!database,
+    database: database ? database.databaseName : null,
+    mode: database ? "mongodb" : "file-store",
     userCount: readUsers().length,
   });
 });
