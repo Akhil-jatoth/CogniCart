@@ -8,6 +8,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onProfileTap;
   final VoidCallback? onLogoutTap;
   final VoidCallback? onLogoTap;
+  final VoidCallback? onThemeToggle;
 
   const AppNavBar({
     super.key,
@@ -15,6 +16,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     required this.onProfileTap,
     this.onLogoutTap,
     this.onLogoTap,
+    this.onThemeToggle,
   });
 
   @override
@@ -42,7 +44,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               // Logo & Brand Name
               GestureDetector(
-                onTap: onLogoTap,
+                onTap: onLogoTap ?? onThemeToggle,
                 child: Row(
                   children: [
                     Image.asset(
@@ -74,76 +76,90 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
 
-              // Actions (Login or User Circle)
-              if (username != null && username.isNotEmpty)
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: onProfileTap,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: AppTheme.bgCardHover,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: AppTheme.primaryPurple.withValues(alpha: 0.4)),
-                        ),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 12,
-                              backgroundColor: AppTheme.primaryPurple,
-                              child: Text(
-                                initial,
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              displayName,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+              // Actions (Theme toggle + Login or User Circle)
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (onThemeToggle != null) ...[
+                    IconButton(
+                      icon: const Icon(Icons.palette_outlined, size: 20, color: AppTheme.accentCyan),
+                      tooltip: 'Change Background Theme',
+                      onPressed: onThemeToggle,
+                      visualDensity: VisualDensity.compact,
                     ),
-                    if (onLogoutTap != null) ...[
-                      const SizedBox(width: 8),
-                      IconButton(
-                        icon: const Icon(Icons.logout_rounded, size: 18, color: AppTheme.textMuted),
-                        onPressed: onLogoutTap,
-                        tooltip: 'Logout',
-                      ),
-                    ],
+                    const SizedBox(width: 4),
                   ],
-                )
-              else
-                ElevatedButton.icon(
-                  onPressed: onLoginTap,
-                  icon: const Icon(Icons.login_rounded, size: 15, color: Colors.white),
-                  label: const Text(
-                    'Sign In',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                  if (username != null && username.isNotEmpty)
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: onProfileTap,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: AppTheme.bgCardHover,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: AppTheme.primaryPurple.withValues(alpha: 0.4)),
+                            ),
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 12,
+                                  backgroundColor: AppTheme.primaryPurple,
+                                  child: Text(
+                                    initial,
+                                    style: const TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  displayName,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        if (onLogoutTap != null) ...[
+                          const SizedBox(width: 8),
+                          IconButton(
+                            icon: const Icon(Icons.logout_rounded, size: 18, color: AppTheme.textMuted),
+                            onPressed: onLogoutTap,
+                            tooltip: 'Logout',
+                          ),
+                        ],
+                      ],
+                    )
+                  else
+                    ElevatedButton.icon(
+                      onPressed: onLoginTap,
+                      icon: const Icon(Icons.login_rounded, size: 15, color: Colors.white),
+                      label: const Text(
+                        'Sign In',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primaryPurple,
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
                     ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryPurple,
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                ),
+                ],
+              ),
             ],
           ),
         ),

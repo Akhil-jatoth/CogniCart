@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'services/storage_service.dart';
@@ -10,6 +11,59 @@ import 'screens/watchlist_screen.dart';
 import 'screens/alerts_screen.dart';
 import 'screens/cart_screen.dart';
 import 'screens/profile_screen.dart';
+
+class BackgroundThemeOption {
+  final String asset;
+  final Color overlayTop;
+  final Color overlayBottom;
+  final Color glow1;
+  final Color glow2;
+  final String name;
+
+  const BackgroundThemeOption({
+    required this.asset,
+    required this.overlayTop,
+    required this.overlayBottom,
+    required this.glow1,
+    required this.glow2,
+    required this.name,
+  });
+}
+
+const List<BackgroundThemeOption> kBackgroundThemes = [
+  BackgroundThemeOption(
+    asset: 'assets/bg/bg1.png',
+    overlayTop: Color(0xDE090705), // rgba(9, 7, 5, 0.88)
+    overlayBottom: Color(0xEB090705),
+    glow1: Color(0xFFFACC15), // Yellow
+    glow2: Color(0xFFEF4444), // Red
+    name: 'Solar Flare',
+  ),
+  BackgroundThemeOption(
+    asset: 'assets/bg/bg2.png',
+    overlayTop: Color(0xDE0A0A0A), // rgba(10, 10, 10, 0.88)
+    overlayBottom: Color(0xEB0A0A0A),
+    glow1: Color(0xFFF59E0B), // Amber
+    glow2: Color(0xFFD97706), // Gold
+    name: 'Cyber Amber',
+  ),
+  BackgroundThemeOption(
+    asset: 'assets/bg/bg3.png',
+    overlayTop: Color(0xDE060912), // rgba(6, 9, 18, 0.88)
+    overlayBottom: Color(0xE8080E1C),
+    glow1: Color(0xFF10B981), // Emerald
+    glow2: Color(0xFF8B5CF6), // Purple
+    name: 'Neon Matrix',
+  ),
+  BackgroundThemeOption(
+    asset: 'assets/bg/bg4.png',
+    overlayTop: Color(0xEB060912), // rgba(6, 9, 18, 0.92)
+    overlayBottom: Color(0xF2080E1C),
+    glow1: Color(0xFF3B82F6), // Electric Blue
+    glow2: Color(0xFF60A5FA), // Sky Blue
+    name: 'Deep Oceanic',
+  ),
+];
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,6 +102,36 @@ class MainNavigationShell extends StatefulWidget {
 
 class _MainNavigationShellState extends State<MainNavigationShell> {
   int _currentIndex = 0;
+  late int _themeIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    // Random theme selection on launch matching the web app (Math.random() * themes.length)
+    _themeIndex = math.Random().nextInt(kBackgroundThemes.length);
+  }
+
+  void _cycleTheme() {
+    setState(() {
+      _themeIndex = (_themeIndex + 1) % kBackgroundThemes.length;
+    });
+    final theme = kBackgroundThemes[_themeIndex];
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.palette_rounded, color: AppTheme.accentCyan, size: 20),
+            const SizedBox(width: 10),
+            Text('Background: ${theme.name} (${_themeIndex + 1}/4)'),
+          ],
+        ),
+        duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: const Color(0xFF161E31),
+      ),
+    );
+  }
 
   void _onTabSelected(int index) {
     setState(() => _currentIndex = index);
@@ -65,6 +149,8 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
 
   @override
   Widget build(BuildContext context) {
+    final currentTheme = kBackgroundThemes[_themeIndex];
+
     final screens = [
       HomeSearchScreen(onOpenAuth: _openAuthModal),
       WatchlistScreen(onOpenAuth: _openAuthModal),
@@ -82,24 +168,31 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
       backgroundColor: const Color(0xFF060912),
       body: Stack(
         children: [
-          // ─── 1. FULLSCREEN SHOPPING DOODLE BACKGROUND PATTERN (EXACT SAME AS WEBSITE) ───
+          // ─── 1. FULLSCREEN SHOPPING DOODLE BACKGROUND PATTERN (DYNAMIC 4 THEMES) ───
           Positioned.fill(
-            child: Image.asset(
-              'assets/bg/bg3.png',
-              fit: BoxFit.cover,
-              alignment: Alignment.center,
-              errorBuilder: (context, error, stackTrace) => Container(color: const Color(0xFF060912)),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 600),
+              child: Image.asset(
+                currentTheme.asset,
+                key: ValueKey<String>(currentTheme.asset),
+                fit: BoxFit.cover,
+                alignment: Alignment.center,
+                width: double.infinity,
+                height: double.infinity,
+                errorBuilder: (context, error, stackTrace) => Container(color: const Color(0xFF060912)),
+              ),
             ),
           ),
 
-          // ─── 2. DARK TINT OVERLAY: linear-gradient(rgba(6, 9, 18, 0.88), rgba(6, 9, 18, 0.90)) ───
+          // ─── 2. DYNAMIC DARK TINT OVERLAY GRADIENT ───
           Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 600),
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color(0xE0060912), // 88% dark
-                    Color(0xE8080E1C), // 91% dark
+                    currentTheme.overlayTop,
+                    currentTheme.overlayBottom,
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -112,24 +205,26 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
           Positioned(
             top: -60,
             right: -60,
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 600),
               width: 260,
               height: 260,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppTheme.primaryPurple.withValues(alpha: 0.16),
+                color: currentTheme.glow1.withValues(alpha: 0.16),
               ),
             ),
           ),
           Positioned(
             bottom: 120,
             left: -80,
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 600),
               width: 240,
               height: 240,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppTheme.accentCyan.withValues(alpha: 0.10),
+                color: currentTheme.glow2.withValues(alpha: 0.10),
               ),
             ),
           ),
@@ -142,6 +237,8 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
                 AppNavBar(
                   onLoginTap: _openAuthModal,
                   onProfileTap: () => setState(() => _currentIndex = 4),
+                  onThemeToggle: _cycleTheme,
+                  onLogoTap: _cycleTheme,
                   onLogoutTap: () async {
                     await StorageService.logout();
                     setState(() {});

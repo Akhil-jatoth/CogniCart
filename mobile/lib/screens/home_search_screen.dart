@@ -117,14 +117,17 @@ class _HomeSearchScreenState extends State<HomeSearchScreen> {
     } else {
       AuthModal.show(context, () {
         setState(() {});
-        action();
+        if (StorageService.isLoggedIn()) {
+          action();
+        }
       });
     }
   }
 
   Future<void> _handleWatchlist(Product product) async {
     _requireAuthThen(() async {
-      final username = StorageService.getUsername()!;
+      final username = StorageService.getUsername();
+      if (username == null) return;
       final success = await ApiService.addToWatchlist(username, product);
       if (mounted) {
         if (success) {
@@ -138,8 +141,9 @@ class _HomeSearchScreenState extends State<HomeSearchScreen> {
 
   Future<void> _handleAlert(Product product) async {
     _requireAuthThen(() {
+      final username = StorageService.getUsername();
+      if (username == null) return;
       TargetPriceModal.show(context, product, (targetPrice) async {
-        final username = StorageService.getUsername()!;
         final success = await ApiService.addAlert(username, product, targetPrice);
         if (mounted) {
           if (success) {
@@ -157,7 +161,8 @@ class _HomeSearchScreenState extends State<HomeSearchScreen> {
 
   Future<void> _handleAddToCart(Product product) async {
     _requireAuthThen(() async {
-      final username = StorageService.getUsername()!;
+      final username = StorageService.getUsername();
+      if (username == null) return;
       final success = await ApiService.addToCart(username, product);
       if (mounted) {
         if (success) {

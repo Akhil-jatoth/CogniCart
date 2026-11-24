@@ -66,11 +66,11 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
     return total;
   }
 
-  Future<void> _removeFromCart(Product item) async {
+  Future<void> _removeFromCart(Product item, int index) async {
     final username = StorageService.getUsername();
     if (username == null) return;
 
-    final success = await ApiService.removeFromCart(username, item.title);
+    final success = await ApiService.removeFromCart(username, index: index, title: item.title);
     if (!mounted) return;
 
     if (success) {
@@ -276,7 +276,7 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
                       ),
                       IconButton(
                         icon: const Icon(Icons.delete_outline_rounded, color: Colors.redAccent, size: 20),
-                        onPressed: () => _removeFromCart(item),
+                        onPressed: () => _removeFromCart(item, i),
                       ),
                     ],
                   ),

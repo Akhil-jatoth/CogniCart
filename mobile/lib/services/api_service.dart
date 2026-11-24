@@ -136,7 +136,7 @@ class ApiService {
   }
 
   static Future<Map<String, dynamic>> login(String username, String password) async {
-    final uri = Uri.parse('$baseUrl/login');
+    final uri = Uri.parse('$baseUrl/login-password');
     try {
       final res = await http.post(
         uri,
@@ -162,7 +162,7 @@ class ApiService {
   }
 
   static Future<bool> addToWatchlist(String username, Product product, {String folder = 'My Wishlist'}) async {
-    final uri = Uri.parse('$baseUrl/watchlist');
+    final uri = Uri.parse('$baseUrl/watchlist/add');
     try {
       final res = await http.post(
         uri,
@@ -203,7 +203,7 @@ class ApiService {
   }
 
   static Future<bool> addAlert(String username, Product product, double targetPrice) async {
-    final uri = Uri.parse('$baseUrl/price-alerts');
+    final uri = Uri.parse('$baseUrl/price-alert');
     try {
       final res = await http.post(
         uri,
@@ -258,7 +258,7 @@ class ApiService {
   }
 
   static Future<bool> addToCart(String username, Product product) async {
-    final uri = Uri.parse('$baseUrl/cart');
+    final uri = Uri.parse('$baseUrl/add-to-cart');
     try {
       final res = await http.post(
         uri,
@@ -271,8 +271,8 @@ class ApiService {
     }
   }
 
-  static Future<bool> removeFromCart(String username, String title) async {
-    final uri = Uri.parse('$baseUrl/cart/${Uri.encodeComponent(username)}?title=${Uri.encodeComponent(title)}');
+  static Future<bool> removeFromCart(String username, {int index = 0, String? title}) async {
+    final uri = Uri.parse('$baseUrl/cart/${Uri.encodeComponent(username)}/$index');
     try {
       final res = await http.delete(uri).timeout(timeoutDuration);
       return res.statusCode == 200;
@@ -281,13 +281,13 @@ class ApiService {
     }
   }
 
-  static Future<bool> checkout(String username) async {
-    final uri = Uri.parse('$baseUrl/orders/checkout');
+  static Future<bool> checkout(String username, {String paymentMethod = 'COD'}) async {
+    final uri = Uri.parse('$baseUrl/place-order');
     try {
       final res = await http.post(
         uri,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'username': username}),
+        body: jsonEncode({'username': username, 'paymentMethod': paymentMethod}),
       ).timeout(timeoutDuration);
       return res.statusCode == 200;
     } catch (_) {
