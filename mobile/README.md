@@ -1,17 +1,50 @@
-# cognicart
+# 📱 CogniCart Mobile — Flutter Android Application
 
-A new Flutter project.
+CogniCart Mobile is the official cross-platform client for the CogniCart smart price-comparison platform. Built with Flutter & Dart, it brings the complete dark glassmorphic shopping experience, real-time price monitoring, and multi-store deal intelligence directly to Android devices.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🌟 Key Features
 
-A few resources to get you started if this is your first Flutter project:
+- **🎨 4 Dynamic Background Themes:**
+  - Cycles across `Solar Flare`, `Cyber Amber`, `Neon Matrix`, and `Deep Oceanic`.
+  - Automatically randomizes theme on launch matching the web app.
+  - Interactive theme switcher in the top navigation bar (palette icon 🎨).
+  - All UI elements (primary buttons, active tab icons, card borders, badge gradients, floating AI button) dynamically shift their color palette to match the active background theme.
+- **🖼️ Official Custom App Icon:**
+  - Customized launcher icons across all mipmap density buckets derived from `logo.png`.
+- **⚡ Instant Optimistic UI Deletions:**
+  - Removing items from **Cart**, **Watchlist**, or **Price Radar** updates the UI immediately without waiting for server response.
+- **🔍 Multi-Store Price Comparison:**
+  - Query Amazon, Flipkart, Google Shopping simultaneously.
+- **🤖 Floating AI Shopping Advisor:**
+  - Access Groq-powered CogniBot directly from any screen.
+- **📦 Cart & Order Tracking:**
+  - Manage cart items, perform simulated 1-click checkout, and review past orders.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🚀 Development & Build
+
+### Prerequisites
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) (v3.24+ recommended)
+- [Android SDK](https://developer.android.com/studio) with NDK 28+
+
+### Setup
+```bash
+flutter pub get
+```
+
+### Run Locally
+```bash
+flutter run
+```
+
+### Build Production Release APK
+```bash
+flutter build apk --release
+```
+The output file is generated at:
+```
+build/app/outputs/flutter-apk/app-release.apk
+```
