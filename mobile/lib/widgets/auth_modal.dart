@@ -156,7 +156,7 @@ class _AuthModalState extends State<AuthModal> {
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.bgCard,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         border: Border.all(color: AppTheme.primaryPurple.withValues(alpha: 0.3)),
       ),
       padding: EdgeInsets.only(
@@ -248,7 +248,7 @@ class _AuthModalState extends State<AuthModal> {
             enabled: !_otpSent,
             style: const TextStyle(color: Colors.white, fontSize: 15),
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.email_outlined, color: AppTheme.accentCyan, size: 20),
+              prefixIcon: Icon(Icons.email_outlined, color: AppTheme.accentCyan, size: 20),
               hintText: 'name@example.com',
               filled: true,
               fillColor: AppTheme.bgInput,
@@ -258,7 +258,7 @@ class _AuthModalState extends State<AuthModal> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: AppTheme.accentCyan, width: 2),
+                borderSide: BorderSide(color: AppTheme.accentCyan, width: 2),
               ),
             ),
             onSubmitted: (_) => _checkEmail(),
@@ -274,7 +274,7 @@ class _AuthModalState extends State<AuthModal> {
               obscureText: true,
               style: const TextStyle(color: Colors.white, fontSize: 15),
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppTheme.accentCyan, size: 20),
+                prefixIcon: Icon(Icons.lock_outline_rounded, color: AppTheme.accentCyan, size: 20),
                 hintText: 'Enter your password',
                 filled: true,
                 fillColor: AppTheme.bgInput,
@@ -284,7 +284,7 @@ class _AuthModalState extends State<AuthModal> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppTheme.accentCyan, width: 2),
+                  borderSide: BorderSide(color: AppTheme.accentCyan, width: 2),
                 ),
               ),
             ),
@@ -307,7 +307,7 @@ class _AuthModalState extends State<AuthModal> {
             Center(
               child: TextButton(
                 onPressed: () => setState(() => _usePasswordMode = false),
-                child: const Text('Or sign in with 1-Time OTP instead', style: TextStyle(color: AppTheme.accentCyan, fontSize: 13)),
+                child: Text('Or sign in with 1-Time OTP instead', style: TextStyle(color: AppTheme.accentCyan, fontSize: 13)),
               ),
             ),
           ] else if (!_otpSent) ...[
@@ -332,7 +332,7 @@ class _AuthModalState extends State<AuthModal> {
               Center(
                 child: TextButton(
                   onPressed: () => setState(() => _usePasswordMode = true),
-                  child: const Text('Or use password to sign in', style: TextStyle(color: AppTheme.accentCyan, fontSize: 13)),
+                  child: Text('Or use password to sign in', style: TextStyle(color: AppTheme.accentCyan, fontSize: 13)),
                 ),
               ),
             ],
@@ -345,7 +345,7 @@ class _AuthModalState extends State<AuthModal> {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: AppTheme.accentCyan.withValues(alpha: 0.2)),
               ),
-              child: const Row(
+              child: Row(
                 children: [
                   Icon(Icons.mark_email_read_outlined, color: AppTheme.accentCyan, size: 20),
                   SizedBox(width: 10),
@@ -379,7 +379,7 @@ class _AuthModalState extends State<AuthModal> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppTheme.accentCyan, width: 2),
+                  borderSide: BorderSide(color: AppTheme.accentCyan, width: 2),
                 ),
               ),
             ),
@@ -408,7 +408,7 @@ class _AuthModalState extends State<AuthModal> {
                 ),
                 TextButton(
                   onPressed: _sendOtp,
-                  child: const Text('Resend code', style: TextStyle(color: AppTheme.accentCyan, fontSize: 13)),
+                  child: Text('Resend code', style: TextStyle(color: AppTheme.accentCyan, fontSize: 13)),
                 ),
               ],
             ),

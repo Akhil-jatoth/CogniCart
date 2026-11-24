@@ -33,7 +33,7 @@ class AiRecommendationCard extends StatelessWidget {
         'CogniCart AI analyzed ${totalStores ?? 3} major stores. ${item?.title ?? "This deal"} is recommended for offering the lowest price and authentic warranty on ${item?.store ?? "official store"}.';
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -62,7 +62,7 @@ class AiRecommendationCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     colors: [AppTheme.primaryPurple, AppTheme.accentCyan],
                   ),
                   borderRadius: BorderRadius.circular(12),
@@ -222,7 +222,7 @@ class AiRecommendationCard extends StatelessWidget {
                 icon: const Icon(Icons.local_mall_rounded, color: Colors.white, size: 16),
                 label: Text(
                   'Grab Deal on ${item.store}',
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryPurple,

@@ -53,14 +53,17 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
         final username = StorageService.getUsername();
         if (username == null) return;
 
+        setState(() {
+          _items.removeWhere((i) => i.id == item.id || i.title == item.title);
+        });
+
+        ActionConfirmModal.showToast(context, 'Removed from Watchlist');
+
         final success = await ApiService.deleteWatchlistItem(item.id, username, item.title);
         if (!mounted) return;
 
-        if (success) {
-          ActionConfirmModal.showToast(context, 'Removed from Watchlist');
+        if (!success) {
           _loadWatchlist();
-        } else {
-          ActionConfirmModal.showToast(context, 'Could not remove item');
         }
       },
     );
@@ -88,7 +91,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
           slivers: [
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                padding: EdgeInsets.fromLTRB(16, 16, 16, 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -121,7 +124,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                           ),
                           child: Text(
                             '${_items.length} items',
-                            style: const TextStyle(color: AppTheme.accentCyan, fontSize: 12, fontWeight: FontWeight.bold),
+                            style: TextStyle(color: AppTheme.accentCyan, fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ],
@@ -145,7 +148,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.lock_outline_rounded, size: 54, color: AppTheme.accentCyan),
+                        Icon(Icons.lock_outline_rounded, size: 54, color: AppTheme.accentCyan),
                         const SizedBox(height: 16),
                         const Text('Sign In Required', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 8),
@@ -171,7 +174,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                 ),
               )
             else if (_isLoading)
-              const SliverFillRemaining(
+              SliverFillRemaining(
                 child: Center(child: CircularProgressIndicator(color: AppTheme.accentCyan)),
               )
             else if (_items.isEmpty)
@@ -198,7 +201,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                     (ctx, i) {
                       final item = _items[i];
                       return Container(
-                        margin: const EdgeInsets.only(bottom: 12),
+                        margin: EdgeInsets.only(bottom: 12),
                         decoration: BoxDecoration(
                           color: AppTheme.bgCard,
                           borderRadius: BorderRadius.circular(16),
@@ -240,7 +243,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                       children: [
                                         Text(
                                           item.price,
-                                          style: const TextStyle(color: AppTheme.accentCyan, fontSize: 15, fontWeight: FontWeight.bold),
+                                          style: TextStyle(color: AppTheme.accentCyan, fontSize: 15, fontWeight: FontWeight.bold),
                                         ),
                                         const SizedBox(width: 8),
                                         Container(
@@ -264,7 +267,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                               Column(
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.open_in_new_rounded, color: AppTheme.accentCyan, size: 20),
+                                    icon: Icon(Icons.open_in_new_rounded, color: AppTheme.accentCyan, size: 20),
                                     onPressed: () => _openStore(item.link),
                                   ),
                                   IconButton(

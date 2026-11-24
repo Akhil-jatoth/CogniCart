@@ -134,11 +134,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppTheme.bgCard,
-        title: const Text('Edit Display Name', style: TextStyle(color: Colors.white, fontFamily: 'Syne')),
+        title: Text('Edit Display Name', style: TextStyle(color: Colors.white, fontFamily: 'Syne')),
         content: TextField(
           controller: controller,
           style: const TextStyle(color: Colors.white),
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             hintText: 'Enter new name',
             filled: true,
             fillColor: AppTheme.bgInput,
@@ -194,7 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final initial = displayName.isNotEmpty ? displayName[0].toUpperCase() : 'G';
 
     if (_isLoading) {
-      return const Scaffold(
+      return Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(child: CircularProgressIndicator(color: AppTheme.accentCyan)),
       );
@@ -205,11 +205,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: Colors.transparent,
         body: Center(
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.account_circle_outlined, size: 64, color: AppTheme.accentCyan),
+                Icon(Icons.account_circle_outlined, size: 64, color: AppTheme.accentCyan),
                 const SizedBox(height: 16),
                 const Text('Sign In to CogniCart Profile', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
@@ -243,7 +243,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: AppTheme.bgCard,
         onRefresh: _loadProfileData,
         child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -372,10 +372,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
 
               // 5 STAT CARDS IN SINGLE HORIZONTAL ROW (Matches Web Profile Dashboard Layout)
-              const Row(
+              Row(
                 children: [
                   Icon(Icons.dashboard_rounded, color: AppTheme.accentCyan, size: 18),
                   SizedBox(width: 8),
@@ -432,7 +432,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       value: '₹${_watchlistValue.toStringAsFixed(0)}',
                       label: 'WATCHLIST VALUE',
                       subtext: 'current prices',
-                      borderColor: const Color(0xFF38EF7D),
+                      borderColor: Color(0xFF38EF7D),
                     ),
                     const SizedBox(width: 10),
                     _buildStatCard(
@@ -459,7 +459,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Row(
+                    Row(
                       children: [
                         Icon(Icons.bar_chart_rounded, color: AppTheme.primaryPurple, size: 20),
                         SizedBox(width: 8),
@@ -495,7 +495,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Row(
+                    Row(
                       children: [
                         Icon(Icons.history_rounded, color: AppTheme.accentCyan, size: 20),
                         SizedBox(width: 8),
@@ -523,7 +523,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         return ListTile(
                           contentPadding: EdgeInsets.zero,
                           dense: true,
-                          leading: const Icon(Icons.circle, size: 8, color: AppTheme.accentCyan),
+                          leading: Icon(Icons.circle, size: 8, color: AppTheme.accentCyan),
                           title: Text(query, style: const TextStyle(color: Colors.white, fontSize: 14)),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -531,7 +531,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Text(time, style: const TextStyle(color: AppTheme.textMuted, fontSize: 12)),
                               const SizedBox(width: 8),
                               IconButton(
-                                icon: const Icon(Icons.arrow_outward_rounded, size: 16, color: AppTheme.accentCyan),
+                                icon: Icon(Icons.arrow_outward_rounded, size: 16, color: AppTheme.accentCyan),
                                 onPressed: () {
                                   if (widget.onReSearch != null) {
                                     widget.onReSearch!(query);
@@ -600,7 +600,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }) {
     return Container(
       width: 150,
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppTheme.bgCard,
         borderRadius: BorderRadius.circular(16),
@@ -688,7 +688,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           barRods: [
             BarChartRodData(
               toY: count.toDouble(),
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 colors: [AppTheme.primaryPurple, AppTheme.accentCyan],
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,

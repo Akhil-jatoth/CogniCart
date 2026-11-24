@@ -9,7 +9,7 @@ class ActionConfirmModal {
     required String message,
     String confirmText = 'Confirm',
     String cancelText = 'Cancel',
-    Color confirmColor = AppTheme.primaryPurple,
+    Color? confirmColor,
     required VoidCallback onConfirm,
   }) {
     showDialog(
@@ -50,7 +50,7 @@ class ActionConfirmModal {
               onConfirm();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: confirmColor,
+              backgroundColor: confirmColor ?? AppTheme.primaryPurple,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
             child: Text(
@@ -69,7 +69,7 @@ class ActionConfirmModal {
         backgroundColor: Colors.transparent,
         elevation: 0,
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         duration: const Duration(seconds: 3),
         content: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -87,7 +87,7 @@ class ActionConfirmModal {
           ),
           child: Row(
             children: [
-              const Icon(Icons.check_circle_rounded, color: AppTheme.accentCyan, size: 20),
+              Icon(Icons.check_circle_rounded, color: AppTheme.accentCyan, size: 20),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
@@ -113,13 +113,13 @@ class ActionConfirmModal {
     required String message,
     String confirmText = 'Confirm',
     String cancelText = 'Cancel',
-    Color confirmColor = AppTheme.primaryPurple,
+    Color? confirmColor,
   }) async {
     final result = await showDialog<bool>(
       context: context,
       builder: (ctx) => Dialog(
         backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        insetPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         child: Container(
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
@@ -180,7 +180,7 @@ class ActionConfirmModal {
                     child: ElevatedButton(
                       onPressed: () => Navigator.of(ctx).pop(true),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: confirmColor,
+                        backgroundColor: confirmColor ?? AppTheme.primaryPurple,
                         foregroundColor: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

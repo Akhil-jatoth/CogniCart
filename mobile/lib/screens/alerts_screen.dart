@@ -54,14 +54,17 @@ class _AlertsScreenState extends State<AlertsScreen> {
         final username = StorageService.getUsername();
         if (username == null) return;
 
+        setState(() {
+          _items.removeWhere((a) => a.id == item.id || a.title == item.title);
+        });
+
+        ActionConfirmModal.showToast(context, 'Alert removed');
+
         final success = await ApiService.deleteAlert(item.id, username, item.title);
         if (!mounted) return;
 
-        if (success) {
-          ActionConfirmModal.showToast(context, 'Alert removed');
+        if (!success) {
           _loadAlerts();
-        } else {
-          ActionConfirmModal.showToast(context, 'Could not remove alert');
         }
       },
     );
@@ -103,7 +106,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
           slivers: [
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                padding: EdgeInsets.fromLTRB(16, 16, 16, 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -115,7 +118,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                             color: AppTheme.accentCyan.withValues(alpha: 0.15),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.notifications_active_rounded, color: AppTheme.accentCyan, size: 20),
+                          child: Icon(Icons.notifications_active_rounded, color: AppTheme.accentCyan, size: 20),
                         ),
                         const SizedBox(width: 10),
                         const Text(
@@ -136,7 +139,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                           ),
                           child: Text(
                             '${_items.length} active',
-                            style: const TextStyle(color: AppTheme.accentCyan, fontSize: 12, fontWeight: FontWeight.bold),
+                            style: TextStyle(color: AppTheme.accentCyan, fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ],
@@ -160,7 +163,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.add_alert_rounded, size: 54, color: AppTheme.accentCyan),
+                        Icon(Icons.add_alert_rounded, size: 54, color: AppTheme.accentCyan),
                         const SizedBox(height: 16),
                         const Text('Sign In to Track Prices', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 8),
@@ -186,7 +189,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                 ),
               )
             else if (_isLoading)
-              const SliverFillRemaining(
+              SliverFillRemaining(
                 child: Center(child: CircularProgressIndicator(color: AppTheme.accentCyan)),
               )
             else if (_items.isEmpty)
@@ -215,7 +218,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                       final isTargetMet = item.numericCurrentPrice <= item.targetPrice && item.numericCurrentPrice > 0;
 
                       return Container(
-                        margin: const EdgeInsets.only(bottom: 14),
+                        margin: EdgeInsets.only(bottom: 14),
                         decoration: BoxDecoration(
                           color: AppTheme.bgCard,
                           borderRadius: BorderRadius.circular(16),
@@ -315,7 +318,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                                         const Text('Target Alert', style: TextStyle(color: AppTheme.textMuted, fontSize: 11)),
                                         Text(
                                           '₹${item.targetPrice.toStringAsFixed(0)}',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             color: AppTheme.accentCyan,
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold,
@@ -334,8 +337,8 @@ class _AlertsScreenState extends State<AlertsScreen> {
                                 children: [
                                   TextButton.icon(
                                     onPressed: () => _updateTargetPrice(item),
-                                    icon: const Icon(Icons.edit_outlined, size: 16, color: AppTheme.accentCyan),
-                                    label: const Text('Edit Target', style: TextStyle(color: AppTheme.accentCyan, fontSize: 12)),
+                                    icon: Icon(Icons.edit_outlined, size: 16, color: AppTheme.accentCyan),
+                                    label: Text('Edit Target', style: TextStyle(color: AppTheme.accentCyan, fontSize: 12)),
                                   ),
                                   ElevatedButton.icon(
                                     onPressed: () => _openStore(item.link),

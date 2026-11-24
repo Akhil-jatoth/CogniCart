@@ -110,7 +110,7 @@ class _AiChatModalState extends State<AiChatModal> {
       margin: EdgeInsets.only(bottom: keyboardHeight),
       decoration: BoxDecoration(
         color: AppTheme.bgCard,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         border: Border.all(color: AppTheme.primaryPurple.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
@@ -141,7 +141,7 @@ class _AiChatModalState extends State<AiChatModal> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(
+                        gradient: LinearGradient(
                           colors: [AppTheme.primaryPurple, AppTheme.accentCyan],
                         ),
                         borderRadius: BorderRadius.circular(12),
@@ -196,10 +196,10 @@ class _AiChatModalState extends State<AiChatModal> {
           // Loading indicator
           if (_isLoading)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
               child: Row(
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     width: 16,
                     height: 16,
                     child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.accentCyan),
@@ -220,7 +220,7 @@ class _AiChatModalState extends State<AiChatModal> {
               separatorBuilder: (context, index) => const SizedBox(width: 8),
               itemBuilder: (ctx, idx) {
                 return ActionChip(
-                  label: Text(_quickPrompts[idx], style: const TextStyle(fontSize: 12, color: Colors.white)),
+                  label: Text(_quickPrompts[idx], style: TextStyle(fontSize: 12, color: Colors.white)),
                   backgroundColor: AppTheme.bgCardHover,
                   side: BorderSide(color: AppTheme.primaryPurple.withValues(alpha: 0.3)),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -229,7 +229,7 @@ class _AiChatModalState extends State<AiChatModal> {
               },
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
 
           // Input Bar
           Container(
@@ -260,7 +260,7 @@ class _AiChatModalState extends State<AiChatModal> {
                 ),
                 const SizedBox(width: 10),
                 Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [AppTheme.primaryPurple, AppTheme.accentCyan],
                     ),
@@ -283,7 +283,7 @@ class _AiChatModalState extends State<AiChatModal> {
     return Align(
       alignment: msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: EdgeInsets.only(bottom: 12),
         constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.78),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(

@@ -55,7 +55,7 @@ class ProductCard extends StatelessWidget {
                 ? AppTheme.accentCyan.withValues(alpha: 0.15)
                 : Colors.black.withValues(alpha: 0.25),
             blurRadius: product.isAiTopPick ? 16 : 8,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -122,7 +122,7 @@ class ProductCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
+                      gradient: LinearGradient(
                         colors: [AppTheme.primaryPurple, AppTheme.accentCyan],
                       ),
                       borderRadius: BorderRadius.circular(12),
@@ -195,7 +195,7 @@ class ProductCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       '${product.reviewsCount} reviews',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
                         color: AppTheme.textMuted,
                       ),
@@ -261,7 +261,7 @@ class ProductCard extends StatelessWidget {
 
                     // Add to Cart button
                     IconButton(
-                      icon: const Icon(Icons.add_shopping_cart_rounded, color: AppTheme.accentCyan, size: 20),
+                      icon: Icon(Icons.add_shopping_cart_rounded, color: AppTheme.accentCyan, size: 20),
                       style: IconButton.styleFrom(
                         backgroundColor: AppTheme.bgCardHover,
                         shape: RoundedRectangleBorder(

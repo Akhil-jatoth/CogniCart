@@ -12,59 +12,6 @@ import 'screens/alerts_screen.dart';
 import 'screens/cart_screen.dart';
 import 'screens/profile_screen.dart';
 
-class BackgroundThemeOption {
-  final String asset;
-  final Color overlayTop;
-  final Color overlayBottom;
-  final Color glow1;
-  final Color glow2;
-  final String name;
-
-  const BackgroundThemeOption({
-    required this.asset,
-    required this.overlayTop,
-    required this.overlayBottom,
-    required this.glow1,
-    required this.glow2,
-    required this.name,
-  });
-}
-
-const List<BackgroundThemeOption> kBackgroundThemes = [
-  BackgroundThemeOption(
-    asset: 'assets/bg/bg1.png',
-    overlayTop: Color(0xDE090705), // rgba(9, 7, 5, 0.88)
-    overlayBottom: Color(0xEB090705),
-    glow1: Color(0xFFFACC15), // Yellow
-    glow2: Color(0xFFEF4444), // Red
-    name: 'Solar Flare',
-  ),
-  BackgroundThemeOption(
-    asset: 'assets/bg/bg2.png',
-    overlayTop: Color(0xDE0A0A0A), // rgba(10, 10, 10, 0.88)
-    overlayBottom: Color(0xEB0A0A0A),
-    glow1: Color(0xFFF59E0B), // Amber
-    glow2: Color(0xFFD97706), // Gold
-    name: 'Cyber Amber',
-  ),
-  BackgroundThemeOption(
-    asset: 'assets/bg/bg3.png',
-    overlayTop: Color(0xDE060912), // rgba(6, 9, 18, 0.88)
-    overlayBottom: Color(0xE8080E1C),
-    glow1: Color(0xFF10B981), // Emerald
-    glow2: Color(0xFF8B5CF6), // Purple
-    name: 'Neon Matrix',
-  ),
-  BackgroundThemeOption(
-    asset: 'assets/bg/bg4.png',
-    overlayTop: Color(0xEB060912), // rgba(6, 9, 18, 0.92)
-    overlayBottom: Color(0xF2080E1C),
-    glow1: Color(0xFF3B82F6), // Electric Blue
-    glow2: Color(0xFF60A5FA), // Sky Blue
-    name: 'Deep Oceanic',
-  ),
-];
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
@@ -76,6 +23,10 @@ void main() async {
     ),
   );
   await StorageService.init();
+
+  // Random theme selection on initial launch matching website (Math.random() * themes.length)
+  AppTheme.setTheme(math.Random().nextInt(kBackgroundThemes.length));
+
   runApp(const CogniCartApp());
 }
 
@@ -84,11 +35,16 @@ class CogniCartApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'CogniCart',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
-      home: const MainNavigationShell(),
+    return ValueListenableBuilder<int>(
+      valueListenable: AppTheme.themeNotifier,
+      builder: (context, themeIndex, child) {
+        return MaterialApp(
+          title: 'CogniCart',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.darkTheme,
+          home: const MainNavigationShell(),
+        );
+      },
     );
   }
 }
@@ -102,33 +58,26 @@ class MainNavigationShell extends StatefulWidget {
 
 class _MainNavigationShellState extends State<MainNavigationShell> {
   int _currentIndex = 0;
-  late int _themeIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    // Random theme selection on launch matching the web app (Math.random() * themes.length)
-    _themeIndex = math.Random().nextInt(kBackgroundThemes.length);
-  }
 
   void _cycleTheme() {
-    setState(() {
-      _themeIndex = (_themeIndex + 1) % kBackgroundThemes.length;
-    });
-    final theme = kBackgroundThemes[_themeIndex];
+    AppTheme.cycleTheme();
+    final theme = AppTheme.current;
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
           children: [
-            const Icon(Icons.palette_rounded, color: AppTheme.accentCyan, size: 20),
+            Icon(Icons.palette_rounded, color: theme.accent, size: 20),
             const SizedBox(width: 10),
-            Text('Background: ${theme.name} (${_themeIndex + 1}/4)'),
+            Text(
+              'Theme: ${theme.name} (${AppTheme.activeIndex + 1}/4)',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
           ],
         ),
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: const Color(0xFF161E31),
+        backgroundColor: theme.bgSurface,
       ),
     );
   }
@@ -149,7 +98,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
 
   @override
   Widget build(BuildContext context) {
-    final currentTheme = kBackgroundThemes[_themeIndex];
+    final currentTheme = AppTheme.current;
 
     final screens = [
       HomeSearchScreen(onOpenAuth: _openAuthModal),
@@ -165,13 +114,13 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFF060912),
+      backgroundColor: currentTheme.bgVoid,
       body: Stack(
         children: [
           // ─── 1. FULLSCREEN SHOPPING DOODLE BACKGROUND PATTERN (DYNAMIC 4 THEMES) ───
           Positioned.fill(
             child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 600),
+              duration: const Duration(milliseconds: 500),
               child: Image.asset(
                 currentTheme.asset,
                 key: ValueKey<String>(currentTheme.asset),
@@ -179,7 +128,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
                 alignment: Alignment.center,
                 width: double.infinity,
                 height: double.infinity,
-                errorBuilder: (context, error, stackTrace) => Container(color: const Color(0xFF060912)),
+                errorBuilder: (context, error, stackTrace) => Container(color: currentTheme.bgVoid),
               ),
             ),
           ),
@@ -187,7 +136,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
           // ─── 2. DYNAMIC DARK TINT OVERLAY GRADIENT ───
           Positioned.fill(
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 600),
+              duration: const Duration(milliseconds: 500),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -201,12 +150,12 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
             ),
           ),
 
-          // ─── 3. SUBTLE NEON AMBIENT GLOW ACCENTS ───
+          // ─── 3. SUBTLE NEON AMBIENT GLOW ACCENTS MATCHING THEME ───
           Positioned(
             top: -60,
             right: -60,
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 600),
+              duration: const Duration(milliseconds: 500),
               width: 260,
               height: 260,
               decoration: BoxDecoration(
@@ -219,7 +168,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
             bottom: 120,
             left: -80,
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 600),
+              duration: const Duration(milliseconds: 500),
               width: 240,
               height: 240,
               decoration: BoxDecoration(
@@ -258,7 +207,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
         ],
       ),
 
-      // Floating AI Assistant Button (Matches Web circular glowing bot button)
+      // Floating AI Assistant Button (Colors dynamically match active theme)
       floatingActionButton: FloatingActionButton(
         onPressed: _openAiChat,
         backgroundColor: Colors.transparent,
@@ -269,14 +218,14 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
           height: 56,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: const LinearGradient(
-              colors: [Color(0xFF6366F1), Color(0xFF00E5FF)],
+            gradient: LinearGradient(
+              colors: [currentTheme.primary, currentTheme.secondary],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             boxShadow: [
               BoxShadow(
-                color: AppTheme.accentCyan.withValues(alpha: 0.45),
+                color: currentTheme.accent.withValues(alpha: 0.45),
                 blurRadius: 16,
                 spreadRadius: 2,
                 offset: const Offset(0, 4),
@@ -291,10 +240,10 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
         ),
       ),
 
-      // Bottom Navigation Bar
+      // Bottom Navigation Bar (Highlights dynamically match active theme)
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: const Color(0xF20B1120),
+          color: currentTheme.bgDeep.withValues(alpha: 0.95),
           border: Border(
             top: BorderSide(
               color: Colors.white.withValues(alpha: 0.08),
@@ -308,35 +257,35 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          selectedItemColor: AppTheme.accentCyan,
+          selectedItemColor: currentTheme.accent,
           unselectedItemColor: AppTheme.textMuted,
           selectedFontSize: 11,
           unselectedFontSize: 11,
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.search_rounded),
-              activeIcon: Icon(Icons.search_rounded, color: AppTheme.accentCyan),
+              icon: const Icon(Icons.search_rounded),
+              activeIcon: Icon(Icons.search_rounded, color: currentTheme.accent),
               label: 'Search',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark_outline_rounded),
-              activeIcon: Icon(Icons.bookmark_rounded, color: AppTheme.accentCyan),
+              icon: const Icon(Icons.bookmark_outline_rounded),
+              activeIcon: Icon(Icons.bookmark_rounded, color: currentTheme.accent),
               label: 'Watchlist',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.notifications_none_rounded),
-              activeIcon: Icon(Icons.notifications_active_rounded, color: AppTheme.accentCyan),
+              icon: const Icon(Icons.notifications_none_rounded),
+              activeIcon: Icon(Icons.notifications_active_rounded, color: currentTheme.accent),
               label: 'Radar',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart_outlined),
-              activeIcon: Icon(Icons.shopping_cart_rounded, color: AppTheme.accentCyan),
+              icon: const Icon(Icons.shopping_cart_outlined),
+              activeIcon: Icon(Icons.shopping_cart_rounded, color: currentTheme.accent),
               label: 'Cart',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline_rounded),
-              activeIcon: Icon(Icons.person_rounded, color: AppTheme.accentCyan),
+              icon: const Icon(Icons.person_outline_rounded),
+              activeIcon: Icon(Icons.person_rounded, color: currentTheme.accent),
               label: 'Profile',
             ),
           ],

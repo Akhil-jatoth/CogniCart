@@ -34,19 +34,47 @@ emailClient.authentications["api-key"].apiKey = env("BREVO_API_KEY");
 const emailApi = new SibApiV3Sdk.TransactionalEmailsApi();
 
 // ─── 1. DATABASE SETUP (MongoDB with users.json auto-sync & fallback) ────────
-const USERS_FILE = path.join(__dirname, "..", "users.json");
+const DEFAULT_USERS_FILE = path.join(__dirname, "..", "users.json");
+let USERS_FILE = DEFAULT_USERS_FILE;
+
+// Serverless / Lambda environments (e.g. Vercel) have a read-only root; use /tmp for writes
+const isServerless = !!(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NOW_REGION);
+if (isServerless) {
+  USERS_FILE = path.join("/tmp", "users.json");
+  try {
+    if (!fs.existsSync(USERS_FILE) && fs.existsSync(DEFAULT_USERS_FILE)) {
+      fs.copyFileSync(DEFAULT_USERS_FILE, USERS_FILE);
+    }
+  } catch (err) {
+    console.error("Failed to seed /tmp/users.json from root:", err.message);
+  }
+}
+
+let inMemoryUsers = null;
 
 function readUsers() {
+  if (inMemoryUsers && Array.isArray(inMemoryUsers)) {
+    return inMemoryUsers;
+  }
   try {
-    if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, "[]", "utf8");
-    return JSON.parse(fs.readFileSync(USERS_FILE, "utf8"));
+    if (!fs.existsSync(USERS_FILE)) {
+      if (fs.existsSync(DEFAULT_USERS_FILE)) {
+        fs.copyFileSync(DEFAULT_USERS_FILE, USERS_FILE);
+      } else {
+        fs.writeFileSync(USERS_FILE, "[]", "utf8");
+      }
+    }
+    inMemoryUsers = JSON.parse(fs.readFileSync(USERS_FILE, "utf8"));
+    return inMemoryUsers;
   } catch (e) {
     console.error("Error reading users.json:", e.message);
-    return [];
+    if (!inMemoryUsers) inMemoryUsers = [];
+    return inMemoryUsers;
   }
 }
 
 function writeUsers(users) {
+  inMemoryUsers = users;
   try {
     fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf8");
   } catch (e) {

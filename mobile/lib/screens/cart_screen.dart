@@ -70,14 +70,21 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
     final username = StorageService.getUsername();
     if (username == null) return;
 
+    setState(() {
+      if (index >= 0 && index < _cartItems.length) {
+        _cartItems.removeAt(index);
+      } else {
+        _cartItems.removeWhere((p) => p.title == item.title);
+      }
+    });
+
+    ActionConfirmModal.showToast(context, 'Removed from cart');
+
     final success = await ApiService.removeFromCart(username, index: index, title: item.title);
     if (!mounted) return;
 
-    if (success) {
-      ActionConfirmModal.showToast(context, 'Removed from cart');
+    if (!success) {
       _loadData();
-    } else {
-      ActionConfirmModal.showToast(context, 'Could not remove item');
     }
   }
 
@@ -113,7 +120,7 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100),
+        preferredSize: Size.fromHeight(100),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -148,11 +155,11 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
       body: !isLoggedIn
           ? Center(
               child: Padding(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.all(24),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.shopping_bag_outlined, size: 54, color: AppTheme.accentCyan),
+                    Icon(Icons.shopping_bag_outlined, size: 54, color: AppTheme.accentCyan),
                     const SizedBox(height: 16),
                     const Text('Sign In Required', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
@@ -177,7 +184,7 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
               ),
             )
           : _isLoading
-              ? const Center(child: CircularProgressIndicator(color: AppTheme.accentCyan))
+              ? Center(child: CircularProgressIndicator(color: AppTheme.accentCyan))
               : TabBarView(
                   controller: _tabController,
                   children: [
@@ -226,7 +233,7 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
               itemBuilder: (ctx, i) {
                 final item = _cartItems[i];
                 return Container(
-                  margin: const EdgeInsets.only(bottom: 12),
+                  margin: EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: AppTheme.bgCard,
@@ -262,7 +269,7 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
                             const SizedBox(height: 4),
                             Row(
                               children: [
-                                Text(item.price, style: const TextStyle(color: AppTheme.accentCyan, fontSize: 15, fontWeight: FontWeight.bold)),
+                                Text(item.price, style: TextStyle(color: AppTheme.accentCyan, fontSize: 15, fontWeight: FontWeight.bold)),
                                 const SizedBox(width: 8),
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -287,7 +294,7 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
 
           // Total Bar & Checkout
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: AppTheme.bgCard,
               borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
@@ -302,7 +309,7 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
                       const Text('Total Amount:', style: TextStyle(color: AppTheme.textMuted, fontSize: 14)),
                       Text(
                         '₹${_cartTotal.toStringAsFixed(0)}',
-                        style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -362,7 +369,7 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
         itemBuilder: (ctx, i) {
           final order = _orders[i];
           return Container(
-            margin: const EdgeInsets.only(bottom: 12),
+            margin: EdgeInsets.only(bottom: 12),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppTheme.bgCard,
@@ -377,7 +384,7 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
                   children: [
                     Text(
                       'Order #${order.id.substring(order.id.length > 8 ? order.id.length - 8 : 0)}',
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -401,7 +408,7 @@ class _CartScreenState extends State<CartScreen> with SingleTickerProviderStateM
                     Text('${order.items.length} items', style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
                     Text(
                       '₹${order.total.toStringAsFixed(0)}',
-                      style: const TextStyle(color: AppTheme.accentCyan, fontSize: 16, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: AppTheme.accentCyan, fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),

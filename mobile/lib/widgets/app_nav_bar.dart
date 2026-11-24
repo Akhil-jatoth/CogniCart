@@ -31,7 +31,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.bgDark.withValues(alpha: 0.95),
-        border: const Border(
+        border: Border(
           bottom: BorderSide(color: AppTheme.glassBorder, width: 1),
         ),
       ),
@@ -51,7 +51,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
                       'assets/logo.png',
                       height: 32,
                       width: 32,
-                      errorBuilder: (context, error, stackTrace) => const Icon(
+                      errorBuilder: (context, error, stackTrace) => Icon(
                         Icons.shopping_cart_rounded,
                         color: AppTheme.accentCyan,
                         size: 28,
@@ -59,7 +59,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     const SizedBox(width: 10),
                     ShaderMask(
-                      shaderCallback: (bounds) => const LinearGradient(
+                      shaderCallback: (bounds) => LinearGradient(
                         colors: [Color(0xFFFFFFFF), AppTheme.accentCyan],
                       ).createShader(bounds),
                       child: Text(
@@ -82,7 +82,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
                   if (onThemeToggle != null) ...[
                     IconButton(
-                      icon: const Icon(Icons.palette_outlined, size: 20, color: AppTheme.accentCyan),
+                      icon: Icon(Icons.palette_outlined, size: 20, color: AppTheme.accentCyan),
                       tooltip: 'Change Background Theme',
                       onPressed: onThemeToggle,
                       visualDensity: VisualDensity.compact,

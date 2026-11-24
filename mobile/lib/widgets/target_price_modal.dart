@@ -57,7 +57,7 @@ class _TargetPriceModalState extends State<TargetPriceModal> {
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.bgCard,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         border: Border.all(color: AppTheme.primaryPurple.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
@@ -98,7 +98,7 @@ class _TargetPriceModalState extends State<TargetPriceModal> {
                   color: AppTheme.accentCyan.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.notifications_active_rounded, color: AppTheme.accentCyan, size: 22),
+                child: Icon(Icons.notifications_active_rounded, color: AppTheme.accentCyan, size: 22),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -181,7 +181,7 @@ class _TargetPriceModalState extends State<TargetPriceModal> {
             style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
             decoration: InputDecoration(
               prefixText: '₹ ',
-              prefixStyle: const TextStyle(color: AppTheme.accentCyan, fontSize: 18, fontWeight: FontWeight.bold),
+              prefixStyle: TextStyle(color: AppTheme.accentCyan, fontSize: 18, fontWeight: FontWeight.bold),
               filled: true,
               fillColor: AppTheme.bgInput,
               border: OutlineInputBorder(
@@ -190,7 +190,7 @@ class _TargetPriceModalState extends State<TargetPriceModal> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: AppTheme.accentCyan, width: 2),
+                borderSide: BorderSide(color: AppTheme.accentCyan, width: 2),
               ),
             ),
             onChanged: (val) {
@@ -211,7 +211,7 @@ class _TargetPriceModalState extends State<TargetPriceModal> {
                 Navigator.pop(context);
                 widget.onConfirm(target);
               },
-              icon: const Icon(Icons.add_alert_rounded, color: Colors.white),
+              icon: Icon(Icons.add_alert_rounded, color: Colors.white),
               label: const Text(
                 'Track Price Drop',
                 style: TextStyle(
@@ -238,7 +238,7 @@ class _TargetPriceModalState extends State<TargetPriceModal> {
         onTap: () => _applyDiscount(percent),
         borderRadius: BorderRadius.circular(8),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: EdgeInsets.symmetric(vertical: 8),
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: AppTheme.primaryPurple.withValues(alpha: 0.15),
@@ -247,7 +247,7 @@ class _TargetPriceModalState extends State<TargetPriceModal> {
           ),
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppTheme.accentCyan,
               fontSize: 12,
               fontWeight: FontWeight.w600,

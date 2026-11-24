@@ -188,7 +188,7 @@ class _HomeSearchScreenState extends State<HomeSearchScreen> {
           // Header / Search Bar area
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -202,7 +202,7 @@ class _HomeSearchScreenState extends State<HomeSearchScreen> {
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: AppTheme.accentCyan.withValues(alpha: 0.3)),
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(Icons.bolt_rounded, color: AppTheme.accentCyan, size: 14),
@@ -254,7 +254,7 @@ class _HomeSearchScreenState extends State<HomeSearchScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        const Icon(Icons.search_rounded, color: AppTheme.accentCyan, size: 22),
+                        Icon(Icons.search_rounded, color: AppTheme.accentCyan, size: 22),
                         const SizedBox(width: 10),
                         Expanded(
                           child: TextField(
@@ -277,8 +277,8 @@ class _HomeSearchScreenState extends State<HomeSearchScreen> {
                             },
                           ),
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: 6),
-                          decoration: const BoxDecoration(
+                          margin: EdgeInsets.symmetric(vertical: 6),
+                          decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [AppTheme.primaryPurple, AppTheme.accentCyan],
                             ),
@@ -306,7 +306,7 @@ class _HomeSearchScreenState extends State<HomeSearchScreen> {
                           onTap: () => _searchProducts(_quickSearches[i]),
                           borderRadius: BorderRadius.circular(16),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
                               color: AppTheme.bgCardHover,
                               borderRadius: BorderRadius.circular(16),
@@ -330,7 +330,7 @@ class _HomeSearchScreenState extends State<HomeSearchScreen> {
                       children: _stores.map((store) {
                         final isSelected = _selectedStore == store;
                         return Padding(
-                          padding: const EdgeInsets.only(right: 8),
+                          padding: EdgeInsets.only(right: 8),
                           child: FilterChip(
                             selected: isSelected,
                             showCheckmark: false,
@@ -381,7 +381,7 @@ class _HomeSearchScreenState extends State<HomeSearchScreen> {
                       ),
                       Text(
                         '${_filteredProducts.length} deals',
-                        style: const TextStyle(color: AppTheme.accentCyan, fontSize: 13, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: AppTheme.accentCyan, fontSize: 13, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -392,7 +392,7 @@ class _HomeSearchScreenState extends State<HomeSearchScreen> {
 
           // Loading indicator
           if (_isLoading)
-            const SliverFillRemaining(
+            SliverFillRemaining(
               child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
