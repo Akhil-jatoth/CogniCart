@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Backgrounds
-  static const Color bgDark = Color(0xFF0B0F19);
+  // Backgrounds matching web
+  static const Color bgDark = Color(0xFF080E1C);
   static const Color bgVoid = Color(0xFF060912);
   static const Color bgDeep = Color(0xFF0B1120);
-  static const Color bgSurface = Color(0xFF111827);
-  static const Color bgCard = Color(0xFF111827);
-  static const Color bgCardHover = Color(0xFF1E293B);
-  static const Color bgRaised = Color(0xFF1A2235);
-  static const Color bgFloat = Color(0xFF1E293B);
-  static const Color bgInput = Color(0xFF0F172A);
+  static const Color bgSurface = Color(0xD9111827); // 85% opacity glass
+  static const Color bgCard = Color(0xCC111827);    // 80% opacity glass so background shines through
+  static const Color bgCardHover = Color(0xE01E293B);// 88% opacity glass
+  static const Color bgRaised = Color(0xD91A2235);
+  static const Color bgFloat = Color(0xD91E293B);
+  static const Color bgInput = Color(0xE60F172A);
 
   // Brand Accents
   static const Color primary = Color(0xFF6366F1);
@@ -58,7 +58,7 @@ class AppTheme {
     return ThemeData(
       brightness: Brightness.dark,
       fontFamily: GoogleFonts.dmSans().fontFamily,
-      scaffoldBackgroundColor: bgDark,
+      scaffoldBackgroundColor: Colors.transparent, // Allow full-screen background image
       primaryColor: primaryPurple,
       colorScheme: const ColorScheme.dark(
         primary: primaryPurple,
@@ -73,18 +73,13 @@ class AppTheme {
         bodyLarge: GoogleFonts.dmSans(color: textBody),
         bodyMedium: GoogleFonts.dmSans(color: textBody),
       ),
-      appBarTheme: AppBarTheme(
-        backgroundColor: bgDark,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: false,
-        titleTextStyle: GoogleFonts.syne(
-          color: textMain,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: bgCard,
+        backgroundColor: Color(0xF20B1120),
         selectedItemColor: accentCyan,
         unselectedItemColor: textMuted,
       ),

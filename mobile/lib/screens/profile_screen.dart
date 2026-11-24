@@ -290,28 +290,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               Row(
                                 children: [
+                                  Text(
+                                    'Hey, $displayName!',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Syne',
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Row(
+                                children: [
                                   Flexible(
                                     child: Text(
-                                      'Hey, $displayName!',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Syne',
-                                      ),
+                                      username,
+                                      style: const TextStyle(color: AppTheme.textMuted, fontSize: 12),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                  const SizedBox(width: 6),
+                                  const SizedBox(width: 8),
                                   InkWell(
                                     onTap: _editDisplayName,
-                                    child: const Icon(Icons.edit_outlined, color: AppTheme.accentPink, size: 16),
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withValues(alpha: 0.06),
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
+                                      ),
+                                      child: const Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.edit_outlined, color: AppTheme.accentPink, size: 12),
+                                          SizedBox(width: 4),
+                                          Text('Edit name', style: TextStyle(color: AppTheme.textMuted, fontSize: 11)),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 2),
-                              Text(username, style: const TextStyle(color: AppTheme.textMuted, fontSize: 12)),
                             ],
                           ),
                         ),

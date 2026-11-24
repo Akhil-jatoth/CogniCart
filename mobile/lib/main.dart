@@ -14,10 +14,10 @@ import 'screens/profile_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
+    const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: AppTheme.bgDark,
+      systemNavigationBarColor: Color(0xFF080E1C),
       systemNavigationBarIconBrightness: Brightness.light,
     ),
   );
@@ -79,36 +79,62 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
     ];
 
     return Scaffold(
-      backgroundColor: AppTheme.bgDark,
+      backgroundColor: const Color(0xFF060912),
       body: Stack(
         children: [
-          // Subtle background decorative ambient glow
-          Positioned(
-            top: -100,
-            right: -100,
-            child: Container(
-              width: 250,
-              height: 250,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppTheme.primaryPurple.withValues(alpha: 0.12),
-              ),
+          // ─── 1. FULLSCREEN SHOPPING DOODLE BACKGROUND PATTERN (EXACT SAME AS WEBSITE) ───
+          Positioned.fill(
+            child: Image.asset(
+              'assets/bg/bg3.png',
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+              errorBuilder: (context, error, stackTrace) => Container(color: const Color(0xFF060912)),
             ),
           ),
-          Positioned(
-            bottom: 50,
-            left: -80,
+
+          // ─── 2. DARK TINT OVERLAY: linear-gradient(rgba(6, 9, 18, 0.88), rgba(6, 9, 18, 0.90)) ───
+          Positioned.fill(
             child: Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppTheme.accentCyan.withValues(alpha: 0.08),
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xE0060912), // 88% dark
+                    Color(0xE8080E1C), // 91% dark
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
             ),
           ),
 
-          // Main Layout
+          // ─── 3. SUBTLE NEON AMBIENT GLOW ACCENTS ───
+          Positioned(
+            top: -60,
+            right: -60,
+            child: Container(
+              width: 260,
+              height: 260,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppTheme.primaryPurple.withValues(alpha: 0.16),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 120,
+            left: -80,
+            child: Container(
+              width: 240,
+              height: 240,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppTheme.accentCyan.withValues(alpha: 0.10),
+              ),
+            ),
+          ),
+
+          // ─── 4. MAIN FOREGROUND APP CONTENT ───
           SafeArea(
             child: Column(
               children: [
@@ -122,7 +148,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
                   },
                 ),
 
-                // Active Tab Content
+                // Active Tab Screen Content
                 Expanded(
                   child: IndexedStack(
                     index: _currentIndex,
@@ -135,44 +161,35 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
         ],
       ),
 
-      // Floating AI Assistant Button
-      floatingActionButton: FloatingActionButton.extended(
+      // Floating AI Assistant Button (Matches Web circular glowing bot button)
+      floatingActionButton: FloatingActionButton(
         onPressed: _openAiChat,
         backgroundColor: Colors.transparent,
         elevation: 6,
         highlightElevation: 10,
-        label: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        child: Container(
+          width: 56,
+          height: 56,
           decoration: BoxDecoration(
+            shape: BoxShape.circle,
             gradient: const LinearGradient(
-              colors: [AppTheme.primaryPurple, AppTheme.accentCyan],
+              colors: [Color(0xFF6366F1), Color(0xFF00E5FF)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(30),
             boxShadow: [
               BoxShadow(
-                color: AppTheme.accentCyan.withValues(alpha: 0.35),
-                blurRadius: 14,
+                color: AppTheme.accentCyan.withValues(alpha: 0.45),
+                blurRadius: 16,
+                spreadRadius: 2,
                 offset: const Offset(0, 4),
               ),
             ],
           ),
-          child: const Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.smart_toy_rounded, color: Colors.white, size: 20),
-              SizedBox(width: 8),
-              Text(
-                'AI Deals',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ],
+          child: const Icon(
+            Icons.smart_toy_rounded,
+            color: Colors.white,
+            size: 28,
           ),
         ),
       ),
@@ -180,7 +197,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
       // Bottom Navigation Bar
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: AppTheme.bgCard,
+          color: const Color(0xF20B1120),
           border: Border(
             top: BorderSide(
               color: Colors.white.withValues(alpha: 0.08),
